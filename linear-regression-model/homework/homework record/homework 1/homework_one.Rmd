@@ -1,0 +1,123 @@
+---
+title: "homework_1"
+author: "Yi (Chris) Chen"
+date: "September 11, 2017"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# homework one
+## YI CHEN ; yc3356 ; yc3356@columbia.edu
+
+### chapter 1 problem 19
+####question a
+```{r}
+## import the data
+setwd("C:/Users/cheny/Desktop")
+data_19 <- read.table('19.txt',header = FALSE, col.names = c('GPA','ACT'))
+head(data_19,nwe = 10)
+## regression
+reg_19 <- lm(data_19$GPA ~ data_19$ACT)
+reg_19
+```
+#### question b
+```{r}
+
+plot(data_19$GPA ~ data_19$ACT, main = "Estimated outcome v.s. Data", xlab = "ACT(x)", ylab = "GPA(y)", 
+    col = "black")
+abline(reg_19, col = "red")
+```
+####question c
+```{r}
+Y = reg_19$coefficients[[2]] * 30 + reg_19$coefficients[[1]]
+Y
+```
+
+### chapter 1 problem 43
+#### question a
+```{r}
+## import the data
+setwd("C:/Users/cheny/Desktop")
+data_43 <- read.table('43.txt',header = FALSE)
+head(data_43,n = 10)
+reg_43_1 <- lm(data_43$V8 ~ data_43$V5)
+reg_43_1
+reg_43_2 <- lm(data_43$V8 ~ data_43$V9)
+reg_43_2
+reg_43_3 <- lm(data_43$V8 ~ data_43$V15)
+reg_43_3
+```
+####question b
+```{r}
+par(mfrow=c(2,2))
+plot(data_43$V8 ~ data_43$V5, main = "y v.s. x1", xlab = "total population(x1)", ylab = "number of active physicians", 
+    col = "black")
+abline(reg_43_1, col = "red")
+
+plot(data_43$V8 ~ data_43$V9, main = "y v.s. x2", xlab = "total population(x1)", ylab = "number of hospital beds", 
+    col = "black")
+abline(reg_43_2, col = "red")
+
+plot(data_43$V8 ~ data_43$V15, main = "y v.s. x3", xlab = "total population(x1)", ylab = "total personal income", 
+    col = "black")
+abline(reg_43_3, col = "red")
+```
+####question c
+```{r}
+mse1 <- sum(reg_43_1$residuals^2)/(length(reg_43_1$residuals)-2)
+mse2 <- sum(reg_43_2$residuals^2)/(length(reg_43_2$residuals)-2)
+mse3 <- sum(reg_43_3$residuals^2)/(length(reg_43_3$residuals)-2)
+result <- c(mse1,mse2,mse3)
+result
+```
+###chapter 1 problem 44
+####question a
+```{r}
+library(dplyr)
+region_1 <- filter(data_43,V17 == 1) %>% select(c(V15,V12))
+region_2 <- filter(data_43,V17 == 2) %>% select(c(V15,V12))
+region_3 <- filter(data_43,V17 == 3) %>% select(c(V15,V12))
+region_4 <- filter(data_43,V17 == 4) %>% select(c(V15,V12))
+reg_44_1 <- lm(region_1$V15 ~ region_1$V12)
+reg_44_2 <- lm(region_2$V15 ~ region_2$V12)
+reg_44_3 <- lm(region_3$V15 ~ region_3$V12)
+reg_44_4 <- lm(region_4$V15 ~ region_4$V12)
+reg_44_1
+reg_44_2
+reg_44_3
+reg_44_4
+```
+
+```{r}
+par(mfrow=c(2,2))
+plot(region_1$V15 ~ region_1$V12, main = "region one", xlab = "percentage of bachelor (x)", ylab = "per captial incom(y)", 
+    col = "black")
+abline(reg_44_1, col = "red")
+
+plot(region_2$V15 ~ region_2$V12, main = "region two", xlab = "percentage of bachelor (x)", ylab = "per captial incom(y)", 
+    col = "black")
+abline(reg_44_2, col = "red")
+
+plot(region_3$V15 ~ region_3$V12, main = "region three", xlab = "percentage of bachelor (x)", ylab = "per captial incom(y)", 
+    col = "black")
+abline(reg_44_3, col = "red")
+
+plot(region_4$V15 ~ region_4$V12, main = "region four", xlab = "percentage of bachelor (x)", ylab = "per captial incom(y)", 
+    col = "black")
+abline(reg_44_4, col = "red")
+
+```
+#### question c
+```{r}
+mse44_1 <- sum(reg_44_1$residuals^2)/(length(reg_44_1$residuals)-2)
+mse44_2 <- sum(reg_44_2$residuals^2)/(length(reg_44_2$residuals)-2)
+mse44_3 <- sum(reg_44_3$residuals^2)/(length(reg_44_3$residuals)-2)
+mse44_4 <- sum(reg_44_4$residuals^2)/(length(reg_44_4$residuals)-2)
+result <- c(mse44_1,mse44_2,mse44_3,mse44_4)
+result
+```

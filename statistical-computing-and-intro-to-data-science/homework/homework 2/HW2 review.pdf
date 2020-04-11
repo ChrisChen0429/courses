@@ -1,0 +1,93 @@
+---
+title: "HW2 review"
+author: "Yi Chen(yc3356)"
+date: "November 29, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## HW2 Review
+
+### part one
+#### i
+```{r}
+setwd("C:/Users/cheny/Desktop/study/statistical computing and intro to data science/homework/homework 2")
+
+nets1718 <- readLines('NetsSchedule.html ')
+
+length(nets1718)
+
+sum(nchar(nets1718))
+
+max(nchar(nets1718))
+```
+
+#### ii
+Wed, Oct 18	@Indiana 7:00PM
+
+Wed, Apr 11	@Boston 8:00PM
+
+####iii
+321
+
+402
+
+#### iv
+```{r}
+regular <- "><td>[A-Z][a-z]*,\\s[A-Z][a-z]*.*</td><td><ul"
+
+records <- grep(regular,nets1718)
+
+length(records)
+
+records[1]
+
+records[length(records)]
+```
+
+#### v
+```{r}
+
+date <- regmatches(nets1718,regexpr(regular,nets1718))
+
+date <- substr(date,6,nchar(date)-12)
+head(date)
+```
+
+```{r}
+regular_time <- "</td><td>[0-9]*:[0-9]* PM</td>"
+grep(regular_time,nets1718,value = TRUE)
+time <- regmatches(nets1718,regexpr(regular_time,nets1718))
+time <- substr(time,10,nchar(time)-5)
+head(time)
+
+```
+
+```{r}
+regular_home <- "><li class=\"game-status\">.{1,2}</li><li"
+home <- regmatches(nets1718,regexpr(regular_home,nets1718))
+home <- substr(home,26,nchar(home)-8)
+home <- gsub(home,pattern = "@",replacement = 0)
+home <- gsub(home,pattern = "vs",replacement = 1)
+
+head(home)
+```
+
+```{r}
+regular_opponent <- ">[A-Z]*[a-z]*\\s?([A-Z][a-z]*)?</a></li></ul></td><td>"
+opponent <- regmatches(nets1718,regexpr(regular_opponent,nets1718))
+opponent <- substr(opponent,2,nchar(opponent)-23)
+
+head(opponent)
+```
+
+```{r}
+result <- data.frame(date=date,opponent=opponent,time=time,home=home)
+
+
+head(result)
+```
+

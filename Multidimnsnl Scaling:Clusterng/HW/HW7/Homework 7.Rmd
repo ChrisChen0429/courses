@@ -1,0 +1,76 @@
+---
+title: "Homework 7"
+author: "Yi Chen"
+date: "3/6/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Homework 7
+
+```{r}
+library(MASS)
+library(gtools)
+library(smacof)
+header <- c("biathlon", "bobsled", "down-hill", "figure", "hockey", "icedance", "luge", "skiJump", "slalom", "snowbrd", "speed-Skt", "XctySki")    
+data <- read.table('sport.dat',sep = ',')
+rownames(data) <- data[,1]
+data <- data <- data[,2:ncol(data)]
+colnames(data) <- header
+data
+```
+
+```{r}
+### interval, matrix-conditional
+result1 <- smacof::smacofRect(delta = data,ndim = 2,type = "interval",conditionality = 'matrix')
+### interval, row-conditional
+result2 <- smacof::smacofRect(delta = data,ndim = 2,type = "interval",conditionality = 'row')
+### ordinal, matrix-conditional
+result3 <- smacof::smacofRect(delta = data,ndim = 2,type = "ordinal",conditionality = 'matrix')
+### ordinal, row-conditional
+result4 <- smacof::smacofRect(delta = data,ndim = 2,type = "ordinal",conditionality = 'row')
+```
+
+```{r}
+plot(result1, "stressplot")
+plot(result2, "stressplot")
+plot(result3, "stressplot")
+plot(result4, "stressplot")
+```
+
+```{r}
+plot(result1)
+plot(result2)
+plot(result3)
+plot(result4)
+```
+
+```{r}
+plot(result1,"Shepard")
+plot(result2,"Shepard")
+plot(result3,"Shepard")
+plot(result4,"Shepard")
+```
+
+Personally, I perfer the result 3 which is the ordinal-matrix conditaion. The reasons are:
+
+1) the cofiguration on 2 dimension of both subjects and sports are more distinguishable. Consequently, we can easily to find the difference of sports and subjects.
+
+2) Based on the cofigurations, the sport invloves jumping and speed are more close to each other. Hockey is far away from other sport which do not use balls. Meanwhie, ice dance and figure are close.
+
+
+```{r}
+stress <- c()
+for (d in 2:5){
+  result <- smacof::smacofRect(delta = data,ndim = d,type = "ordinal",conditionality = 'matrix',lambda = 0.1,itmax = 50000)
+  stress <- c(stress,result$stress)
+}
+plot(2:5,stress,type = 'l')
+```
+
+Note, when the alpha is 0.5 as default, it seems to have too much penalty. I choose to make it smaller, which tends to give more complex model and lower stress.
+
+Dimension 3 seems to be the best choice.

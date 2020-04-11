@@ -1,0 +1,551 @@
+---
+title: "lecture 8"
+author: "Yi Chen(yc3356)"
+date: "November 16, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## lecture 8
+### Distributions and Simulations
+1. simple example
+
+Target distribution
+$p(x=k)=\frac{1}{n}$ for $k=0,1,...,n-1$
+
+instead: generate $U ~ U[0,1]$ 
+```{r}
+set.seed(1)
+n <- 10
+samp <- 100
+
+head(runif(samp),3);
+head(n*runif(samp),3);
+head(floor(n*runif(samp)),3);
+
+table(floor(n*runif(samp)))/samp
+table(floor(n*runif(samp)))/samp
+```
+
+2. another example
+
+target distribution
+
+X take values in {1,2,3} with probability (1/2,1/4,1/4)
+```{r}
+# method one
+n <- 100
+samp <- runif(n)
+u <- rep(NA, n)
+u[which(samp<1/2)]<-1
+u[which(samp>1/2 & samp<3/4)]<-2
+u[which(samp>3/4)] <- 3
+u
+```
+
+### inverse transform method
+
+1. find the inverse function of the cmf
+$F^{-1}(P)=inf\{ x\in \mathbb{R}\ \vert F(X) \geqslant U \} $
+2. generate the random variable follow the uniform distribution
+3. plug in the value into the inverse function and calculate the inverse function about the x and p
+
+**exmaple: generate the random variable that follow the exponential distritution with rate = 2 **
+for the exponential distritbuion:
+$f(x)=\lambda e^{- \lambda x }$
+
+thus the inverse function(quantile function) is:
+
+$F(x)=1-e^{-\lambda x}$ 
+
+then we get
+
+$x=-\frac{1}{\lambda}log(1-u)$ 
+
+```{r}
+lambda <- 2 # the parameter of the exponential distribution
+n <- 1000  # number of random variables
+u <- runif(n) # generate the uniform distribution
+
+Finverse <- function(u,lambda){
+        # function for the inverse transform
+        stopifnot(u > 0 & u < 1)
+        return(-(1/lambda)*log(1-u))
+}
+
+x <- Finverse(u,lambda)
+
+library(ggplot2)
+ggplot(data=data.frame(x))+
+        geom_histogram(aes(x=x,y=..density..))+
+        stat_function(mapping = aes(x=x),fun = dexp,args = list(rate=2),col='red')+
+        labs(title='Inverse Transfrom Method to simulate Exponential distribution')
+
+```
+
+**tesk**
+
+simulate a r.v. of size 1000 from the pdf $f_X(x)=3x^{2},0\leqslant x \leqslant 1$
+
+1. Find the cmf $F_x(x)=x^3$
+2. Find the quantile function $F^{-1}_X(x)= x^{1/3}$
+
+```{r}
+n <- 1000
+u <- runif(n)
+
+Finverse <- function(u){
+        stopifnot(u > 0 & u < 1)
+        return(u^(1/3)) # Inverse function of F(x)
+}
+
+x <- Finverse(u)
+
+ggplot(data = data.frame(x))+
+        geom_histogram(aes(x=x,y=..density..))+
+        stat_function(mapping = aes(x=x),fun = function(x){3*x^2},col='red')+
+        labs(title='inverse Transfrom Method')
+
+
+
+```
+
+### acceptance regection algorithm
+1. **input:**
+
+A probability density $g(x)$ (the proposal density) Proposal density would be provided.
+A function with $p(x)$ follows the uniform distribution U[0,b]. Here b is the maximum value of proposal density.(the accepetance probability)
+
+2. **random values**
+
+$X_n i.i.d g(x)$
+
+$U_n i.id U[0,1]$
+
+3. **output**
+
+$f(x)=\frac{1}{x}p(x)g(x), where z=\int p(x)g(x)dx$
+In reality, f(x) can not be calculated or hard to calculated. That is why we need to use this method. 
+
+4 **algorithm**
+generate $X_n \sim g$ and $U_n \sim U[0,1]$
+
+if $U_n \leqslant P(X_n)$ then output x
+
+The result X we generate would follow the f(x) even though, we do not know the exact function of f(x).
+
+
+Example:
+
+```{r}
+p <- function(x) {sqrt(1 - x^2)}
+
+generate_one <- function(p_func) {
+        val <- NULL
+        
+        while (is.null(val)) {
+                x <- runif(1, min = -1, max = +1)
+                u <- runif(1)
+                
+                if (u <= p_func(x)) {val <- x}
+        }
+        return(val)
+}
+
+
+num <- 100000
+samp <- rep(NA, num)
+for (i in 1:num) {samp[i] <- generate_one(p)}
+hist(samp)
+
+
+ggplot(data = data.frame(samp))+
+        geom_histogram(aes(x=samp,y=..density..))+
+        stat_function(mapping = aes(x=samp),fun = function(x){(2/pi)*sqrt(1-x^2)} ,col='red')+
+        labs(title='inverse Transfrom Method')
+```
+
+Geometric Idea
+```{r}
+plot(c(0,1), c(0,3), ty = "n", main = "A Sample Distribution",ylab = "Density f(x)", xlab = "x")
+curve (dbeta(x, 3, 6), add = TRUE, col = "red")
+text(.65, 1, "target function f", col = "red")
+text(.8, 2.8, "envelope function g")
+lines(c(0,0,1,1), c(0,2.6,2.6,0))  # c(0,0,1,) means the x value, c(0,2.6,2.6,0 means y value)
+x1 <- runif(300, min = 0, max = 1);
+y1 <- runif(300, min = 0, max = 2.6)
+selected <- y1 < dbeta(x1, 3, 6)
+points (x1, y1, col = 1+selected, cex = 0.1)
+```
+
+**analysis** when calculate $p(x \leq a)=E(X \leq a)=mean(x \leq a)= \int^{a}_{-\infty} f(x) dx=F_X(a)$
+```{r}
+mean(selected) # Proportion selected
+accepted.points <- x1[selected]
+# Proportion of sample points less than 0.5.
+mean(accepted.points < 0.5)
+# The true distribution.
+pbeta(0.5, 3, 6)
+
+```
+
+```{r}
+plot(c(0,1), c(0,10), ty = "n", main = "A Sample Distribution",
+ylab = "Density f(x)", xlab = "x")
+curve (dbeta(x, 3, 6), add = TRUE, col = "red")
+lines(c(0,0,1,1), c(0,10,10,0))
+x2 <- runif(10000, 0, 1)
+y2 <- runif(10000, 0, 10)
+selected <- y2 < dbeta(x2, 3, 6)
+mean(selected) # Proportion selected
+points (x2, y2, col = 1+selected, cex = 0.1)
+
+```
+
+**example**
+![example](1.png)
+```{r}
+f <- function(x) {
+        stopifnot(x >= 0 & x <= 1)
+        return(60*x^3*(1-x)^2)
+}
+x <- seq(0, 1, length = 100)
+plot(x, f(x), type="l", ylab="f(x)", col = "red")
+
+xmax <- 0.6  #?????????
+f.max <- 60*xmax^3*(1-xmax)^2 #??????
+lines(c(0, 0), c(0, f.max), lty = 1)
+lines(c(0, 1), c(f.max, f.max), lty = 1)
+lines(c(1, 1), c(f.max, 0), lty = 1)
+
+```
+
+```{r}
+n.samps <- 1000 # number of samples desired
+n <- 0 # counter for number samples accepted
+samps <- numeric(n.samps) # initialize the vector of output
+while (n < n.samps) {
+        x <- runif(1) #random draw from g
+        u <- runif(1)
+        if (f.max*u < f(x)) {  
+                #???U????????????f(x)???????????????,???????????????proposal function??? approval function????????????????????????proposal function??????f(x)?????????approval function?????????f(x)?????????????????????????????????
+                n <- n + 1
+                samps[n] <- x
+        }
+}
+
+x <- seq(0, 1, length = 100)
+hist(samps, prob = T, ylab = "f(x)", xlab = "x",
+main = "Histogram of draws from Beta(4,3)")
+lines(x, dbeta(x, 4, 3), lty = 2)
+
+```
+
+###Monte Carlo Methods
+
+$E[f(x)]=\int f(x)\phi (x)$ where $\phi(x)$ is the pdf of x
+
+$E[f(x)] \thickapprox \lim\limits_{N\to+\infty}\frac{1}{N}\sum^{N}_{j=1}f(x_j)$
+
+$P(X \leq a )=E[\mathbb{I}(X\leq a)]$
+
+$F(b)-F(a)=\int^{b}_{a}f(x)dx=(b-a)\int^{b}_{a}f(x)\frac{1}{b-a}dx=(b-a)E[f(x)]$ where $x \sim U[a,b]$
+
+
+**example**
+suppose $X \sim N(0,\frac{1}{\sqrt{2}})$,then compute $E[sin(X)^{2}]$ and the probability $p(x \leq 1.36)$
+```{r}
+# according to LLN, when sample is large, the sample average converge in probability to the mean of population 
+
+n <- 1000000 # gengerate a large number
+norms <- rnorm(n,sd=1/sqrt(2))
+est <- mean(sin(norms)^2)
+est
+
+#The probability of an event can be approximated by the proportion of occurrences in a large number of samples.
+
+est2 <- mean(norms<=1.36)
+est2
+
+pnorm(1.36,sd=1/sqrt(2))
+```
+
+**example 2**
+estimate the intergal $\int^{\infty}_{-\infty}sin(x)^2e^{-x^{2}}dx$
+
+$\int g(x)dx=\int\frac{g(x)}{p(x)}p(x)dx=E[\frac{g(x)}{p(x)}]$,where$x\sim p(x)$
+
+$\int^{\infty}_{-\infty}sin(x^{2})dx=\int\frac{sin(x)^2e^{-x^{2}}}{\frac{1}{\sqrt{2\pi}}e^{-\frac{1}{2}x^{2}}}p(x)dx=\sqrt{2\pi}E[sin(x)^{2}e^{-\frac{1}{2}x^{2}}]$
+
+```{r}
+n <- 10000000
+norms <- rnorm(n)
+est <- sqrt(2*pi)*mean(sin(norms^2)*exp(-(1/2)*norms^2))
+est
+```
+
+```{r}
+n1 <- 10000; n2 <- 1000
+estvec1 <- rep(NA, 1000); estvec2 <- rep(NA, 1000)
+for (i in 1:1000) {
+        norms1 <- rnorm(n1, sd = 1/sqrt(2))
+        estvec1[i] <- mean(sin(norms1)^2)
+}
+for (i in 1:1000) {
+        norms2 <- rnorm(n2, sd = 1/sqrt(2))
+        estvec2[i] <- mean(sin(norms2)^2)
+}
+# sample distribution of E(sin(x)^2)
+df <- data.frame(estimates = c(estvec1, estvec2),
+n = c(rep(n1, 1000), rep(n2, 1000)))
+ggplot(df) +
+geom_histogram(aes(x = estimates)) + facet_wrap(~ n, ncol = 2)
+
+```
+
+**test**
+if x follows exponential distribution, calculate p(x<3)
+,rate =1/3
+
+```{r}
+n <- 100000
+x <- rexp(n,rate = 1/3)
+p <- mean(x<3)
+p
+
+pexp(3,rate = 1/3)
+```
+
+**tasks**
+```{r}
+#Generate 5000 binomial rvs with n = 16 and p = 0:5
+samp.n <- 5000
+n <- 16; p <- 0.5
+
+x <- rbinom(n=samp.n,size=n,prob=p)
+
+# sample mean(expect to be close to n*p=8)
+mean(x)
+
+#sample standard deviation
+expect <- sqrt(16*0.5*0.5)
+expect
+sd(x)
+
+# Plot a histogram of the rvs, with a large value of the breaks input (say breaks=100), on the probability scale. What do you notice about its support? Is this surprising?
+hist(x,breaks = 100)
+
+
+#R's capacity for simulation and computation is impressive: generate 5 million binomial rvs with n = 1 million and p = 0:5.
+
+samp.n <- 5000000
+n <- 1000000; p <- 0.5
+
+x <- rbinom(n=samp.n,size=n,prob=p)
+
+#Standardize the rvs: that is, subtract of the sample mean, and then divide by the sample standard deviation then plot the values as above.
+x_standard <- scale(x)
+hist(x_standard)
+
+
+```
+
+### More simulation: draft game
+```{r}
+# Simulating Dart Throws
+
+board <- list(
+  R1 = 6.35, R2 = 15.9, R3 = 99, R4 = 107, R5 = 162, R = 170, 
+  nums = c(20, 1, 18, 4, 13, 6, 10, 15, 2, 17, 3, 19, 7, 16, 8, 11, 14, 9, 12, 5)
+)
+
+
+drawBoard = function(board) {
+  R1 = board$R1
+  R2 = board$R2
+  R3 = board$R3
+  R4 = board$R4
+  R5 = board$R5
+  R = board$R
+  nums = board$nums
+  
+  mar.orig = par()$mar
+  par(mar = c(0, 0, 0, 0))
+  plot(c(), c(), axes = FALSE, xlim = c(-R - 15, R + 15), 
+       ylim = c(-R - 15, R + 15))
+  t = seq(0, 2 * pi, length = 5000)
+  x = cos(t)
+  y = sin(t)
+  points(R * x, R * y, type = "l")
+  points(R5 * x, R5 * y, type = "l")
+  points(R4 * x, R4 * y, type = "l")
+  points(R3 * x, R3 * y, type = "l")
+  points(R2 * x, R2 * y, type = "l")
+  points(R1 * x, R1 * y, type = "l")
+  t0 = pi/2 + 2 * pi/40
+  points(c(R2 * cos(t0), R * cos(t0)), c(R2 * sin(t0), 
+                                         R * sin(t0)), type = "l")
+  for (i in 1:19) {
+    t1 = t0 - i * 2 * pi/20
+    points(c(R2 * cos(t1), R * cos(t1)), c(R2 * sin(t1), 
+                                           R * sin(t1)), type = "l")
+  }
+  
+  r = R + 10
+  for (i in 1:20) {
+    t1 = pi/2 - (i - 1) * 2 * pi/20
+    text(r * cos(t1), r * sin(t1), nums[i])
+  }
+  
+  par(mar=mar.orig)
+  invisible()
+}
+
+
+
+scorePositions = function(x, y, board) {
+  R1 = board$R1
+  R2 = board$R2
+  R3 = board$R3
+  R4 = board$R4
+  R5 = board$R5
+  R = board$R
+  nums = board$nums
+  
+  n = length(x)
+  rad = sqrt(x^2 + y^2)
+  raw.angles = atan2(x,y)
+  slice = 2*pi/20
+  tilted.angles = (raw.angles + slice/2) %% (2*pi)
+  scores = nums[floor(tilted.angles/slice) + 1]
+  
+  # Bullseyes
+  scores[rad <= R1] = 50
+  scores[R1 < rad & rad <= R2] = 25
+  
+  # Triples
+  scores[R3 < rad & rad <= R4] = 3*scores[R3 < rad & rad <= R4]
+  
+  # Doubles
+  scores[R5 < rad & rad <= R] = 2*scores[R5 < rad & rad <= R]
+  
+  # Zeros (off the board)
+  scores[R < rad] = 0
+  
+  return(scores)
+}
+
+```
+
+
+```{r}
+# Normal Model
+throws  <- 100
+std.dev <- 50
+
+x <- rnorm(throws, sd = std.dev)
+y <- rnorm(throws, sd = std.dev)
+
+drawBoard(board)
+points(x, y, pch = 20, col = "red")
+
+scores <- scorePositions(x, y, board)
+text(x, y+8, scores, cex = .75)
+```
+
+
+```{r}
+# Uniform Model
+
+R <- 170
+
+x <- runif(throws, min = -R, max = R)
+y <- runif(throws, min = -R, max = R)
+
+drawBoard(board)
+points(x, y, pch = 20, col = "red")
+
+scores <- scorePositions(x, y, board)
+text(x, y+8, scores, cex = .75)
+```
+
+```{r}
+# Comparing Models
+throws <- 10000
+
+x1 <- rnorm(throws, sd = std.dev)
+y1 <- rnorm(throws, sd = std.dev)
+x2 <- runif(throws, min = -R, max = R)
+y2 <- runif(throws, min = -R, max = R)
+
+scores1 <- scorePositions(x1, y1, board)
+scores2 <- scorePositions(x2, y2, board)
+mean(scores1)
+mean(scores2)
+
+
+drawBoard(board)
+points(x1, y1, pch = 20, col = "red", cex = .05)
+points(x2, y2, pch = 20, col = "blue", cex = .05)
+```
+
+```{r}
+# Comparing SD values
+
+sd.vals    <- seq(5, 150, by = 5)
+n          <- length(sd.vals)
+avg.scores <- rep(NA, length = n)
+names(avg.scores) <- sd.vals  # in order to plot
+
+for (i in 1:n) {
+  x <- rnorm(throws, sd = sd.vals[i])
+  y <- rnorm(throws, sd = sd.vals[i])
+  
+  scores <- scorePositions(x, y, board)
+  avg.scores[i] <- mean(scores)
+}
+
+plot(sd.vals, avg.scores, xlab = "Standard Deviation", ylab = "Avg. Score")
+abline(mean(scores2), 0, col = "red")
+
+```
+
+```{r}
+# Check Yourself
+
+drawBoard(board)
+points(c(0, -32), c(103, -98), col = c("red", "blue"), pch = 20, cex = 3)
+
+normal.score <- function(mean.x, mean.y, sd, board) {
+  x1 <- rnorm(throws, mean.x, sd)
+  y1 <- rnorm(throws, mean.y, sd)
+  return(mean(scorePositions(x1, y1, board)))
+}
+
+std.dev <- 35
+normal.score(0, 0, std.dev, board)
+normal.score(0, 103, std.dev, board)
+normal.score(-32, -98, std.dev, board)
+
+throws <- 200
+mean.x1 <- 0; mean.y1 <- 103
+mean.x2 <- -32; mean.y2 <- -98
+x1 <- rnorm(throws, mean.x1, std.dev)
+y1 <- rnorm(throws, mean.y1, std.dev)
+
+x2 <- rnorm(throws, mean.x2, std.dev)
+y2 <- rnorm(throws, mean.y2, std.dev)
+
+drawBoard(board)
+points(x1, y1, pch = 20, col = "red")
+points(x2, y2, pch = 20, col = "blue")
+
+scores1 <- scorePositions(x1, y1, board)
+scores2 <- scorePositions(x2, y2, board)
+text(x1, y1+8, scores1, cex = .75)
+text(x2, y2+8, scores2, cex = .75)
+```
+

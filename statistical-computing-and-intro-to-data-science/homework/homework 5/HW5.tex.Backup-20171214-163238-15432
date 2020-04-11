@@ -1,0 +1,237 @@
+%
+
+\documentclass[12pt, leqno]{article}
+
+%%% PACKAGES
+\usepackage{listings}
+\lstset{
+    language=R,
+}
+
+\usepackage{tikz,xcolor,soul}
+\usepackage{media9}
+\usetikzlibrary{arrows,shapes,backgrounds,fit}
+
+\usepackage{booktabs} 
+\usepackage{array} 
+\usepackage{paralist} 
+\usepackage{verbatim} 
+\usepackage{subfig} 
+\usepackage{graphicx}
+\usepackage{amsfonts}
+\usepackage{rotating}
+\usepackage{amsmath}
+\usepackage{multirow}
+\usepackage[parfill]{parskip}
+\usepackage{lscape}
+\usepackage{enumerate}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb}
+\usepackage{hyperref}
+%\usepackage{showkeys}%this show all labels of equations, graphics and tables
+
+\newtheorem{thm}{Theorem}
+\newcommand{\e}{\epsilon} 
+\newcommand{\bi}{\begin{itemize}}
+\newcommand{\ei}{\end{itemize}}
+\newcommand{\bcr}{\begin{center}}
+\newcommand{\ecr}{\end{center}}
+\newcommand{\ben}{\begin{eqnarray*}}
+\newcommand{\een}{\end{eqnarray*}}
+\newcommand{\mc}{\mathcal}
+\newcommand{\mbf}{\mathbf}
+\newcommand{\tmb}[1]{\tilde{\mathbf{#1}}}
+\newcommand{\abs}[1]{\lvert#1\rvert}
+\newcommand{\norm}[1]{\lVert#1\rVert}
+\newcommand{\expec}{\mathbb{E}}
+
+
+%%% HEADERS & FOOTERS
+\usepackage{fancyhdr} 
+\pagestyle{fancy} 
+\renewcommand{\headrulewidth}{0pt} 
+\lhead{}\chead{}\rhead{}
+\lfoot{}\cfoot{\thepage}\rfoot{}
+
+%%% SECTION TITLE APPEARANCE
+\usepackage{sectsty}
+\allsectionsfont{\sffamily\mdseries\upshape} 
+
+%%% ToC (table of contents) APPEARANCE
+\usepackage[nottoc,notlof,notlot]{tocbibind} % Put the bibliography in the ToC
+\usepackage[titles,subfigure]{tocloft} % Alter the style of the Table of Contents
+
+\renewcommand{\cftsecfont}{\rmfamily\mdseries\upshape}
+\renewcommand{\cftsecpagefont}{\rmfamily\mdseries\upshape}
+\renewcommand{\baselinestretch}{1.1}
+%\usepackage{showkeys}
+%\usepackage{kokoszka}
+%\usepackage{graphicx}
+%\usepackage{oxford3}
+
+\usepackage[utf8]{inputenc} 
+
+%%% PAGE DIMENSIONS
+\usepackage{geometry} 
+\geometry{a4paper} 
+
+\usepackage{graphicx} % support the \includegraphics command and options
+
+%%% END Article customizations
+
+%%% Create New Commands
+\renewcommand{\cftsecfont}{\rmfamily\mdseries\upshape}
+\renewcommand{\cftsecpagefont}{\rmfamily\mdseries\upshape}
+\renewcommand{\baselinestretch}{1.1}
+
+\newcommand{\isd}{\stackrel{d}{=}}
+\newcommand\bzero{\mbox{\boldmath${0}$}}
+\newcommand\bbe{\mbox{\boldmath${ \beta}$}}
+\newcommand\bdg{\mbox{\boldmath${\dg}$}}
+\newcommand\beg{\mbox{\boldmath${\eg}$}}
+\newcommand\bfeta{\mbox{\boldmath${\eta}$}}
+\newcommand\bga{\mbox{\boldmath${\gamma}$}}
+\newcommand\bGa{\mbox{\boldmath${\Gamma}$}}
+\newcommand\bGg{\mbox{\boldmath${\Gg}$}}
+\newcommand\bpsi{\mbox{\boldmath${\psi}$}}
+\newcommand\bDg{\mbox{\boldmath${\Delta}$}}
+\newcommand\bDel{\mbox{\boldmath${\Delta}$}}
+\newcommand\bLa{{\bf \Lambda}}
+\newcommand\bPhi{{\bf \Phi}}
+\newcommand\bPsi{{\bf \Psi}}
+\newcommand\bzg{{\bf \zg}}
+\newcommand\bSig{\mbox{\boldmath${\Sigma}$}}
+
+
+\newcommand\hbDg{\hat{\mbox{\boldmath${\Delta}$}}}
+\newcommand\hbeg{\hat{\mbox{\boldmath${\eg}$}}}
+\newcommand\hbeta{\hat{\mbox{\boldmath${\eta}$}}}
+\newcommand\hbga{\hat{\mbox{\boldmath${\gamma}$}}}
+\newcommand\hbGa{\hat{\mbox{\boldmath${\Gamma}$}}}
+
+\newcommand\bA{{\bf A}}
+\newcommand\ba{{\bf a}}
+\newcommand\bB{{\bf B}}
+\newcommand\bb{{\bf b}}
+\newcommand\bC{{\bf C}}
+\newcommand\bc{{\bf c}}
+\newcommand\bF{{\bf F}}
+\newcommand\bG{{\bf G}}
+\newcommand\bH{{\bf H}}
+\newcommand\bI{{\bf I}}
+\newcommand\bJ{{\bf J}}
+\newcommand\bK{{\bf K}}
+\newcommand\bM{{\bf M}}
+\newcommand\bm{{\bf m}}
+\newcommand\bP{{\bf P}}
+\newcommand\bQ{{\bf Q}}
+\newcommand\bR{{\bf R}}
+\newcommand\bS{{\bf S}}
+\newcommand\bT{{\bf T}}
+\newcommand\bt{{\bf t}}
+\newcommand\bU{{\bf U}}
+\newcommand\bu{{\bf u}}
+\newcommand\bV{{\bf V}}
+\newcommand\bv{{\bf v}}
+\newcommand\bW{{\bf W}}
+\newcommand\bX{{\bf X}}
+\newcommand\bx{{\bf x}}
+\newcommand\bY{{\bf Y}}
+\newcommand\by{{\bf y}}
+\newcommand\bZ{{\bf Z}}
+
+
+\newcommand\cD{{\mathcal D}}
+\newcommand\cF{{\mathcal F}}
+\newcommand\cH{{\mathcal H}}
+\newcommand\cL{{\mathcal L}}
+\newcommand\cO{{\mathcal O}}
+\newcommand\cR{{\mathcal R}}
+\newcommand\cS{{\mathcal S}}
+\newcommand\cT{{\mathcal T}}
+
+\newcommand\ap{{a^\prime}}
+\newcommand\bp{{b^\prime}}
+\newcommand\jp{j^\prime}
+\newcommand\kp{{k^\prime}}
+\newcommand\ellp{{\ell^\prime}}
+\newcommand\np{n^\prime}
+\newcommand\egp{\eg^{\prime}}
+\newcommand\begp{\mbox{\boldmath${\eg}^{\prime}$}}
+
+\newcommand\bMat{\begin{bmatrix}}
+\newcommand\eMat{\end{bmatrix}}
+
+
+\newtheorem{Assume}{A}
+\newtheorem{List}{Note}
+
+
+%%% The "real" document content comes below...
+
+\title{Brief Article}
+\author{The Author}
+%\date{} % Activate to display a given date or no date (if empty),
+         % otherwise the current date is printed 
+
+
+\setlength{\oddsidemargin}{0mm}
+\setlength{\evensidemargin}{0mm}
+\setlength{\topmargin}{-15mm}
+\setlength{\textwidth}{164mm}
+\setlength{\textheight}{215mm}
+
+\begin{document}
+
+\begin{center}
+{\large {\bf STAT GR5206 Homework 5 [100 pts] \\ Due 8:00pm Monday, December 11 on Canvas}}
+\end{center}
+
+
+Your homework should be submitted on Canvas using \texttt{R}Markdown.  Please submit both a knitted .pdf file and a raw .Rmd file.  (If you are having trouble knitting to .pdf come to office hours and we'll try to sort it out, but for the homework, knit to .html and then convert to .pdf before handing it in). We will not (and cannot) accept any other formats.  Please clearly label the questions in your responses and support your answers by textual explanations and the code you use to produce the result.  Note that you cannot answer the questions by observing the data in the ``Environment" section of \texttt{R}Studio or in Excel -- you must use coded commands.
+
+\textbf{Goals}: Practice transforming data and more practice with selective access and applying functions.
+
+Ideas which we take today as common such as `viral marketing' and `early adopters' grew from sociological studies on the diffusion of information.  One of the most famous such studies tracked how a then-new antibiotic, tetracycline, spread among doctors in four small cities in Illinois in the 1950s.  In this lab we will study this data and study the idea that the innovation (in this case tetracycline) `spread' from one person to the next.
+
+Download the two data files \texttt{ckm\_nodes.csv} and \texttt{ckm\_network.txt} which store information on each individual doctor in the four towns and on which doctors knew each other, respectively.
+
+\textbf{Part I}
+
+\begin{enumerate}
+
+\item Load the \texttt{ckm\_nodes.csv} data into a data frame called \texttt{nodes}.  It should have 246 rows and 13 columns.  The variable \texttt{adoption\_date} records the month in which the doctor \textbf{began} prescribing tetracycline, counting from November 1953.  If the doctor did not begin prescribing it by month 17, i.e.\ February 1955, when the study ended, this is recorded as \texttt{Inf}.  If it's not known when or if the doctor adopted tetracycline, their value is \texttt{NA}.  Answer the following. (a) How many doctors \textbf{began} prescribing tetracycline in each month of the study?  (b) How many never prescribed it during the study? (c) How many are NAs?
+
+\item Create a vector which records the \textbf{index numbers} of the doctors for whom \texttt{adoption\_date} is not \texttt{NA}.  Check that this vector has length 125.  Reassign \texttt{nodes} so it only contains those rows.  (Do not drop rows if they have a value for \texttt{adoption\_date} but are \texttt{NA} in some other column.)  Use this cleaned version of \texttt{nodes} for the rest of the homework.
+
+\item Create a plot of the number of doctors who began prescribing tetracycline each month versus time.  (The number on the x-axis can be integers instead of formatted dates.)  Produce another plot of the \emph{total} number of doctors prescribing tetracycline in each month.  The curve for total adoptions should first rise rapidly and then level out around month 6.
+
+\item Create a logical vector which indicates for each doctor whether they had begun prescribing tetracycline by month 2.  Convert it to a vector of index numbers.  There should be twenty such doctors.  Create a logical vector which indicates for each doctor whether they began prescribing tetracycline after month 14.  Convert it to a vector of index numbers.  There should be twenty-three such doctors.
+
+\item Write a function \texttt{adopters} which takes two arguments, \texttt{month}, with no default value and \texttt{not.yet} defaulting to \texttt{FALSE}.  If \texttt{not.yet} is \texttt{FALSE}, \texttt{adopters} should return a logical vector indicating the doctors who began prescribing tetracycline in that month.  If \texttt{not.yet} is \texttt{TRUE}, then \texttt{adopters} should return the vector indicating the doctors who began prescribing tetracycline \emph{after} that month (or never did).  Check that \texttt{adopters(2)} indicates 9 doctors began prescribing in month 2, and that \texttt{adopters(month = 14, not.yet = TRUE)} indicates that 23 doctors began prescribing after month 14, or never did. 
+
+\end{enumerate}
+
+\textbf{Part II}
+
+\begin{enumerate}
+
+\item[6.] The file \texttt{ckm\_network.txt} contains a binary matrix; the entry in row $i$, column $j$ is 1 if doctor number $i$ said that doctor $j$ is a friend or close professional contact, and 0 otherwise.  Load the file into \texttt{R} and call it \texttt{network}.  Verify you get a square matrix that contains only 1s and 0s with 246 rows and columns.  Drop the rows and columns corresponding to doctors with missing \texttt{adoption\_date} values.  Check that the result has 125 rows and columns.  Use this reduced matrix, and its rows and column numbers for the rest of the homework.
+
+\item[7.] Create a vector that stores the number of contacts each doctor has.  Do not use a loop.  Check that doctor number 41 has 3 contacts.
+
+\item[8.] Create a logical vector that indicates, for each doctor, whether they were a contact of doctor 37, \textbf{and} had begun prescribing tetracycline by month 5 or earlier.  Count the number of such doctors without converting the logical vector to a vector of indices.  There should be three such doctors.  What proportion of doctor 37's friends do those three doctors represent?
+
+\item[9.] Write a function \texttt{count\_peer\_pressure} that takes in the index number of a doctor and a month and returns the number of doctors whom that doctor names as contacts, \emph{and} had begun prescribing tetracycline by that month or earlier.  If it is working properly, doctor number 37 and month 5 should return 3.
+
+\item[10.] Write a function \texttt{prop\_peer\_pressure} that takes in the index number of a doctor and a month and returns the proportion of the doctor's contacts who are already prescribing tetracycline by that month.  If a doctor has no contacts, your function should return \texttt{NaN}.  Check that doctor 37, month 5 returns a proportion of 0.6, but doctor 102 in month 14 returns \texttt{NaN}.  Your function should call, not repeat the code from, your \texttt{count\_peer\_pressure()} function and use your \texttt{doc.contacts} vector.
+
+\item[11.] Write a function that takes in a month and returns a vector of length 2.  The first element of the returned vector should be the\textbf{ average proportion of prescribers among contacts of doctors who \textbf{began} prescribing in that month}.  The other should be the \textbf{average proportion of prescribers among contacts of doctors who began prescribing \textbf{later}, or never}.  Call your your \texttt{adopters()} and \texttt{prop\_peer\_pressure()} functions; avoid using a loop by using an appropriate function from the apply family.
+
+\item[12.] Plot the average proportions from (11.) over time on the same graph.  Do not use a loop and add an appropriate legend.  The point of the plot is to visualize whether the doctors who adopt in a given month consistently have more contacts who are already prescribing than non-adopters.
+
+\end{enumerate}
+
+
+
+\end{document}

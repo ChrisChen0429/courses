@@ -1,0 +1,84 @@
+File 'CSNA.MLT' contains a multivariate data set extracted from
+the CSNA membership/address file prepared by Bill Day.  There are
+407 observations, recording the values of 17 variables, as follows:
+
+column   variable   description
+------   --------   ------------------------------------------
+ 1-3      subj       subject number (cat.)
+ 5-6      spec       primary speciality or discipline (cat.)
+  8       work       type of work setting (cat.)
+10-23     i01-i14    indicator var's for 14 interests (binary)
+
+
+KEY TO VALUES/VARIABLES:
+
+VAR spec: categorical
+---------------------
+ 01    agric      
+ 02    anthr      
+ 03    archeology 
+ 04    biology    
+ 05    bus appl   
+ 06    chemistry  
+ 07    comp sci   
+ 08    economics  
+ 09    education  
+ 10    engin      
+ 11    geography  
+ 12    geology    
+ 13    history    
+ 14    lib sci    
+ 15    ling       
+ 16    math       
+ 17    medicine   
+ 18    other      
+ 19    physics    
+ 20    pol sci    
+ 21    psychiatry 
+ 22    psychology 
+ 23    sociology  
+ 24    soil sci   
+ 25    statistics 
+ 99    (missing)  
+
+
+VAR work: categorical
+ 1    consultant 
+ 2    govt       
+ 3    maj ind    
+ 4    nonprofit  
+ 5    other      
+ 6    priv bus   
+ 7    student    
+ 8    univ 
+
+
+VAR i01-i14 (interest variables): binary 1=yes,0=no
+i01   appd  (appled d a)
+i02   clus  (cust anal)
+i03   comb  (combinator)
+i04   soft  (comp softw)
+i05   disc  (discr anal)
+i06   fact  (factr anal)
+i07   grpt  (graph thry)
+i08   grph  (grph dsply)
+i09   mdsc  (multi scal)
+i10   numm  (num method)
+i11   ntax  (num taxon)
+i12   othr  (other)
+i13   patt  (patt recog)
+i14   prob  (prob thry)
+
+
+
+
+
+
+
+
+
+
+
+
+
+

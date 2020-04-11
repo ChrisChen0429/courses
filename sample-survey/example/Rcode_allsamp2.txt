@@ -1,0 +1,31 @@
+
+
+# R Take all possible SRSs of size n=2 from a given population
+ 
+allsamp2 <- function(y)
+{
+ out <- NULL
+ N <- length(y)
+ ybar.U <- mean(y)
+ S2 <- var(y)
+ for(i in 1:(N-1))
+ { 
+  for(j in (i+1):N)
+  {
+   ysamp <- y[c(i,j)]
+   ybar <- mean(ysamp)
+   sqerror <- (ybar - ybar.U)^2
+   out <- rbind(out, c(i=i, j=j, ybar=ybar, sqerror=sqerror))
+  }
+ }
+ print(out)
+ cat("Population ybar.U   =", ybar.U, "\n")
+ cat("Population variance =", S2, "\n")
+ cat("Average of the ybar =", mean(out[,3]), "\n")
+ cat("Mean squared error  =", mean(out[,4]), "\n")
+ cat("S2/n * (1-f)        =", (S2/2) * (1 - 2/N), "\n")
+ invisible()
+}
+
+
+

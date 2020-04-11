@@ -1,0 +1,63 @@
+---
+title: '5291'
+author: "Yi Chen(yc3356)"
+date: "April 18, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Homework 7
+
+```{r}
+# read the data
+times <- c(1.25,1.41, 4.98, 5.25, 5.38, 6.92, 8.89, 10.98, 11.18, 13.11, 13.21, 16.33, 19.77, 21.08,21.84, 22.07, 31.38, 32.61, 37.18, 42.92, 1.05, 2.92, 3.61, 4.20, 4.49, 6.72, 7.31, 9.08, 9.11, 14.49, 16.85, 18.82, 26.59, 30.26, 41.34)
+status <- c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0)
+group <- c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2)
+```
+
+### 1. Obtain and plot the survival fucntions $S_A$ and $S_B$ of group A and B.
+```{r}
+library(survival)
+fit <- survfit(Surv(times,status)~group)
+plot(fit,lty = 1:2, col = 1:2,main = "the survival function for group A and group B")
+legend("topright",legend=c("Group A", "Group B"), col = 1:2, lty=1:2, cex=1)
+```
+```{r}
+print("the survival function for group A")
+fit$surv[1:20]
+print("the survival function for group B")
+fit$surv[21:length(fit$surv)]
+```
+
+
+### 2. Estimate $S_A(10)$ and $S_B(10)$ using a 95% confidence interval.
+
+$$S\hat(t) \pm Z_{\alpha/2} \sigma\hat(t) $$
+```{r}
+summary(fit)
+```
+
+As we can see from the summary of the fit result. 
+$$S_B(10) \in [0.215 , 0.743] $$
+$$S_A(10) \in [0.471 ,0.897] $$
+
+### 3. Test H0: $S_A=S_B$
+```{r}
+survdiff(Surv(times,status)~group, rho=0)
+```
+As we can see from the test: the p = 0.784 which means that we fail to reject the null hypothesis that the two survival functions are equal.
+
+### 4 Cox proportional hazard model
+```{r}
+fit2 <- coxph(formula = Surv(times, status) ~ factor(group))
+summary(fit2)
+```
+
+Interpretation:
+We have 95% confidence to conclude that: if we fixed other protential variables, approximately, at any instant in time, the group 1 would be between 0.5012 and 2.496 times likely to die thant than group 2.
+
+### 5. Test H0: $\beta=0$
+As we can see from the result of the test. The p-value is 0.784 which means that we fail to reject the H0 which means that the $\beta = 0$. Besides, we can see that the confidence interval for the question d include the point 1 which also means that the value of $\beta$ could be equal to 0.

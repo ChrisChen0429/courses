@@ -1,0 +1,2402 @@
+WEBVTT
+
+1
+00:00:52.320 --> 00:00:53.430
+Dobrin Marchev: Hello everybody.
+
+2
+00:00:54.720 --> 00:00:59.220
+Dobrin Marchev: I'm just now testing the system if you can hear me.
+
+3
+00:01:00.900 --> 00:01:09.390
+Dobrin Marchev: And if you have any questions or issues there is a way you can raise your hand. And that's what I've been taught, so maybe we should check that option.
+
+4
+00:01:21.180 --> 00:01:22.050
+Dobrin Marchev: Or
+
+5
+00:01:26.550 --> 00:01:29.370
+Dobrin Marchev: If there are no issues, I can simply start
+
+6
+00:01:30.570 --> 00:01:31.860
+Dobrin Marchev: Let me give you a minute.
+
+7
+00:01:42.450 --> 00:01:42.960
+paul: Well, this
+
+8
+00:01:43.380 --> 00:01:44.280
+Dobrin Marchev: Seems like
+
+9
+00:01:45.390 --> 00:01:46.530
+Dobrin Marchev: There is no
+
+10
+00:01:48.900 --> 00:01:50.100
+Dobrin Marchev: Raising hand.
+
+11
+00:01:51.180 --> 00:02:00.030
+Dobrin Marchev: So what I can do is unmute everybody if you promise to not ask and talk at the same time. Let's see if this works.
+
+12
+00:02:07.710 --> 00:02:18.120
+Dobrin Marchev: Okay. OK, I see some cans. So maybe those of you that know how to use the option can write in the chat to everybody else where to find the rice camp.
+
+13
+00:02:43.440 --> 00:02:44.010
+Dobrin Marchev: All right. Alright.
+
+14
+00:02:45.030 --> 00:02:46.800
+So if there are no
+
+15
+00:02:48.900 --> 00:02:53.070
+Dobrin Marchev: Other issues. I'll go to the PowerPoint.
+
+16
+00:02:54.660 --> 00:02:56.640
+Dobrin Marchev: Maybe I'll give you one more minute.
+
+17
+00:03:05.250 --> 00:03:06.840
+Dobrin Marchev: Alright, looks good.
+
+18
+00:03:08.520 --> 00:03:08.880
+Dobrin Marchev: So,
+
+19
+00:03:10.380 --> 00:03:16.590
+Dobrin Marchev: The first time I'm using the system. Who knows how to go. I'm trying my best.
+
+20
+00:03:17.280 --> 00:03:22.080
+Dobrin Marchev: And my idea is to do the principal components today.
+
+21
+00:03:23.070 --> 00:03:24.480
+Dobrin Marchev: If you have any
+
+22
+00:03:24.780 --> 00:03:30.360
+Dobrin Marchev: Questions for homework or for any other material you can
+
+23
+00:03:31.560 --> 00:03:36.270
+Dobrin Marchev: Ask in the in the chat or we can stay after the lecture and I'll help.
+
+24
+00:03:39.000 --> 00:03:41.760
+Dobrin Marchev: So going to the
+
+25
+00:03:43.650 --> 00:03:44.670
+Dobrin Marchev: Screen.
+
+26
+00:03:46.080 --> 00:03:47.040
+Dobrin Marchev: Share
+
+27
+00:03:54.060 --> 00:03:56.340
+Dobrin Marchev: Okay, I don't know what is this thing on the side.
+
+28
+00:04:03.900 --> 00:04:04.500
+Dobrin Marchev: Away.
+
+29
+00:04:06.030 --> 00:04:07.680
+Dobrin Marchev: So just
+
+30
+00:04:09.240 --> 00:04:16.380
+Dobrin Marchev: To let you know after the lecture, we will see this video and
+
+31
+00:04:17.490 --> 00:04:21.660
+Dobrin Marchev: Audio recording available there will be a link to share with you.
+
+32
+00:04:23.400 --> 00:04:34.470
+Dobrin Marchev: What are we doing today. It's a new chapter and a new material, starting with the principal components together with
+
+33
+00:04:34.620 --> 00:04:39.750
+Dobrin Marchev: Factor analysis. These are known as techniques for explaining the
+
+34
+00:04:39.960 --> 00:04:49.590
+Dobrin Marchev: Variance and color in structuring date. How is it different than what we've been doing so far and multivariate course.
+
+35
+00:04:50.820 --> 00:04:58.530
+Dobrin Marchev: If you look back at what we cover the most recent regression before that my novel before that the Hoteling desk.
+
+36
+00:04:59.160 --> 00:05:13.500
+Dobrin Marchev: In all this techniques. There was a dedicated group of variables, called the response, the ones that we call why variables in regression. We had predicted variables that we call see
+
+37
+00:05:14.490 --> 00:05:34.650
+Dobrin Marchev: In the Minerva, it also have predictable. It's a little bit hidden. This is the Grouping Variable. And that relates to the homework or I asked you to do either version with the minority regression, but in all of this, there is a response variable. And somehow we want to
+
+38
+00:05:35.760 --> 00:05:43.680
+Dobrin Marchev: test whether the response depends, either on continuous predictors, like in regression or in grouping like on the T test and
+
+39
+00:05:44.820 --> 00:05:59.820
+Dobrin Marchev: Mono what we're doing today is very different because there will be no splitting of the data to predict during response. It's only X variables that come in the columns in your data.
+
+40
+00:06:00.300 --> 00:06:13.080
+Dobrin Marchev: And what we want to do is simply try to explain how these variables are correlated to each other and with the principal components also to maybe reduce the dimension of the date.
+
+41
+00:06:13.560 --> 00:06:21.270
+Dobrin Marchev: Maybe you measure too many variables and individuals. Let's say you took 15 measurements of various scores.
+
+42
+00:06:21.810 --> 00:06:26.910
+Dobrin Marchev: But they are highly correlated. So you don't need all of them. The principal components is a
+
+43
+00:06:27.780 --> 00:06:36.690
+Dobrin Marchev: Like a summary, how to extract the most useful features of your many say 15 predict hitters and explain all the
+
+44
+00:06:37.140 --> 00:06:51.990
+Dobrin Marchev: Structure and the data we just say to them, and these are these three of them are called principal components factor analysis is very similar, but that will be after the spring break. So let's move on with the
+
+45
+00:06:54.240 --> 00:06:55.110
+Dobrin Marchev: Idea of the
+
+46
+00:06:56.250 --> 00:06:59.430
+Dobrin Marchev: principal components so
+
+47
+00:07:01.080 --> 00:07:02.520
+Dobrin Marchev: The lecture starts
+
+48
+00:07:04.020 --> 00:07:06.030
+Dobrin Marchev: Very technical
+
+49
+00:07:07.650 --> 00:07:16.530
+Dobrin Marchev: We have some variables. So, the beginning of the lecture, what you see is the population.
+
+50
+00:07:16.980 --> 00:07:32.340
+Dobrin Marchev: Structure. It's not how you do it on the sample. It's like in the regression. When we assume what is the model that we want to fit to the data. So what I did not here at the beginning with the x one track speed. Think about these are the
+
+51
+00:07:32.640 --> 00:07:34.800
+Dobrin Marchev: Variables that you want to start measuring on
+
+52
+00:07:34.830 --> 00:07:35.880
+Zimo: Individuals
+
+53
+00:07:36.420 --> 00:07:39.450
+Dobrin Marchev: Like blood pressure, cholesterol level. He
+
+54
+00:07:39.900 --> 00:07:40.650
+Dobrin Marchev: Killed them.
+
+55
+00:07:40.950 --> 00:07:45.870
+Dobrin Marchev: They have some structure covariance matrix sigma
+
+56
+00:07:46.890 --> 00:07:56.340
+Dobrin Marchev: And what do we want to really achieve with that we want to transform the original measurements x one x p p variables.
+
+57
+00:07:57.120 --> 00:08:13.080
+Dobrin Marchev: In a clever way finding specific coefficients for each of them. So if you look here at what I call why one. It's a linear transformation of the original variables with some coefficients A one one dot dot dot one p
+
+58
+00:08:13.830 --> 00:08:15.360
+Dobrin Marchev: Action such a way
+
+59
+00:08:15.600 --> 00:08:28.530
+Dobrin Marchev: That the variance of why one is as high as possible. So the idea is that you have this underlying sigma that your original variables come with but
+
+60
+00:08:28.590 --> 00:08:32.280
+Dobrin Marchev: You want to summarize them in a linear transformation.
+
+61
+00:08:32.970 --> 00:08:40.980
+Dobrin Marchev: In such a way that the first one. This is called the first principle component retains as much variance as possible.
+
+62
+00:08:42.150 --> 00:08:49.440
+Dobrin Marchev: And further, the chances are that you won't be able to explain all the variants with just one component
+
+63
+00:08:50.010 --> 00:09:04.950
+Dobrin Marchev: Probably you have to also define why to which is another linear combination of the variables in such a way that it explains another chunk of the variants and it's at the same time uncorrelated with the first summary why want
+
+64
+00:09:06.450 --> 00:09:07.410
+Dobrin Marchev: So that's
+
+65
+00:09:09.240 --> 00:09:22.050
+Dobrin Marchev: Simply put, the goal of the principal components maximize the variants of the linear transformation of the variables in such a way that you end up with uncorrelated new service.
+
+66
+00:09:23.130 --> 00:09:27.840
+Dobrin Marchev: I think here is a good time to check my screen and the chat room if
+
+67
+00:09:29.010 --> 00:09:32.130
+Dobrin Marchev: anybody has questions because I'm not sure I see this
+
+68
+00:09:32.550 --> 00:09:37.950
+Dobrin Marchev: Talking, so let me for a moment. Stop this share and see what's going on.
+
+69
+00:09:44.160 --> 00:09:53.040
+Dobrin Marchev: Okay, nobody seems to have any questions. So maybe I'll just move on.
+
+70
+00:09:56.400 --> 00:09:59.190
+Dobrin Marchev: Then back to the screen share
+
+71
+00:10:03.720 --> 00:10:04.800
+Dobrin Marchev: Give me a second.
+
+72
+00:10:06.420 --> 00:10:08.670
+Dobrin Marchev: Next page.
+
+73
+00:10:10.590 --> 00:10:21.750
+Dobrin Marchev: Before I continue, just one other remark that I have to make I switched as you notice from Ken writing to the PowerPoint again and
+
+74
+00:10:22.230 --> 00:10:31.710
+Dobrin Marchev: I had a colleague nicely share this principal components slides with me I rewrote, a lot of it to match the notation in the book.
+
+75
+00:10:32.160 --> 00:10:47.100
+Dobrin Marchev: But there are a few occasions where you might see the principal components called see one CPU instead of why I want to IP the textbook that we're using is using the notation, why
+
+76
+00:10:48.150 --> 00:10:56.280
+Dobrin Marchev: But also, traditionally, these are called seed standing for component. So if you see capital city. It's what we mean by why
+
+77
+00:10:57.570 --> 00:11:19.200
+Dobrin Marchev: That's just short, not how do we find this principal components. If you look at the previous slide again for a moment. You want to maximize some formula. A prime sigma A. The problem is that this is not unique. If you try to do it with the good old way we'll see in a minute, with the
+
+78
+00:11:20.640 --> 00:11:30.810
+Dobrin Marchev: Taking the derivative certain equal to zero. They're infinitely many solutions for this. A prime sigma. Think about this is like trying to maximize x
+
+79
+00:11:31.830 --> 00:11:37.770
+Dobrin Marchev: Square, like a quadratic form. If you multiply the vector A by some
+
+80
+00:11:39.150 --> 00:11:50.100
+Dobrin Marchev: Numbers some fixed scheduler, it will still be achieving the same maximum. So, to avoid this technical issue, as you can see on the next slide, usually
+
+81
+00:11:51.570 --> 00:12:07.230
+Dobrin Marchev: We impose the restriction. The length of the a vector which maximizes the variance is equal to one. This is just the technical constraint that it has nothing to do with the interpretation. So think about that. Some of squares of the
+
+82
+00:12:09.540 --> 00:12:11.550
+Dobrin Marchev: Elements of a is equal to one.
+
+83
+00:12:12.900 --> 00:12:24.120
+Dobrin Marchev: What do we want to achieve this next few slides are more about how it's done. You can skip them. It's not a big deal, like how to do it. God was this
+
+84
+00:12:24.990 --> 00:12:39.900
+Dobrin Marchev: The technique is known as the garage multipliers, that is known as constraint maximization, you have the objective function here. A prime sigma a subject to the restriction that a primary must be equal to one.
+
+85
+00:12:40.950 --> 00:12:49.830
+Dobrin Marchev: And then the method is the same as anything in calculus take partial derivatives that equal to zero. I'll skip this very
+
+86
+00:12:50.310 --> 00:13:03.570
+Dobrin Marchev: Quickly. But the interesting thing is that the solution turns out to be the Eigen factor of the matrix sigma and if you remember when we did the
+
+87
+00:13:04.500 --> 00:13:16.290
+Dobrin Marchev: Eigenvectors long time ago, just to define what they mean. I told you they will pop up. We will need them. We use them. That's exactly here in the principal components.
+
+88
+00:13:16.740 --> 00:13:42.750
+Dobrin Marchev: So it turns out that if you want to maximize the A prime sigma A. The solution is the item vector corresponding to the largest either. And that's the maximum possible first principle component can get so this is summarized here in this derivation said equal to zero and
+
+89
+00:13:43.980 --> 00:13:51.990
+Dobrin Marchev: The solution turns out to be the eigenvector corresponding to the artist, I go back
+
+90
+00:13:54.060 --> 00:13:56.730
+Dobrin Marchev: And what do we do
+
+91
+00:13:58.080 --> 00:14:13.740
+Dobrin Marchev: Next, the same technique can go on to find the second principle component third principle component and so on. So every positive definite matrix like our covariance matrix sigma. If you remember the
+
+92
+00:14:15.750 --> 00:14:21.840
+Dobrin Marchev: The composition CRM that can be written as PDP prime, where the peace.
+
+93
+00:14:23.370 --> 00:14:27.120
+Dobrin Marchev: Matrix with eigenvectors. These are the diagonal with the lambda
+
+94
+00:14:28.290 --> 00:14:37.080
+Dobrin Marchev: They are because the matrix is positive definite. The longest are always no negative, starting with the largest to the smallest
+
+95
+00:14:37.920 --> 00:14:51.360
+Dobrin Marchev: And we end up with the first result for today that the solution to what we wanted to achieve summarizing our variables with new linear transformations
+
+96
+00:14:51.990 --> 00:15:07.620
+Dobrin Marchev: Is done exactly through the eigenvectors of the matrix. So, for example, the first eigenvector corresponding to lambda one, the largest diagonal value is contains the coefficients of the
+
+97
+00:15:09.270 --> 00:15:27.210
+Dobrin Marchev: Transformation for the first principle component. Then the second principle component is the second one second eigenvector, and so on. Because of the spectral the composition theorem. Everything else is also satisfied the vectors. He have liked one and they are correlated
+
+98
+00:15:28.350 --> 00:15:40.200
+Dobrin Marchev: So to put it tracking a summary. Everything is achieved with basically proved with the specter of the composition theorem.
+
+99
+00:15:41.130 --> 00:16:02.850
+Dobrin Marchev: So when we do this in our you'll see in a few minutes. All you have to do is get your data set, obtain the color is matrix and requested the Eigen function on it. There is also a building function called bring calm that can be used for the same purpose, but the results are equivalent.
+
+100
+00:16:04.170 --> 00:16:10.080
+Dobrin Marchev: And before we move on, just to summarize
+
+101
+00:16:11.280 --> 00:16:24.210
+Dobrin Marchev: What really happened. The largest quote first principle component is such that the variants of this new variable is as maximum as possible.
+
+102
+00:16:25.020 --> 00:16:38.400
+Dobrin Marchev: The second, third and so on are also maximize variants that subject to being also independent of the previous. So think about it that we are creating
+
+103
+00:16:38.940 --> 00:16:52.380
+Dobrin Marchev: Predictors but not for why variable, we are creating predictors for the entire total variance in our dataset. How can we explain the total variance, which is the trace of the sigma matrix.
+
+104
+00:16:53.370 --> 00:16:58.380
+Dobrin Marchev: With summary statistics calculated from our original data.
+
+105
+00:16:59.070 --> 00:17:12.000
+Dobrin Marchev: Well, that's how they are summarized you start with something which takes as much as possible from the total various the leftover various is explained with the second principle component
+
+106
+00:17:12.360 --> 00:17:23.760
+Dobrin Marchev: With the restriction of it must be uncorrelated with the first one and then you move on the third one explains the leftover the first and second being independent to the first and second
+
+107
+00:17:24.270 --> 00:17:33.750
+Dobrin Marchev: At the end of the day, you have as many principal components as original variables in your data set and this year I'm to
+
+108
+00:17:34.260 --> 00:17:53.910
+Dobrin Marchev: Say the total variance in your data set that you started with, which is the sum of the diagonal elements of the sigma matrix is exactly the same as the total variants of the principal components, which turned out to be the some of the various of singing
+
+109
+00:17:54.960 --> 00:18:14.400
+Dobrin Marchev: So what really did this do for us it. Think about it. We are rewriting the data set with summary statistics which are cleverly summarizing the the various the variants, not to be spread out through the different
+
+110
+00:18:15.480 --> 00:18:25.920
+Dobrin Marchev: X variables, but as much in why one then a little bit leftover and why to. And usually, starting with the third for the explain variance is so small that
+
+111
+00:18:26.640 --> 00:18:35.790
+Dobrin Marchev: Will say we can ignore them and we will summarize our data set on the with the first few principal components. This results that you see.
+
+112
+00:18:36.270 --> 00:18:46.410
+Dobrin Marchev: In the lecture notes as theory in one year and two, there are simply called result in the lecture notes, but I copied and pasted exactly the statement from the chapter.
+
+113
+00:18:48.090 --> 00:19:02.850
+Dobrin Marchev: And that's one more time, everything together. See, that's the slide from that I inherited from the other professor, they call them see here and the eigenvectors. A that corresponds to what I call
+
+114
+00:19:03.420 --> 00:19:21.450
+Dobrin Marchev: While and eigenvector speak, but it's the same exact result. So this is just stating and explaining why the some of the variance of the components matches the some of the variants of the original date to this formula with the trace that we covered long time ago.
+
+115
+00:19:23.970 --> 00:19:35.370
+Dobrin Marchev: Then probably the most important part of the end of the day it's a nice formula we calculate the components we calculate the landers
+
+116
+00:19:35.790 --> 00:19:55.860
+Dobrin Marchev: But so what what we want is to be able to say what percent of variance is explained by each principle component. So, we will be looking at this ratio of each Veatch eigenvalue lambda divided by the total sum of the land.
+
+117
+00:19:57.090 --> 00:20:03.420
+Dobrin Marchev: And we've achieved a good summary of our original data set. If
+
+118
+00:20:04.470 --> 00:20:15.000
+Dobrin Marchev: The. Usually when we started this, we start with lambda one, you can take this ratio for any of the components. But if you plug in here, lambda one out of the total
+
+119
+00:20:15.360 --> 00:20:20.790
+Dobrin Marchev: If it is a do 90%. You can even claim that the entire variance was due to one principal component
+
+120
+00:20:21.360 --> 00:20:37.260
+Dobrin Marchev: If it's not that high enough, you can calculate the second one and you say, explain further 15% and we aim to retain as many principal components as we can roughly explain at 90% of your original
+
+121
+00:20:37.920 --> 00:20:57.480
+Dobrin Marchev: Dataset variance. So this is the summary of the method you can calculate individually. The percent explain variance with this formula or with the cumulative explain various you can decide where to stop and to say
+
+122
+00:20:57.900 --> 00:21:13.350
+Dobrin Marchev: I really don't need 15 variables in my data said all can be summarized with just three of them because the some lambda one plus two plus three out of the total up to 10 is say 85 or 95%
+
+123
+00:21:14.910 --> 00:21:26.010
+Dobrin Marchev: When is this going to work. By the way, if dx variables are highly correlated. Think about that. Maybe there is a later on in the lecture on example.
+
+124
+00:21:26.610 --> 00:21:37.200
+Dobrin Marchev: Measuring intelligence, you can measure this in many different ways. But maybe you're giving similar tasks to the person like measuring maybe
+
+125
+00:21:37.980 --> 00:21:46.890
+Dobrin Marchev: Algebra in like other math analytical thinking, chances are it will be highly correlated. And then you can simply say
+
+126
+00:21:47.430 --> 00:22:04.860
+Dobrin Marchev: I don't really need three measurements of the same thing for the individual I can summarize it with the first principle component, then the second one, maybe will be the verbal measurements and instead of having 10 scores for everybody. You can get away with just two of them.
+
+127
+00:22:06.210 --> 00:22:14.730
+Dobrin Marchev: If your original variables x are completely unrelated that is extremely unlikely to happen, but you might end up with
+
+128
+00:22:15.450 --> 00:22:20.430
+Dobrin Marchev: correlation matrix on the original x which is close to zero.
+
+129
+00:22:20.940 --> 00:22:37.650
+Dobrin Marchev: That means that when you do the principal components you wouldn't be achieving too much because you have to retain the entire set of the original variables, each of them explains its own there is out of the total not really sharing anything
+
+130
+00:22:39.090 --> 00:22:46.830
+Dobrin Marchev: So check again the chat room. Let me switch for a little bit. Okay. I actually see it pops up here.
+
+131
+00:22:48.000 --> 00:22:50.340
+Dobrin Marchev: Except I don't know how to get there. Let me see.
+
+132
+00:22:50.850 --> 00:22:51.600
+Dobrin Marchev: If I just talked
+
+133
+00:22:51.990 --> 00:22:53.520
+Dobrin Marchev: My question go
+
+134
+00:22:56.070 --> 00:22:56.730
+Dobrin Marchev: Okay.
+
+135
+00:22:58.530 --> 00:22:59.670
+Xinyu Pan: It's okay for me. Jesus. Oh.
+
+136
+00:22:59.670 --> 00:23:00.060
+Dobrin Marchev: There is
+
+137
+00:23:04.860 --> 00:23:06.840
+Dobrin Marchev: Yeah, so if you are
+
+138
+00:23:07.890 --> 00:23:08.580
+Dobrin Marchev: Sharing
+
+139
+00:23:09.750 --> 00:23:15.090
+Dobrin Marchev: Questions and raise your hand, you can simply ask me, you don't have to wait for me to click anywhere.
+
+140
+00:23:15.480 --> 00:23:22.740
+Xinyu Pan: Okay, great. So my request is that, is it possible for you to pause before you explain the slide. So I can
+
+141
+00:23:22.740 --> 00:23:23.850
+Anything this slide.
+
+142
+00:23:25.020 --> 00:23:25.770
+Xinyu Pan: Can you hear me.
+
+143
+00:23:25.830 --> 00:23:32.160
+Dobrin Marchev: I forgot to show you that I'm actually here with the camera, if I can. Yeah, briefly.
+
+144
+00:23:35.070 --> 00:23:36.390
+Dobrin Marchev: Is asking me for some
+
+145
+00:23:36.510 --> 00:23:37.140
+Xinyu Pan: Okay, great.
+
+146
+00:23:37.350 --> 00:23:43.110
+Dobrin Marchev: That's me. But the light is behind me so sorry. It's not a really good video how stupid.
+
+147
+00:23:43.440 --> 00:23:47.760
+Dobrin Marchev: Know where you next time I'll have a turn it in another way.
+
+148
+00:23:49.020 --> 00:23:49.560
+Dobrin Marchev: Okay.
+
+149
+00:23:56.430 --> 00:23:56.730
+Xinyu Pan: Okay.
+
+150
+00:23:56.790 --> 00:24:01.440
+Dobrin Marchev: Although I just realized my volume was the lowest so I couldn't hear anybody
+
+151
+00:24:01.440 --> 00:24:02.700
+Dobrin Marchev: Sorry. Okay, now
+
+152
+00:24:02.760 --> 00:24:03.360
+Getting
+
+153
+00:24:06.900 --> 00:24:09.660
+Dobrin Marchev: Yeah, can you please repeat the question.
+
+154
+00:24:09.690 --> 00:24:14.400
+Xinyu Pan: Yeah, it's not really a question. It's more of a request because
+
+155
+00:24:15.270 --> 00:24:23.070
+Xinyu Pan: The slide is, is it possible for you to pause before you explain the slide. So I can have a chance to read what's on the slide because I'm having a
+
+156
+00:24:23.730 --> 00:24:26.340
+Dobrin Marchev: Very good idea here all day. You're saying
+
+157
+00:24:26.460 --> 00:24:28.260
+Xinyu Pan: versus what's on the slide itself.
+
+158
+00:24:29.220 --> 00:24:38.070
+Dobrin Marchev: Very good, thank you. So I'll start doing this from now. Do you have any question on what we just covered or should I go back to anything.
+
+159
+00:24:44.670 --> 00:24:49.500
+Xinyu Pan: I don't want to delay everyone so it's okay, I can go back and re listen to the recording.
+
+160
+00:24:49.530 --> 00:24:50.550
+Dobrin Marchev: All right, yeah.
+
+161
+00:24:51.750 --> 00:25:09.300
+Dobrin Marchev: Everything, by the way, is as before, in the sense that the lecture notes on canvas. The our files on canvas, you will also get an additional file with the recording. Once I get it from the zoom network.
+
+162
+00:25:11.310 --> 00:25:12.870
+Dobrin Marchev: Alright, so
+
+163
+00:25:14.070 --> 00:25:20.430
+Dobrin Marchev: Going back then to the share of the slides where we explaining the
+
+164
+00:25:21.660 --> 00:25:22.500
+Dobrin Marchev: Variance
+
+165
+00:25:24.360 --> 00:25:36.360
+Dobrin Marchev: OK, so moving on. I think the there is one more result. By the way, this one. I don't want to pause because it's the derivation of the DRM
+
+166
+00:25:37.500 --> 00:25:46.320
+Dobrin Marchev: You can look at this in the book. It's not such a big deal. But there is one last result before the actual examples.
+
+167
+00:25:48.030 --> 00:25:54.990
+Dobrin Marchev: It's here. So maybe I slow down a little bit for everybody to read it.
+
+168
+00:26:05.310 --> 00:26:09.060
+Dobrin Marchev: And what is this slide about
+
+169
+00:26:10.230 --> 00:26:20.040
+Dobrin Marchev: It's a major issue with principal components and in general. Later on we'll see something similar in factor analysis.
+
+170
+00:26:20.790 --> 00:26:27.090
+Dobrin Marchev: The principal components are not scale environment. What is that supposed to mean
+
+171
+00:26:27.600 --> 00:26:36.120
+Dobrin Marchev: It's not like calculating, for example, correlation coefficient between two variables and let's say one of the variables is measured in inches you
+
+172
+00:26:36.660 --> 00:26:55.320
+Dobrin Marchev: Send your mind and switch two centimeters. It has the same exact correlation coefficient with the other variable. If you switch the scaling of the x variable even one of them say centimeters two inches or vice versa around the principal components, you get a different answer.
+
+173
+00:26:56.550 --> 00:27:15.660
+Dobrin Marchev: So how do we deal with this one thing that can be done is that you don't have to run it really on the covariance matrix, you can do the principal components on the correlation matrix, there is actually an example later on.
+
+174
+00:27:16.170 --> 00:27:29.970
+Dobrin Marchev: The date stamp this way. Traditionally, the PC. The principal components, the way they were like developed it always starts with the covariance, but you don't have to do that, it can be done. Also on the correlation
+
+175
+00:27:30.780 --> 00:27:48.990
+Dobrin Marchev: And you can also scare it like what is the correlation matrix, you're basically doing the principal components on this course, every variable is subtract domain divided by the standard deviation of that variable and you apply the PC on the resulting matrix.
+
+176
+00:27:50.340 --> 00:28:06.570
+Dobrin Marchev: You can scale the variables, according to your own research. Sometimes people know for example that the answers are something like percent. They can say that it's out of 100 that's another way you can divide everything by hundred to get it on the same scale.
+
+177
+00:28:07.680 --> 00:28:18.600
+Dobrin Marchev: So that's the you can dividing by the maximum. Sometimes people divide by the range max mine was the men. There are many ways you can scale the variables if needed.
+
+178
+00:28:19.800 --> 00:28:36.270
+Dobrin Marchev: If you don't really scale your variables like in our examples of the beginning. Just keep in mind that if you have one variable which has much higher variants don't arrest, does the second bullet that you see here.
+
+179
+00:28:37.470 --> 00:28:44.520
+Dobrin Marchev: It will dominate the first principle component, like let's say your sigma matrix is
+
+180
+00:28:45.210 --> 00:28:57.420
+Dobrin Marchev: Containing on the diagonal hundred than then 531 200 which means that one of the variables as various hundred is much larger than the other, which have
+
+181
+00:28:58.170 --> 00:29:07.110
+Dobrin Marchev: Single digit variance. And when you're on the principal component. It will pretty much tell you first variable is its own its own principal component
+
+182
+00:29:08.160 --> 00:29:21.300
+Dobrin Marchev: This is reflected in the DRM three. And that's the last result for today that how do the principal components correlate with the original variables.
+
+183
+00:29:21.870 --> 00:29:31.230
+Dobrin Marchev: It's the. But let's say you have to calculate how the first principle component correlates with the second variable in your data set.
+
+184
+00:29:31.830 --> 00:29:43.860
+Dobrin Marchev: You have to take the eigenvalue one, two, which means the second element of the first time to multiply by the standard deviation of the principal component
+
+185
+00:29:44.400 --> 00:29:58.950
+Dobrin Marchev: And divided by the standard deviation of the second variable if these are highly correlated, the number or he is Jay will be very high, it will be close to one. And if you make the
+
+186
+00:30:00.030 --> 00:30:12.750
+Dobrin Marchev: Item principal component and the J variable very highly correlated, it will happen when the sigma JJ is high and it will match with the AI that
+
+187
+00:30:13.170 --> 00:30:33.450
+Dobrin Marchev: You'll see an example of this is just more as a warning that for this analysis to work, you have to take special care variables which are kind of dominating the other variables in the sense that they have too much variance associated with them.
+
+188
+00:30:35.430 --> 00:30:42.210
+Dobrin Marchev: And then I can move on to the first example.
+
+189
+00:30:44.430 --> 00:30:46.950
+Dobrin Marchev: This one is
+
+190
+00:30:48.750 --> 00:30:57.930
+Dobrin Marchev: Also available in Dr cold, but I want to switch to the are called when we actually have data. It's a theoretical example. What does that mean,
+
+191
+00:30:58.380 --> 00:31:18.120
+Dobrin Marchev: You don't have your data matrix, you don't have observations on the three original X variables, all that I know is that there were three of them that's here P equals three. And somebody told me that their population covariance matrix is equal to this.
+
+192
+00:31:19.230 --> 00:31:36.510
+Dobrin Marchev: What does this mean if you look at it before we do any principal components you would notice that, for example, the second variable has variants five which kind of dominates the other two. A little bit.
+
+193
+00:31:38.310 --> 00:31:45.030
+Dobrin Marchev: I mean, it's not so bad. But it's five times larger than the first two and a half times larger than the third variable.
+
+194
+00:31:45.630 --> 00:31:55.680
+Dobrin Marchev: And other interesting property this matrix are the zeros. What does this mean is that the third variable was completely independent of the other two.
+
+195
+00:31:56.520 --> 00:32:08.580
+Dobrin Marchev: So what we expect to see, even without knowing what is the principal component that we will have one principal component exactly go to the third variable because of the zeros, you cannot
+
+196
+00:32:09.180 --> 00:32:29.340
+Dobrin Marchev: Really associated with anything else, so it must be matching that variable. And another thing that you expect to see is that one of the principal components will be dominating because of the five on second. The other thing I see maybe there are questions I see here a pop up.
+
+197
+00:32:35.190 --> 00:32:45.480
+Dobrin Marchev: Okay, no. Maybe that was something else. So let's continue. I think with the questions would be
+
+198
+00:32:48.180 --> 00:32:54.300
+Dobrin Marchev: Yeah, I think they will come up and I'll see them. But for now, it means everybody's good
+
+199
+00:32:55.770 --> 00:32:59.790
+Dobrin Marchev: Alright share back to the slides.
+
+200
+00:33:01.170 --> 00:33:19.350
+Dobrin Marchev: So what did I do here, this matrix is a three by three, you put it in our and say give me the item function on it, it will pop up simultaneously the eigenvalues, which are these three numbers here called lambda one, number two and three.
+
+201
+00:33:20.430 --> 00:33:28.530
+Dobrin Marchev: They will be always positive, because it's a symmetric positive definite matrix and they're always arranged from largest to smart.
+
+202
+00:33:29.400 --> 00:33:39.480
+Dobrin Marchev: As I told you one of them dominates the others also what the function will provide is this one idea not here, is he wanted to be three.
+
+203
+00:33:40.260 --> 00:33:51.120
+Dobrin Marchev: And these are the factors associated with each that. So, for example, it means that the first principle component, which I call here why one
+
+204
+00:33:51.840 --> 00:34:06.360
+Dobrin Marchev: Is derived from the first and second original variable because there is a zero for the third by multiplying the first by point 383 the second by negative point 924
+
+205
+00:34:06.900 --> 00:34:20.310
+Dobrin Marchev: Remember, by design. The some of squares of this he or the eigenvectors is always one. So this numbers in there, such
+
+206
+00:34:20.940 --> 00:34:42.300
+Dobrin Marchev: Close to one means that it's really almost dominating by one of their so this big number point 924 associated with x two is exactly what we were expecting the first principle component is mostly related to the extra variable with a little bit of weight on the first one.
+
+207
+00:34:43.440 --> 00:35:00.990
+Dobrin Marchev: And that's because of the high number five that we saw here. So it says that if you don't want to use all three variables that came with your data said you can use only one of them, and it has to be derived from the original dream using this for
+
+208
+00:35:02.160 --> 00:35:27.750
+Dobrin Marchev: Did we achieve much of exponential with that we can do check that by dividing the lambda one by the sum of all the landers and it means that should you decide to keep on any one principle component you achieve 72.9% it's playing variance. Out of the total variants using three
+
+209
+00:35:28.830 --> 00:35:41.250
+Dobrin Marchev: Original variables, it's not so impressive. So probably should keep two of them. Remember the guideline is as it should be at least 80% better to be nine
+
+210
+00:35:42.360 --> 00:35:59.100
+Dobrin Marchev: So what if we decide to keep to you move on to the second lambda which is equal to 10 as already predicted and expected the corresponding Eigen factor says 001
+
+211
+00:35:59.580 --> 00:36:12.600
+Dobrin Marchev: Because of the uncorrelated structure that we started with. It simply says your second principle component is identical equal to the third variable. And that's reflected here.
+
+212
+00:36:13.650 --> 00:36:24.840
+Dobrin Marchev: How much variance is explained, if you use both white one, and white to it will be 7.83 out of seven.
+
+213
+00:36:26.310 --> 00:36:36.780
+Dobrin Marchev: Out of eight, I think it is almost 99% I didn't calculate here but you do 7.83 of the total sum which is a
+
+214
+00:36:38.400 --> 00:36:56.700
+Dobrin Marchev: And that means that you can all together. Drop the third principle component. The third principle component is saying the leftover after using white one white two is predominantly x one with a little bit of weight also annex to there.
+
+215
+00:36:58.770 --> 00:37:11.910
+Dobrin Marchev: Sometimes when you do this for real, like we didn't even know what are these various pill PS3. I know I have three measurements are the blood pressure, cholesterol levels. I don't know.
+
+216
+00:37:13.230 --> 00:37:29.250
+Dobrin Marchev: Maybe sometimes we do make sense why the coefficients are choosing one of these as the dominating variable. Sometimes it's more difficult to make sense of it, but I have some interesting examples for real data which show you that.
+
+217
+00:37:30.480 --> 00:37:34.350
+Dobrin Marchev: So maybe it's a good point here to
+
+218
+00:37:36.570 --> 00:37:41.970
+Dobrin Marchev: Switch to or maybe let me see. Not that I'll switch to the
+
+219
+00:37:44.370 --> 00:37:46.290
+Dobrin Marchev: Are after next example.
+
+220
+00:37:47.310 --> 00:38:02.070
+Dobrin Marchev: What I also wanted to show your at the end is the computation manually just confirming that the covariance between the principal components is zero and
+
+221
+00:38:03.030 --> 00:38:21.450
+Dobrin Marchev: You can. This is by design, but you can also calculate it with the form that like you take the formula for why one take it covariance with extreme it's point three at the covariance between one and two, which is zero plus another 00 should be
+
+222
+00:38:23.160 --> 00:38:24.120
+Dobrin Marchev: As expected,
+
+223
+00:38:26.310 --> 00:38:28.920
+Dobrin Marchev: Oh, okay. I stopped this
+
+224
+00:38:32.340 --> 00:38:33.390
+Dobrin Marchev: Question. Go ahead.
+
+225
+00:38:34.740 --> 00:38:51.600
+dalalalhomaizi: Their numbers like point 383 and point 924. Is there a number that would be like small but it's not really significant like if the for variable one it was point 001 would we still say that the first variable.
+
+226
+00:38:51.630 --> 00:38:52.830
+Dobrin Marchev: Is contributing to that.
+
+227
+00:38:52.830 --> 00:39:13.380
+Dobrin Marchev: Factor. Yeah, so this test for significance. We have actually a second lecture on principal components. Today, we're not really doing any statistics, to be honest with you. This is a transformation of the data set and we are simply trying to see what the results, say, Sam, what does it mean
+
+228
+00:39:14.430 --> 00:39:23.670
+Dobrin Marchev: How many components should be retained. You don't have to go with this rule of thumb at 90% there is actually a chi square test.
+
+229
+00:39:24.240 --> 00:39:39.840
+Dobrin Marchev: Is, for example, are two of them enough are three of them enough and you can get, the more definite answer with a p better. Same thing for significance of the correlation between the components, like you said, it's so small, can I simply called zero
+
+230
+00:39:41.220 --> 00:39:52.200
+Dobrin Marchev: So this is coming up after the spring break. Okay, thank you. And I see that there is a question that was sent privately.
+
+231
+00:39:53.760 --> 00:39:58.050
+Dobrin Marchev: Except I don't know how to answer privately because I've never used this chat room.
+
+232
+00:40:00.840 --> 00:40:19.260
+Dobrin Marchev: But the question is about should we scale the variables, I would say that if you do this for your homework, it will be explicitly written as an instruction. Use the principal component on the covariance Oreos. The principal component of the correlation
+
+233
+00:40:20.790 --> 00:40:28.200
+Dobrin Marchev: Matrix, which is the difference between rescaling or not if you're doing it for your own research, it's
+
+234
+00:40:28.560 --> 00:40:45.810
+Dobrin Marchev: Kind of more popular to do it on the correlation to avoid this trapped with the dominating their hands on some of the directors. So I would say it's more like when you read some paper using PC. Do people usually do it on the correlation night.
+
+235
+00:40:48.120 --> 00:40:51.210
+Dobrin Marchev: Okay, if anybody has also questions we
+
+236
+00:40:53.970 --> 00:40:58.500
+Dobrin Marchev: Know, okay. So go back to the screenshot and
+
+237
+00:41:00.360 --> 00:41:01.230
+Dobrin Marchev: This is
+
+238
+00:41:03.750 --> 00:41:11.460
+Dobrin Marchev: I think I accidentally stopped the slides. So let me go back and start the slideshow. Give me one second. So, this
+
+239
+00:41:13.470 --> 00:41:15.750
+Dobrin Marchev: Let's see, here and now.
+
+240
+00:41:18.030 --> 00:41:21.120
+Dobrin Marchev: I should be able to share it, except I don't see it.
+
+241
+00:41:23.430 --> 00:41:24.660
+Dobrin Marchev: Okay, yeah. All right.
+
+242
+00:41:28.260 --> 00:41:39.750
+Dobrin Marchev: So this is just a warm up example, don't, don't put too much thinking into it. Now, the next one is more like a real day example.
+
+243
+00:41:40.950 --> 00:41:42.030
+Dobrin Marchev: Well, do we see
+
+244
+00:41:43.110 --> 00:42:04.140
+Dobrin Marchev: Before we see the results. And this is where I'll switch to be our to show you the computation. But after I explained the results again P is three and they are the variables are population of most in three different areas. So these are
+
+245
+00:42:06.660 --> 00:42:21.090
+Dobrin Marchev: I forgot how they're measured like in hundreds or thousands but 23 years of data, how the population. Most change between aerial one, two, and three.
+
+246
+00:42:22.080 --> 00:42:30.390
+Dobrin Marchev: So what do we want to do. We were on a principal components and maybe we can try to make sense of it by saying
+
+247
+00:42:30.810 --> 00:42:44.280
+Dobrin Marchev: I don't really need to be focusing on what happened in area one into in three. Maybe I can overall come up with a summary of describing the movement of the population with principal components.
+
+248
+00:42:45.000 --> 00:43:04.740
+Dobrin Marchev: So let's go to next slide because this is just the data file which is on campus. By the way, imagine that we have this area of visual in that we know the geography, there is a river and area, one, two, and three, and each of this is measured for the population.
+
+249
+00:43:06.150 --> 00:43:09.960
+Dobrin Marchev: When you do the summary statistics.
+
+250
+00:43:10.980 --> 00:43:21.000
+Dobrin Marchev: This time we kind of don't have this such a major issue with the variances. They're almost in the same vicinity
+
+251
+00:43:22.050 --> 00:43:34.380
+Dobrin Marchev: You see the numbers 4.2 3.5. This is a little bit higher, but it's not like 10 times higher. You also have the summary statistics, you don't really need x bar for any reason for the
+
+252
+00:43:35.430 --> 00:43:48.300
+Dobrin Marchev: Principal Components is just for your own summary, we also see here the correlation matrix from the covariance matrix, the three areas are extremely highly correlated
+
+253
+00:43:48.840 --> 00:43:59.250
+Dobrin Marchev: So chances are, when we do the principal components will be able to reduce the data, a lot because of this high correlations. We don't have a
+
+254
+00:43:59.640 --> 00:44:11.760
+Dobrin Marchev: Variable which is uncorrelated to any of them. So, probably, we will not have a single component dominated by only one variable, it will do like weighted mixtures of
+
+255
+00:44:12.810 --> 00:44:24.270
+Dobrin Marchev: Like weighted average is of all three of them. So when you pass this into our request the eigenvalues. I did it on the covariance matrix.
+
+256
+00:44:25.980 --> 00:44:44.850
+Dobrin Marchev: No surprise. One of the eigenvalues is much larger than the other. This is the result of this high correlation structure of the date you have three variables, probably, you don't need all three of them, you might get away with just one
+
+257
+00:44:45.990 --> 00:45:01.890
+Dobrin Marchev: So first eigenvalue very high 11.5 2.2 and the third one compared to the other two is almost not the Eigen vectors. These are the numbers, corresponding to each lambda
+
+258
+00:45:03.180 --> 00:45:19.470
+Dobrin Marchev: By the way, one thing that you should be aware that sometimes in our when you run this, you might get the science completely flipped. So I don't really know what this dependence, but instead of seeing
+
+259
+00:45:19.830 --> 00:45:31.800
+Dobrin Marchev: Point 52 point 52.67 you might say that in the same numbers all that negative. Same thing with the second eigenvector. It might be positive point 73 and the other two numbers negative
+
+260
+00:45:32.520 --> 00:45:40.890
+Dobrin Marchev: The meaning is the same. It's just that multiplying by negative one doesn't change the solution is still the same. I go back there.
+
+261
+00:45:41.910 --> 00:45:51.630
+Dobrin Marchev: And summarize with or without flipping the science first principle component is like point five. It's almost uniformly
+
+262
+00:45:52.320 --> 00:46:17.370
+Dobrin Marchev: distributed between all three variables. The second one is mostly first versus the third and the third principle component is mostly first variable versus the second with a very small number on the third what exactly these numbers mean going back to the picture.
+
+263
+00:46:19.800 --> 00:46:38.970
+Dobrin Marchev: So the first principle component being almost the same value the same wait for each of the three original variables simply tells you that if you want to know how the most population changed through the years.
+
+264
+00:46:39.990 --> 00:46:48.210
+Dobrin Marchev: You might as simply get the total and summarize your data with the cantata, it's not perfectly the total because it's
+
+265
+00:46:48.960 --> 00:47:04.110
+Dobrin Marchev: Like the numbers are not exactly equal to each other, but they're so close to each other that you can think about that. It's how much the total population increase this is very similar to what actually
+
+266
+00:47:05.130 --> 00:47:13.800
+Dobrin Marchev: The professors do like me at the end of the semester. How do I assign the grades I calculate the total of all the scores from
+
+267
+00:47:14.520 --> 00:47:24.330
+Dobrin Marchev: The two tests the homework, the project, obviously, because there are different percent I have to write them. But there is one score called the grand total
+
+268
+00:47:24.840 --> 00:47:44.010
+Dobrin Marchev: And that typically captures what's happening. It captures the diversity of the students performance with one number on. So this is exactly what happened. In this example, the first principle component is roughly saying the grand total is
+
+269
+00:47:45.690 --> 00:47:50.130
+Dobrin Marchev: The best summary statistic of your two area populations.
+
+270
+00:47:51.570 --> 00:47:54.600
+Dobrin Marchev: If you want to go further.
+
+271
+00:47:55.950 --> 00:47:59.940
+Dobrin Marchev: Starting with the second principle component
+
+272
+00:48:01.560 --> 00:48:06.240
+Dobrin Marchev: It also has kind numbers everywhere.
+
+273
+00:48:07.260 --> 00:48:18.930
+Dobrin Marchev: And what is interesting here is that one of the numbers is negative. The other positive remember again they could be flipped it could have easily been point 73 positive, the other to negative
+
+274
+00:48:19.380 --> 00:48:36.120
+Dobrin Marchev: So in this version. It simply says that the second principle component is comparing the difference between area three versus the total of one and two, with a little bit more weight on area one
+
+275
+00:48:37.410 --> 00:48:50.130
+Dobrin Marchev: So the migration of the most, one of them is called the overall population changes, is it going up or down. Number two summary statistic which captures the
+
+276
+00:48:50.640 --> 00:49:02.580
+Dobrin Marchev: Remaining variance is how area D is compared to the total one or two, just by looking at the science and the magnitude of the principal component
+
+277
+00:49:04.140 --> 00:49:06.870
+Dobrin Marchev: The third one will be
+
+278
+00:49:08.730 --> 00:49:14.040
+Dobrin Marchev: So small for extreme like kind of going back to the question, is it significant
+
+279
+00:49:15.270 --> 00:49:24.150
+Dobrin Marchev: Somewhere around point one. People don't really use it so you can call it zero, if you wish, but we'll get to the testing. Next, not next week, the week after spring break.
+
+280
+00:49:24.660 --> 00:49:38.940
+Dobrin Marchev: So we will, for now, ignore extreme like it's not there. The other two numbers are fairly large magnitude, but one of them is negative. The other is positive, meaning that it simply comparing area one versus area to
+
+281
+00:49:40.560 --> 00:49:44.880
+Dobrin Marchev: Like the difference between the moment in area.
+
+282
+00:49:46.290 --> 00:49:54.450
+Dobrin Marchev: But remember, this was coming with extremely small lambda. So, this type of variation will be
+
+283
+00:49:55.770 --> 00:50:02.010
+Dobrin Marchev: Explaining very small chunk of the top. If you want to relate back to the
+
+284
+00:50:02.970 --> 00:50:11.220
+Dobrin Marchev: Example, with the scores of students, you might think that the first principle component is overall how the student performed
+
+285
+00:50:11.880 --> 00:50:25.560
+Dobrin Marchev: Then let's say area three is the project how students compare on their project versus the combined say test one test tube and if this was the same result for the
+
+286
+00:50:26.610 --> 00:50:46.500
+Dobrin Marchev: Students. The third component will be how the students scores were different between test one test two and these three things summarize the entire performance throughout the semester or in this example, the entire movement of the most in between the areas to the years
+
+287
+00:50:47.790 --> 00:50:52.710
+Dobrin Marchev: So, pause here for questions.
+
+288
+00:50:54.420 --> 00:50:54.930
+Dobrin Marchev: And
+
+289
+00:50:56.220 --> 00:50:57.330
+Dobrin Marchev: Let's see.
+
+290
+00:50:59.070 --> 00:51:00.300
+Dobrin Marchev: Any budding
+
+291
+00:51:03.090 --> 00:51:06.120
+Dobrin Marchev: Okay, I think I see one question.
+
+292
+00:51:07.560 --> 00:51:08.460
+Jingru Zhang: Hi Professor
+
+293
+00:51:08.640 --> 00:51:20.880
+Jingru Zhang: Yeah. Will you say that the sea to the second principle components is that the remain virus, for which is independent from see one.
+
+294
+00:51:21.270 --> 00:51:37.740
+Dobrin Marchev: Yes, very good question. It is exactly like that if we must continue explaining the second one is independent of the first and explain the leftover variants after the first one is already being used.
+
+295
+00:51:38.850 --> 00:51:39.750
+Jingru Zhang: Gotcha. Thank you.
+
+296
+00:51:40.410 --> 00:51:42.870
+Dobrin Marchev: Alright, so
+
+297
+00:51:44.130 --> 00:51:53.310
+Dobrin Marchev: Maybe. Yeah, I can hear you muted yourself. Thanks. What else anybody else, or I should switch to the our studio
+
+298
+00:51:55.980 --> 00:52:01.860
+Dobrin Marchev: Alright, let me see know how this will go our studio share
+
+299
+00:52:05.640 --> 00:52:18.630
+Dobrin Marchev: Actually I'll start with the moose example, by the way, this file that I uploaded is a little bit different. It's a text file but separated separator is a tab.
+
+300
+00:52:19.140 --> 00:52:31.260
+Dobrin Marchev: So if you simply say read the table, it will not read correctly, you will notice here, separated equals this strange thing. It simply state stands for the
+
+301
+00:52:33.090 --> 00:52:33.360
+Dobrin Marchev: Top
+
+302
+00:52:35.550 --> 00:52:40.470
+Dobrin Marchev: On the text file. Also, it has a header. That's another thing to keep in mind.
+
+303
+00:52:41.610 --> 00:52:48.180
+Dobrin Marchev: Well this one I did we let me get the file first with the
+
+304
+00:52:51.600 --> 00:52:53.400
+Dobrin Marchev: Hi, done by Dr.
+
+305
+00:52:55.860 --> 00:52:58.350
+Dobrin Marchev: Here data set.
+
+306
+00:52:59.790 --> 00:53:00.690
+Dobrin Marchev: Or isn't the
+
+307
+00:53:04.140 --> 00:53:06.750
+Dobrin Marchev: Most tax.
+
+308
+00:53:09.510 --> 00:53:29.370
+Dobrin Marchev: And I removed the year. So what you see here is two to four, I simply removing the first variable, the year we don't need that the covariance matrix between the areas that's the numbers that we saw on the screen and then simply getting the eigenvectors.
+
+309
+00:53:30.630 --> 00:53:40.410
+Dobrin Marchev: I think the science switched. You might notice, by the way, it was a negative point 79 on the me quickly check that.
+
+310
+00:53:42.180 --> 00:53:50.040
+Dobrin Marchev: Yeah, it was negative point 73 and the other two positive. So, that's why. Don't pay too much attention to this arrows on the power point
+
+311
+00:53:51.000 --> 00:54:10.440
+Dobrin Marchev: In that example it was from area one two to three here is the other way around the area is positive. The other two are negative. So the simplest thing that we are comparing third area to the combined one and two.
+
+312
+00:54:11.730 --> 00:54:14.040
+Dobrin Marchev: And same thing here.
+
+313
+00:54:15.210 --> 00:54:19.950
+Dobrin Marchev: Too is negative x one is positive, would have been the other way around.
+
+314
+00:54:21.300 --> 00:54:24.000
+Dobrin Marchev: Okay, let's see some the
+
+315
+00:54:27.720 --> 00:54:29.070
+Dobrin Marchev: Question No.
+
+316
+00:54:34.620 --> 00:54:42.510
+Dobrin Marchev: Okay, there is a question if the file is uploaded it should be in the data sets directory. The like there is a folder.
+
+317
+00:54:44.070 --> 00:54:49.200
+Dobrin Marchev: Please, please check there. And if it's not, I can quickly upload it.
+
+318
+00:54:53.280 --> 00:55:00.120
+Dobrin Marchev: Anybody else having issues with not finding the file. Maybe I'll give you a few minutes to run the code and open everything
+
+319
+00:55:01.410 --> 00:55:08.640
+Dobrin Marchev: The problem with this online thing is I'd already see what everybody's doing so I don't know if we're on the same page.
+
+320
+00:55:11.310 --> 00:55:14.430
+dalalalhomaizi: I'm sorry, where's the our code.
+
+321
+00:55:16.020 --> 00:55:17.760
+dalalalhomaizi: I don't see it on the main page.
+
+322
+00:55:18.810 --> 00:55:19.410
+Dobrin Marchev: Oh, you mean
+
+323
+00:55:20.460 --> 00:55:26.340
+Dobrin Marchev: It's not the data set. It's the are called missing. Okay, let me go and check
+
+324
+00:55:27.690 --> 00:55:31.500
+Dobrin Marchev: If I mean it should be there under week eight
+
+325
+00:55:32.370 --> 00:55:36.510
+dalalalhomaizi: Week. He only has a PDF that's what I have
+
+326
+00:55:36.690 --> 00:55:39.270
+Dobrin Marchev: Okay, one second. I'll go. We can check
+
+327
+00:55:39.870 --> 00:55:41.490
+Dobrin Marchev: That's very easy fix.
+
+328
+00:55:42.930 --> 00:55:46.920
+Dobrin Marchev: At least I'm in front of it. So week eight week eight
+
+329
+00:55:48.450 --> 00:55:53.640
+Dobrin Marchev: Oh, I forgot. Thanks so quickly and this
+
+330
+00:55:58.710 --> 00:55:59.580
+Dobrin Marchev: Okay.
+
+331
+00:56:01.080 --> 00:56:01.980
+Dobrin Marchev: Go.
+
+332
+00:56:04.080 --> 00:56:07.200
+Dobrin Marchev: To the 6122
+
+333
+00:56:08.460 --> 00:56:11.760
+Dobrin Marchev: And there is the PCA dot are
+
+334
+00:56:22.260 --> 00:56:25.950
+Dobrin Marchev: OK. So again, this is for everybody. Please check the you see
+
+335
+00:56:36.630 --> 00:56:37.740
+dalalalhomaizi: I see it. Professor
+
+336
+00:56:38.490 --> 00:56:39.780
+Dobrin Marchev: Good. Anything else
+
+337
+00:56:44.610 --> 00:56:47.520
+Dobrin Marchev: No other issues. So let's go back to
+
+338
+00:56:49.380 --> 00:56:58.830
+Dobrin Marchev: Our studio. So yeah, I simply uploaded the most file around the covariance on it and then requested the item.
+
+339
+00:57:00.240 --> 00:57:03.810
+Dobrin Marchev: Vectors. And that's all it is.
+
+340
+00:57:08.430 --> 00:57:09.600
+Dobrin Marchev: Alright, so
+
+341
+00:57:10.410 --> 00:57:11.940
+Dobrin Marchev: What, then, I'll do
+
+342
+00:57:13.320 --> 00:57:18.330
+Dobrin Marchev: Is go back to the lecture slides.
+
+343
+00:57:20.010 --> 00:57:21.630
+Dobrin Marchev: Which is here.
+
+344
+00:57:23.100 --> 00:57:24.840
+Dobrin Marchev: So we are done with this example.
+
+345
+00:57:27.750 --> 00:57:28.890
+Dobrin Marchev: 123
+
+346
+00:57:30.240 --> 00:57:32.970
+Dobrin Marchev: What is happening. By the way, like
+
+347
+00:57:34.500 --> 00:57:37.350
+Dobrin Marchev: Geometrically, what are we doing
+
+348
+00:57:38.640 --> 00:57:53.340
+Dobrin Marchev: We have in this example three dimensional data, the three areas. And that's the highest dimension which we can explain what's going on. So think about the analogy in 3D.
+
+349
+00:57:53.760 --> 00:58:02.670
+Dobrin Marchev: To the scatter plot. It's like a scatter cloud. And if you look here, if the data highly correlated, they will be
+
+350
+00:58:03.330 --> 00:58:15.210
+Dobrin Marchev: Inside Alex saw the like is the analogy to the cloud, which is all in the 2D, it will be like episode type of shape in 3D.
+
+351
+00:58:16.140 --> 00:58:28.530
+Dobrin Marchev: If the data perfectly around like you know on a sphere, you cannot do much a principal components. But if the data are inside this type of shape.
+
+352
+00:58:29.190 --> 00:58:37.800
+Dobrin Marchev: What we are simply doing is saying that the first principle component should have the direction of the largest
+
+353
+00:58:38.520 --> 00:58:49.860
+Dobrin Marchev: Variance, which means that you're having a new orientation and you're spending this ellipse saw it, not in terms of x one expects to originally
+
+354
+00:58:50.160 --> 00:58:56.670
+Dobrin Marchev: But it's more efficient to say that it goes further in this direction that I'm not pointing. I hope you can see that
+
+355
+00:58:57.540 --> 00:59:07.350
+Dobrin Marchev: And this the direction is the largest difference, then if you have to go one more direction. Maybe we'll go this way and say the remaining
+
+356
+00:59:08.160 --> 00:59:30.240
+Dobrin Marchev: Leftover variance is spanning this way, these are exactly the principal components, elements. The directions of the maximum span and lambda is how far away it goes in that direction. So that's how you can imagine we are reconstructing the data in a more clever really
+
+357
+00:59:31.320 --> 00:59:35.040
+Dobrin Marchev: coordinated system choice. That's what we're really doing
+
+358
+00:59:36.240 --> 00:59:38.370
+Dobrin Marchev: Okay see maybe questions.
+
+359
+00:59:39.720 --> 00:59:42.150
+Dobrin Marchev: Let me go back to the chat room.
+
+360
+00:59:50.880 --> 00:59:52.410
+Dobrin Marchev: Anybody. I think I saw
+
+361
+00:59:54.750 --> 00:59:55.260
+Dobrin Marchev: No.
+
+362
+01:00:02.700 --> 01:00:14.970
+Dobrin Marchev: By the way, if there is we I see now there is a question about some the file being not the same. The one that because I rewrote it a few times, the one that I'm sharing now.
+
+363
+01:00:16.170 --> 01:00:19.740
+Dobrin Marchev: With our studio is
+
+364
+01:00:20.760 --> 01:00:24.120
+Dobrin Marchev: In the link and the week eight. I think it's called
+
+365
+01:00:25.650 --> 01:00:27.930
+Dobrin Marchev: PCI dash one or something like that.
+
+366
+01:00:29.340 --> 01:00:30.480
+Dobrin Marchev: So that's the one you have to
+
+367
+01:00:33.870 --> 01:00:37.800
+Dobrin Marchev: Wait a few minutes to see if there are issues with this.
+
+368
+01:00:40.140 --> 01:00:40.770
+Dobrin Marchev: Now,
+
+369
+01:00:43.890 --> 01:00:45.540
+Dobrin Marchev: Okay, well then
+
+370
+01:00:47.340 --> 01:00:49.650
+Dobrin Marchev: Maybe it's a good idea to move on.
+
+371
+01:00:50.700 --> 01:00:55.230
+Dobrin Marchev: Does the explanation of what we're really doing with this picture.
+
+372
+01:00:56.490 --> 01:00:59.460
+Dobrin Marchev: By the way, what percent of variance was explained
+
+373
+01:01:00.690 --> 01:01:16.320
+Dobrin Marchev: With each of the components that grant total that we caught the first principle component, the movement in or out of the combined area, one, two, and three explains almost 80%
+
+374
+01:01:17.160 --> 01:01:41.970
+Dobrin Marchev: So it's really kind of dominating. It simply says if you want to approximate your data. If you don't need to use the three areas separately combine them with this weights that we saw the point 50 something point 60 something and this way you're reducing your data from 321 action.
+
+375
+01:01:43.170 --> 01:02:03.870
+Dobrin Marchev: Dining almost 80% of the original directs so the population moved a little bit extra like it was not only the total in or out of the combined area. Remember the next one was the comparison to versus the total one or two that explains further almost 15% of the date.
+
+376
+01:02:05.580 --> 01:02:16.680
+Dobrin Marchev: And for that data said if you're doing it for practical purposes, probably you can stop at the first component because the other two are so marginal compared to the first
+
+377
+01:02:17.730 --> 01:02:28.560
+Dobrin Marchev: If you want to have the same diversity of the populations of the most as original, you have to keep all three components and they explain hundred percent
+
+378
+01:02:28.890 --> 01:02:46.560
+Dobrin Marchev: If you want to sacrifice a little bit of the explanation of why the data are very different. You can choose between a almost 95 and the remaining 5% of the total variability of the population.
+
+379
+01:02:48.480 --> 01:02:55.080
+Dobrin Marchev: So this is a good moment if if you want to ask something like, what
+
+380
+01:02:56.280 --> 01:03:02.610
+paul: We are a little I'm a little surprised that it explains 100% of the variants. So there's no
+
+381
+01:03:05.610 --> 01:03:14.430
+Dobrin Marchev: The well that's by design. By the way, if you add all three of them, it's always going to be hundred percent
+
+382
+01:03:18.090 --> 01:03:19.680
+Dobrin Marchev: Is that what you're asking.
+
+383
+01:03:20.070 --> 01:03:26.100
+paul: Yeah so. So with this, with the principal component analysis, we're never going to have an error term.
+
+384
+01:03:26.910 --> 01:03:40.860
+Dobrin Marchev: We will have if we decide to drop some of them. So the error will become part of, let's say, Here we dropped the third one, because it's only 5.4 to 7%
+
+385
+01:03:40.950 --> 01:03:47.820
+Dobrin Marchev: Loss. Then the other to explain on was perfectly everything with an error 5%
+
+386
+01:03:50.760 --> 01:03:54.360
+paul: Oh, so by definition, it's going to be explaining 100% of the variance
+
+387
+01:03:54.390 --> 01:03:55.860
+Dobrin Marchev: Use all three of them.
+
+388
+01:03:56.220 --> 01:03:57.360
+paul: Okay, great. I got
+
+389
+01:03:58.140 --> 01:04:10.140
+Dobrin Marchev: The D. There is no difference between using the three principal components or two or three original variables, by the way, it's just a more clever way of rewriting your data. So
+
+390
+01:04:10.680 --> 01:04:22.860
+Dobrin Marchev: The real benefit of doing PCA is if you start dropping some of them, obviously. In this example, we have three variables to begin with. Why would you want to drop anything, it's not such a big deal but
+
+391
+01:04:23.490 --> 01:04:35.970
+Dobrin Marchev: When we talk about data reduction. Usually the data set comes with hundreds of possible variables and then you can really benefit by summarizing in only five or 10 of them.
+
+392
+01:04:38.310 --> 01:04:38.730
+paul: Okay.
+
+393
+01:04:39.630 --> 01:04:40.920
+Dobrin Marchev: All right, anybody else.
+
+394
+01:04:45.540 --> 01:04:49.860
+Dobrin Marchev: Know, so moving on then.
+
+395
+01:04:51.120 --> 01:04:51.690
+Dobrin Marchev: The
+
+396
+01:04:52.800 --> 01:05:03.150
+Dobrin Marchev: Comment that I kind of already mentioned, not really applicable to this example because it was not so different, but if you have
+
+397
+01:05:03.600 --> 01:05:17.940
+Dobrin Marchev: On the diagonal of sigma some numbers which are too high. You might reconsider doing the principal components on the covariance, you should probably do it on the correlation matrix which is completely equivalent
+
+398
+01:05:19.080 --> 01:05:30.810
+Dobrin Marchev: Of saying that at the beginning I convert each of my access to a z score and then owning it on the covariance of the z which is the same as the correlation of x.
+
+399
+01:05:32.190 --> 01:05:41.820
+Dobrin Marchev: And then the formula for the new correlation changes a little bit, but I will show you this with the next example.
+
+400
+01:05:44.040 --> 01:05:58.950
+Dobrin Marchev: Okay, this one by the way the slide. I don't know if you're looking now the share screen or the original slides that I posted. I added here a picture just for fun.
+
+401
+01:05:59.880 --> 01:06:14.430
+Dobrin Marchev: Because it's such a complicated scientific name that we are doing the white like corn chicken. Well, that's really the chicken that you probably eat if you go to KFC. This is the standard chicken in also to say
+
+402
+01:06:15.780 --> 01:06:21.630
+Dobrin Marchev: What are these measurements and by the way this data set has been extremely popular in
+
+403
+01:06:22.830 --> 01:06:41.220
+Dobrin Marchev: principle components and in the factor analysis. Later on I don't even have the original data. This is from the next chapter in the book and all that is available is the correlation matrix that can very easily happen to you.
+
+404
+01:06:42.540 --> 01:06:58.050
+Dobrin Marchev: When you're doing research. Somebody might say I have this X variables. I will not provide you with data. But here is the correlation matrix. Can you run principal components and tell me what's happened
+
+405
+01:06:58.530 --> 01:07:09.900
+Dobrin Marchev: Okay, sure enough, that's not a problem. What are the measurements. By the way, what are we trying to achieve on the chicken. I took the picture from Wikipedia. By the way, if you see the picture.
+
+406
+01:07:10.560 --> 01:07:31.110
+Dobrin Marchev: And I had to copyright on Wikipedia said, so we don't know, are they measuring the female or male. Are they young to old we have a whole bunch of data on some bones of the of this chicken.
+
+407
+01:07:32.310 --> 01:07:43.890
+Dobrin Marchev: They have six variables, one of kind of coming in sets the first to measure the head this cow in terms of breadth and length.
+
+408
+01:07:44.640 --> 01:08:02.520
+Dobrin Marchev: The next two are the wings. By the way, this is like the scientific the humorous, the owner are the two bones on the it's a generic term on the handle on the arm. The upper and the lower one. So it's like the
+
+409
+01:08:03.180 --> 01:08:11.070
+Dobrin Marchev: drumstick and then the actual wink and same thing on the left part you have the femur Tibia. These are the
+
+410
+01:08:12.840 --> 01:08:19.320
+Dobrin Marchev: It will be the, the actual legs does the tibia and the type is the femur.
+
+411
+01:08:20.520 --> 01:08:44.970
+Dobrin Marchev: So again we we don't have chicken buy chicken, the measurements we have how this the length and width and so on correlate which are again notice extremely highly correlated that and it makes sense. The bigger the chicken. It grows, probably in every possible way all the bonds.
+
+412
+01:08:46.110 --> 01:08:58.890
+Dobrin Marchev: So let's try to run principal components and see. Do we really need this six measurements may be we can explain why the chickens are different. And why do they vary.
+
+413
+01:08:59.310 --> 01:09:08.400
+Dobrin Marchev: With only a few summary statistics. That's really what the PCA is doing the data are in the arsenal. Y'all go back there in a minute.
+
+414
+01:09:10.170 --> 01:09:17.370
+Dobrin Marchev: Okay, well that's what happened when I did copy and paste. I know I found this so strange.
+
+415
+01:09:18.720 --> 01:09:20.160
+Dobrin Marchev: Maybe it's good actually to
+
+416
+01:09:21.900 --> 01:09:27.570
+Dobrin Marchev: quickly switch to our studio and show you because I don't like the quality of this slide.
+
+417
+01:09:28.620 --> 01:09:30.270
+Dobrin Marchev: Okay, I'll share now.
+
+418
+01:09:31.320 --> 01:09:32.370
+Dobrin Marchev: Our studio
+
+419
+01:09:35.340 --> 01:09:41.400
+Dobrin Marchev: Well, the chicken example I start with the correlation matrix.
+
+420
+01:09:42.510 --> 01:09:48.090
+Dobrin Marchev: And because I wanted to be able to refer to the names of the variables. I had to
+
+421
+01:09:50.280 --> 01:09:58.170
+Dobrin Marchev: Change the names. So run this. These are the numbers here that you actually see on that slide with the bat call it
+
+422
+01:09:59.370 --> 01:10:10.560
+Dobrin Marchev: Will explain in details which one is which. Notice how the first principle component is almost perfectly the same exact number.
+
+423
+01:10:11.250 --> 01:10:32.310
+Dobrin Marchev: Well, that's exactly what I said that when birds grow, they grow in every possible size, not only the next everything grows. So the third principle component says if you must, summarize this many measurements of bones. The grand total is your best friend.
+
+424
+01:10:33.510 --> 01:10:41.730
+Dobrin Marchev: Then if you want to continue because if you're not explain everything. You might notice in the second one that is dominated by the skull.
+
+425
+01:10:42.330 --> 01:10:50.820
+Dobrin Marchev: The other two are much more and, moreover, it's positive versus negative. So that's describing the Navy, the heads of some of
+
+426
+01:10:51.570 --> 01:11:04.440
+Dobrin Marchev: The variability is due to the heads being different versus everything else, then there is even further detail, which is the language was the breadth of the scope. Then there is the Wink.
+
+427
+01:11:05.910 --> 01:11:11.640
+Dobrin Marchev: I'll go back to the PowerPoint with you because the explanations are there.
+
+428
+01:11:13.890 --> 01:11:16.020
+Dobrin Marchev: So share this
+
+429
+01:11:17.760 --> 01:11:32.400
+Dobrin Marchev: Now these the, the overall component is really a lot higher than anything else. The eigenvalues four and a half. Everything else is less than one. Any not solid 76% of the variants. It's not perfect but
+
+430
+01:11:32.970 --> 01:11:43.470
+Dobrin Marchev: Starting with six variables and using only one component is quite a miracle that we can explain 76 so the meanings of these components.
+
+431
+01:11:44.220 --> 01:11:54.120
+Dobrin Marchev: Are here general average of everything which you can call size is component one. The reason this data have been used.
+
+432
+01:11:54.570 --> 01:12:05.250
+Dobrin Marchev: So many times is because you can make sense here of the components. I have to warn you, not every time you can make sense of the numbers.
+
+433
+01:12:05.940 --> 01:12:14.670
+Dobrin Marchev: You might learn some principal components will start getting some strange loadings and some numbers by others low
+
+434
+01:12:15.000 --> 01:12:30.270
+Dobrin Marchev: It doesn't necessarily always make sense. Plus, as humans, because this is kind of optimization problem, problem. It's not even statistics. It's trying to find the best linear combination to extract as much variance as possible.
+
+435
+01:12:30.960 --> 01:12:39.840
+Dobrin Marchev: Not always. It will mean something. So we are looking at here that we can even give it a name and we can simply call it the overall size of the chicken. The thought of Obama
+
+436
+01:12:41.100 --> 01:12:49.200
+Dobrin Marchev: Then as I already mentioned, the second one is almost nothing in the wink and legs. It's mostly
+
+437
+01:12:50.340 --> 01:12:56.310
+Dobrin Marchev: The skull size the head. Oops, I wanted to go down.
+
+438
+01:12:57.480 --> 01:12:58.920
+Dobrin Marchev: So this is the
+
+439
+01:13:01.590 --> 01:13:02.580
+Dobrin Marchev: The scope.
+
+440
+01:13:04.590 --> 01:13:13.170
+Dobrin Marchev: But you can call it comparison but the numbers are very small. But if you. It's kind of the scope versus everything else.
+
+441
+01:13:14.460 --> 01:13:33.720
+Dobrin Marchev: And the reason these numbers are much smaller. By the way, keeping time is because we have for measurements of everything else. So it's like the optimisation tried to put equal weight on all of them versus equal weight on the combined score. The important part is the
+
+442
+01:13:34.980 --> 01:13:42.960
+Dobrin Marchev: Science switch. So this word positive, the other negative. That's why we can call it measurement of school versus everything else.
+
+443
+01:13:44.250 --> 01:13:46.500
+Dobrin Marchev: The third principle component
+
+444
+01:13:47.970 --> 01:13:57.000
+Dobrin Marchev: You can safely say disregards anything else except the skull and there is a little bit of variance between the breadth and length of the skull.
+
+445
+01:13:58.260 --> 01:14:12.420
+Dobrin Marchev: I don't know why this is so important that it captures some percent but you can see 6.9% of the variability. Maybe it's actually because the male and female chicken have different Scots and that's why I picked up the differences here.
+
+446
+01:14:13.950 --> 01:14:35.280
+Dobrin Marchev: Well, this the fourth component is the comparison of the wings towards the leg leg and what do we notice here score is almost non existent zeros. The other wink is combined with a negative like this combined average positive
+
+447
+01:14:36.540 --> 01:14:40.590
+Dobrin Marchev: And it goes on further, what would be the
+
+448
+01:14:42.000 --> 01:14:57.030
+Dobrin Marchev: fifth principle component which is only 1.3% variability, it's dominated. See how the signs are positive, negative, positive, negative, it has nothing to do with SCO, it's more about
+
+449
+01:14:58.290 --> 01:15:06.870
+Dobrin Marchev: The difference between the two types of bonds. The upper and the lower one of them positive, the other negative, but it's mostly under like the difference
+
+450
+01:15:08.490 --> 01:15:10.770
+Dobrin Marchev: And the last one is
+
+451
+01:15:11.850 --> 01:15:16.950
+Dobrin Marchev: The on specific doing on the wing. The other like
+
+452
+01:15:18.510 --> 01:15:22.740
+Dobrin Marchev: So if we I'm sorry if we have to decide here.
+
+453
+01:15:24.570 --> 01:15:30.000
+Dobrin Marchev: Should you keep everything all these comparisons. Do you really need like vs.
+
+454
+01:15:32.250 --> 01:15:41.670
+Dobrin Marchev: I mean the likes or the wings or the skull separately or altogether everything, probably, in this example, you will be
+
+455
+01:15:42.360 --> 01:15:53.490
+Dobrin Marchev: Good enough. If you stop on the first two principal components because the total is almost 90%. So the most important if you have to answer the question.
+
+456
+01:15:54.360 --> 01:16:06.900
+Dobrin Marchev: How do this really very day. Very overall size and the second variability is the head difference versus the bot. That's how we can say this gives me
+
+457
+01:16:07.950 --> 01:16:12.900
+Dobrin Marchev: A the 8% explained. Very good.
+
+458
+01:16:15.240 --> 01:16:19.650
+Dobrin Marchev: Our balls again here for questions.
+
+459
+01:16:23.400 --> 01:16:24.840
+Dobrin Marchev: Anybody with
+
+460
+01:16:27.360 --> 01:16:30.000
+Dobrin Marchev: Something that we need to clear
+
+461
+01:16:32.460 --> 01:16:33.210
+Dobrin Marchev: Know,
+
+462
+01:16:36.360 --> 01:16:49.110
+Dobrin Marchev: Where there is one more example. And then there is something from the our file. Let's share again the PowerPoint.
+
+463
+01:16:50.550 --> 01:16:52.530
+Dobrin Marchev: This example, the last one.
+
+464
+01:16:53.670 --> 01:17:00.360
+Dobrin Marchev: Is what you might like I'm giving it is not because we are really doing the analysis.
+
+465
+01:17:01.440 --> 01:17:11.940
+Dobrin Marchev: This is more about reading some buddies paper and for that one. I don't have the the data or the correlation matrix. Nothing is just a
+
+466
+01:17:12.960 --> 01:17:14.460
+Dobrin Marchev: screenshot of the results.
+
+467
+01:17:16.890 --> 01:17:26.370
+Dobrin Marchev: There is this IQ score. By the way, if you Google the West color adult intelligence score. It's a well known.
+
+468
+01:17:27.780 --> 01:17:49.740
+Dobrin Marchev: Test for measuring intelligence of adult people, you know, children, they have a lot of variables. Some of them measuring like the vocabulary. Other measuring the arithmetic skills, but some of them are visual some like picture completion design.
+
+469
+01:17:51.600 --> 01:18:06.420
+Dobrin Marchev: Also have the years of education, the age of the person, a lot of stuff here. And how many variables we got in total 369
+
+470
+01:18:07.740 --> 01:18:25.410
+Dobrin Marchev: And I think 13 altogether. So somebody ran the principal components for us. Can we make sense out of it. It's very common that in our doesn't do that. But if you do this saying SAS or in
+
+471
+01:18:27.450 --> 01:18:42.870
+Dobrin Marchev: SPSS, it gives you a little bit more summarized data you have the coefficients of each component, the iron radio, but also you can also the percent explained variance and the cumulative percent
+
+472
+01:18:43.620 --> 01:18:54.990
+Dobrin Marchev: This is kind of deciding where to stop. We have only the first four here by the way other components. When you do research and real data.
+
+473
+01:18:56.130 --> 01:18:57.540
+Dobrin Marchev: This is more typical
+
+474
+01:18:58.590 --> 01:19:08.490
+Dobrin Marchev: Don't get too excited. See how the first component explains barely above 50% or the other examples were over the jumping to 70 ad with one component
+
+475
+01:19:09.060 --> 01:19:27.690
+Dobrin Marchev: You might end up with the data where we have to keep approving more and more components. If you want more and more explanation. The second one is 10% cumulative up to the second is 62 it's still a little bit low. They stopped at the fourth one, it's still disappointing 74% total
+
+476
+01:19:29.310 --> 01:19:46.380
+Dobrin Marchev: Explanation. Sometimes you might say, Okay, enough is enough. I want to have like a shorter explanation. We just for instead of 13 variables. Maybe that's why they stop of the fourth one. Can we make sense of the numbers.
+
+477
+01:19:47.880 --> 01:19:49.350
+Dobrin Marchev: If the
+
+478
+01:19:51.420 --> 01:20:08.940
+Dobrin Marchev: Data are such that you can calculate something like an overall total very often the first component ends up being exactly that. And you can see that the first one is really kind of uniformly getting you
+
+479
+01:20:10.890 --> 01:20:19.470
+Dobrin Marchev: The number is almost the same. And that's why the the author's called this the overall intelligence of the person.
+
+480
+01:20:20.700 --> 01:20:29.190
+Dobrin Marchev: Years of education or positive everything else. All the other tests positive. He has a negative effect on the principal component
+
+481
+01:20:31.230 --> 01:20:34.680
+Dobrin Marchev: And component to
+
+482
+01:20:35.910 --> 01:20:37.080
+Dobrin Marchev: Is
+
+483
+01:20:38.970 --> 01:20:39.930
+Dobrin Marchev: Kind of
+
+484
+01:20:41.520 --> 01:20:46.740
+Dobrin Marchev: Combat. I mean, it's very heavily on the age and half of the
+
+485
+01:20:47.850 --> 01:20:52.140
+Dobrin Marchev: Measurements are positive, the other negative
+
+486
+01:20:53.340 --> 01:20:55.680
+Dobrin Marchev: The altar call this the
+
+487
+01:20:57.000 --> 01:21:00.390
+Dobrin Marchev: Age factor. So the intelligence.
+
+488
+01:21:01.530 --> 01:21:11.670
+Dobrin Marchev: Is intelligence on the previous one. Everything granddaughter, and this is how people progress with age, their intelligence.
+
+489
+01:21:13.080 --> 01:21:32.970
+Dobrin Marchev: And also has this dichotomous structure verbal verbal or information or skill which advanced with the age and the other, which decreases with age, the spatial qualities. That's why we had half of the numbers, positive or negative.
+
+490
+01:21:34.320 --> 01:21:38.910
+Dobrin Marchev: Then the third and the fourth, they call them spatial
+
+491
+01:21:40.110 --> 01:21:45.090
+Dobrin Marchev: Or dimension perception. And the fourth one is the numerical but that's because
+
+492
+01:21:46.410 --> 01:21:51.270
+Dobrin Marchev: The variables are heavily loaded on the visual versus the
+
+493
+01:21:52.770 --> 01:21:54.150
+Dobrin Marchev: Algebraic skills.
+
+494
+01:21:56.760 --> 01:21:57.300
+Dobrin Marchev: Yeah.
+
+495
+01:21:58.020 --> 01:22:18.270
+dalalalhomaizi: Is it common to because in practice. I've seen that, that they will do a principal component analysis within like an a certain assessment. It's odd that they're combining some demographic features would explain why the variance is kind of weak because
+
+496
+01:22:19.380 --> 01:22:34.320
+dalalalhomaizi: If you're trying to represent a sub test or an assessment, it would make sense to just look at the variables related to that. I don't understand why they would add age and years of education, it just seems to throw it all over the place.
+
+497
+01:22:34.380 --> 01:22:41.850
+Dobrin Marchev: Does that make sense. That's true, actually. But see how the principal components achieve that, if you knew in advance that
+
+498
+01:22:42.330 --> 01:22:59.340
+Dobrin Marchev: He is really a different type of thing or different kind of animal. It doesn't make sense to do compare like oranges and apples. You might leave it out and do the principal components on the rest, I think they were hoping that the PC. I will the PCs will
+
+499
+01:23:00.510 --> 01:23:07.710
+Dobrin Marchev: Pick up these differences and they kind of did. But it's not as clear cut. If you remove it and rerun it like
+
+500
+01:23:08.310 --> 01:23:19.770
+Dobrin Marchev: When you know that your variables can be split into say visual versus analytical versus writing the probably you should do the split yourself.
+
+501
+01:23:20.250 --> 01:23:28.380
+Dobrin Marchev: Sometimes people are not really sure how to do that. And that's why they are on the principal components, people do the work for them. That's what they did here.
+
+502
+01:23:29.010 --> 01:23:33.690
+dalalalhomaizi: So if we have a data set. Can we kind of create our own chunks.
+
+503
+01:23:33.720 --> 01:23:36.090
+dalalalhomaizi: And run principal component analysis.
+
+504
+01:23:36.390 --> 01:23:51.330
+Dobrin Marchev: That is part of the research and it requires familiarity with the data set. Think about the principal component method is like your computer, you don't really know what the meaning of this variable is you're just given a task to optimize it.
+
+505
+01:23:52.050 --> 01:24:07.650
+Dobrin Marchev: And that's what the computer does for. So if you really knew that they can they can explain different parts of the knowledge or intelligence or dimension of the chicken in advance, you should split them yourself.
+
+506
+01:24:08.340 --> 01:24:12.390
+Dobrin Marchev: I think on this examples we pretty much confirm
+
+507
+01:24:12.810 --> 01:24:16.020
+Dobrin Marchev: The principal component is what we are expecting
+
+508
+01:24:22.830 --> 01:24:24.300
+Dobrin Marchev: What time is it, by the way, don't see
+
+509
+01:24:26.010 --> 01:24:27.570
+Dobrin Marchev: I wrote something on the slide.
+
+510
+01:24:27.840 --> 01:24:28.530
+Xinyu Pan: To 20
+
+511
+01:24:29.430 --> 01:24:32.820
+Dobrin Marchev: Let me stop this, because this is the last example.
+
+512
+01:24:33.960 --> 01:24:34.140
+Xinyu Pan: We
+
+513
+01:24:34.170 --> 01:24:34.380
+Dobrin Marchev: Have a
+
+514
+01:24:34.800 --> 01:24:36.450
+Dobrin Marchev: Few more minutes to go over the
+
+515
+01:24:39.000 --> 01:24:40.350
+Dobrin Marchev: PowerPoint. Dr. Steve.
+
+516
+01:24:41.580 --> 01:24:44.040
+Xinyu Pan: So quick clarification question. Yeah.
+
+517
+01:24:44.160 --> 01:24:51.690
+Xinyu Pan: So well done principal component analysis before. I've always use SPSS. This is my first time learning how to do it on our
+
+518
+01:24:52.110 --> 01:25:06.360
+Xinyu Pan: Under SPSS. There's also an option. Will you force it to extract only a certain number of factors. Right. Say that, like if you run the program. Naturally, my spit out five but gives you the option to only extract three
+
+519
+01:25:06.720 --> 01:25:12.060
+Xinyu Pan: It was situation, would you force it to a stress three versus, you know, letting the program determine for
+
+520
+01:25:12.060 --> 01:25:18.630
+Dobrin Marchev: You dumped again is what we are doing after the spring break the test for our three enough
+
+521
+01:25:19.710 --> 01:25:39.390
+Dobrin Marchev: Or if you want to use three for whatever reason that you don't want more than three you can force it in advance. The way we will do it is with a hypothesis test will decide are three enough or not enough. So, which means is the remainder various significantly different than zero, not
+
+522
+01:25:40.680 --> 01:25:41.100
+Xinyu Pan: Gotcha.
+
+523
+01:25:41.160 --> 01:25:50.010
+Dobrin Marchev: Thank you. And sometimes you might have this in mind that you want. No matter what, just to summary statistics, then you can say give me two
+
+524
+01:25:50.820 --> 01:26:01.470
+Dobrin Marchev: Other times you might look at there is something called screen plot, that's again something we're doing after the spring break, based on the chart. You can say, well it flattens here are used to
+
+525
+01:26:03.390 --> 01:26:12.060
+Dobrin Marchev: But you're running a little bit ahead of time. We will. Today we are kind of using the rule of thumb at 90% which is very vague.
+
+526
+01:26:14.430 --> 01:26:15.870
+Dobrin Marchev: So,
+
+527
+01:26:16.890 --> 01:26:19.860
+Dobrin Marchev: Let me go now back to the
+
+528
+01:26:22.170 --> 01:26:24.480
+Dobrin Marchev: Our studio, because I think I have a few more.
+
+529
+01:26:25.590 --> 01:26:37.290
+Dobrin Marchev: Examples there. I don't have that with the intelligence. By the way, what I want to do is around the another example kind of to relate to our textbook.
+
+530
+01:26:38.040 --> 01:26:56.040
+Dobrin Marchev: We use this web data before table 5.1 that file should be available already in data set folder. I want to use this to show you how to do it manually and with the building command that's mostly the goal. So let me
+
+531
+01:26:57.180 --> 01:26:58.860
+Dobrin Marchev: Pick up the data file.
+
+532
+01:27:00.210 --> 01:27:02.430
+Dobrin Marchev: So data sets.
+
+533
+01:27:04.950 --> 01:27:08.700
+Dobrin Marchev: Table. It's not here. Okay, sorry. It seemed
+
+534
+01:27:10.020 --> 01:27:11.310
+Dobrin Marchev: Johnson, it said
+
+535
+01:27:15.750 --> 01:27:19.320
+Dobrin Marchev: And I clicked on the wrong okay again.
+
+536
+01:27:21.210 --> 01:27:23.670
+Dobrin Marchev: Jones and the data sets.
+
+537
+01:27:25.530 --> 01:27:28.260
+Dobrin Marchev: Table, or did I say five one
+
+538
+01:27:34.500 --> 01:27:35.250
+Dobrin Marchev: Open
+
+539
+01:27:37.140 --> 01:27:44.250
+Dobrin Marchev: And we have this one doesn't have column names like created them. This is what the dataset look like
+
+540
+01:27:45.720 --> 01:27:48.120
+Dobrin Marchev: It's the rate of swept the
+
+541
+01:27:49.140 --> 01:27:52.950
+Dobrin Marchev: Sodium potassium some sort of measurement.
+
+542
+01:27:53.970 --> 01:27:55.290
+Dobrin Marchev: Well, let's run the
+
+543
+01:27:57.480 --> 01:28:05.220
+Dobrin Marchev: First, before you run anything. By the way, what should you be looking at. There's remember give you the
+
+544
+01:28:06.240 --> 01:28:17.820
+Dobrin Marchev: By varied correlation between each variable. This is just a preliminary check whether you should expect something good. We see strong correlation between one and two.
+
+545
+01:28:18.690 --> 01:28:30.660
+Dobrin Marchev: There is a little bit between one and three but two and three are not very highly correlated. So maybe there will be somewhat decent principal component. Let's see.
+
+546
+01:28:31.590 --> 01:28:45.720
+Dobrin Marchev: You can look at the correlation matrix again, the one to high one in three relatively high almost no correlation between two and three variables.
+
+547
+01:28:47.490 --> 01:29:05.430
+Dobrin Marchev: Covariance matrix. That's what it is. And you can see here the issue in inaction. One of the variances. The sodium way larger than the other two 200 versus something in the vicinity of two
+
+548
+01:29:06.570 --> 01:29:27.180
+Dobrin Marchev: So chances are that the principal component will be dominated by this second variable. Let's see the eigenvalues see one of them much larger than there. So the one principal component will probably be enough, because this is the remainder is almost negligible.
+
+549
+01:29:28.440 --> 01:29:48.960
+Dobrin Marchev: And how, what percent is explained. I did it here manually. The first number 200 out of the total turns out to be 97% that's way more than enough principal components. What are these principal components you request the item vectors.
+
+550
+01:29:50.880 --> 01:30:05.190
+Dobrin Marchev: And as I already suspected look at the first principle component. It simply says take everything out of the second level and close to nothing of x one, x three.
+
+551
+01:30:06.720 --> 01:30:18.180
+Dobrin Marchev: The second principle component. If you must use it to try to explain the remaining 2% is comparison between three verses one with a little bit different.
+
+552
+01:30:20.340 --> 01:30:23.190
+Dobrin Marchev: loadings and almost nothing to x.
+
+553
+01:30:25.560 --> 01:30:36.210
+Dobrin Marchev: So if you have to be wrong have far more. By the way, the former will be after the spring break. But if the question says report, the first
+
+554
+01:30:36.570 --> 01:30:47.340
+Dobrin Marchev: principle component or the first two, you simply say this is my first one and you report the three loadings. This is my second one and your report, the three loading.
+
+555
+01:30:50.190 --> 01:31:00.270
+Dobrin Marchev: Again, we're not really doing anything with this principal components. But you know what typically is done. People transform their data and say okay I had originally
+
+556
+01:31:00.570 --> 01:31:17.670
+Dobrin Marchev: Three variables. Now transform them and summarize everything we do, which simply means multiply your original data matrix by this component loadings. That's what I call why one and two. And if I type why one here.
+
+557
+01:31:19.170 --> 01:31:36.630
+Dobrin Marchev: You will see that it's just I should have typed it against the original data. This is pretty much the second variable. It's point 99 of the second variable and a little bit of the other. So your best summary of the data simply say, I'm using the sodium
+
+558
+01:31:37.800 --> 01:31:44.190
+Dobrin Marchev: The second one will be something else and then whatever they wanted to achieve as research.
+
+559
+01:31:45.210 --> 01:31:55.950
+Dobrin Marchev: On the data would be done, not on the original x one, x two, x three will be done on why one and one. For example, you can do a regression after that.
+
+560
+01:31:57.960 --> 01:31:58.470
+Dobrin Marchev: And
+
+561
+01:31:59.670 --> 01:32:00.660
+Dobrin Marchev: Just proving
+
+562
+01:32:01.770 --> 01:32:08.970
+Dobrin Marchev: That they are uncorrelated that they should be by design. Why one and like to get correlation zero
+
+563
+01:32:10.860 --> 01:32:25.590
+Dobrin Marchev: How about checking the other DRAM herbal formula for the various first component, the variants of the first component 200 it should match the first item value. It's exactly that 2200 point something
+
+564
+01:32:27.300 --> 01:32:36.150
+Dobrin Marchev: And the last few things that I wanted to show you remember this theorem three, which tells you how the
+
+565
+01:32:38.550 --> 01:32:53.130
+Dobrin Marchev: Principal Components correlate with the original data, you can do it manually like this correlation between why one and x one negative point for the two should match the formula on that on during three
+
+566
+01:32:54.420 --> 01:33:02.070
+Dobrin Marchev: Applying the EU and one times the square root of lambda or discouraged of signal on one, it's exactly same
+
+567
+01:33:03.600 --> 01:33:14.880
+Dobrin Marchev: The correlation between the first principle component and the second variable should be the number that weeks, but the point, it's a negative correlation, but it's almost perfectly correlated
+
+568
+01:33:16.830 --> 01:33:29.220
+Dobrin Marchev: All of this can be done automatically by the way, for example, the PR that there are some packages for them. But if there is a PR come
+
+569
+01:33:30.120 --> 01:33:40.680
+Dobrin Marchev: Function in our you simply pass the matrix of the data and it gives you everything there is only one small difference between
+
+570
+01:33:41.670 --> 01:33:54.570
+Dobrin Marchev: What we've been doing manually instead of reporting lambda which is the variants of each component you see here standard deviations at the combine this is nothing more than the square root of lambda
+
+571
+01:33:55.650 --> 01:33:59.160
+Dobrin Marchev: Function some reason that's what they chose to report.
+
+572
+01:34:00.780 --> 01:34:14.760
+Dobrin Marchev: And the what they call PC one PC to PC three. These are the loadings corresponding to each variable. And remember the negative science can switch. So for example, here it's a positive 99
+
+573
+01:34:17.400 --> 01:34:23.850
+Dobrin Marchev: But if you switch one of the numbers like negative point nine nine to positive to your mass, which also the other
+
+574
+01:34:26.940 --> 01:34:29.910
+Dobrin Marchev: And what was the last thing here.
+
+575
+01:34:32.430 --> 01:34:33.270
+Dobrin Marchev: This is the
+
+576
+01:34:36.240 --> 01:34:43.650
+Dobrin Marchev: Original what we got. Just to show that is the same number, just a matter of multiplying by negative one.
+
+577
+01:34:45.690 --> 01:35:05.070
+Dobrin Marchev: And I know that will do more graphs and more details, after the spring break, but just one quick thing that is recommended the principal components as anything that has to do with correlation or variance are very, very sensitive to outliers.
+
+578
+01:35:06.330 --> 01:35:15.930
+Dobrin Marchev: The recommendation is checked for unusual observations and if something's very bad should be removed. This can be done.
+
+579
+01:35:17.010 --> 01:35:19.620
+Dobrin Marchev: With the QQ norm.
+
+580
+01:35:21.030 --> 01:35:36.450
+Dobrin Marchev: And we see, for example, that there is one observation that is very far of the 45 degree line, which happens to be the largest why one. You can also try on the
+
+581
+01:35:37.560 --> 01:35:49.920
+Dobrin Marchev: Scatter plot, except that it's more difficult that you might not be able to spot which one it is, but it's like I know that the answer is that it's this on air, but I'm pointing to this a little bit of the
+
+582
+01:35:51.090 --> 01:35:54.420
+Dobrin Marchev: Core. The gap between the cloud.
+
+583
+01:35:55.470 --> 01:36:02.340
+Dobrin Marchev: So what is this observation, the largest why one that is so much of the plot.
+
+584
+01:36:03.390 --> 01:36:14.280
+Dobrin Marchev: Remember, this is the first principle component where I want the numbers are negative. And there is one of them, which is unusually high it's exactly
+
+585
+01:36:17.520 --> 01:36:23.010
+Dobrin Marchev: I have a type of I said the observation 17 it's actually observation number 15
+
+586
+01:36:24.540 --> 01:36:31.530
+Dobrin Marchev: It's this number here. The 15 observation, most of the data, kind of in the negative.
+
+587
+01:36:33.990 --> 01:36:45.750
+Dobrin Marchev: This is a negative 13 so if you want to know what is happening, you have to go to the original data deep and check out this observation.
+
+588
+01:36:46.890 --> 01:36:57.480
+Dobrin Marchev: What do you notice the 15th or all these two numbers are unusually low, so it's a person with a very low sweat rate and very low.
+
+589
+01:36:58.230 --> 01:37:11.100
+Dobrin Marchev: Sodium so it kind of doesn't belong to the sample. The third variable is in the vicinity of everybody else, but x one, x three, extremely low compared to the rest of the sample.
+
+590
+01:37:12.630 --> 01:37:27.180
+Dobrin Marchev: So as a we'll do more of this next time. But that's like an early check that maybe if you remove the 15 person, you might get more meaningful results and better explanation of covering a structure.
+
+591
+01:37:29.160 --> 01:37:30.360
+Dobrin Marchev: So let's
+
+592
+01:37:33.030 --> 01:37:36.090
+Dobrin Marchev: The sharing and I'll stay for questions.
+
+593
+01:37:38.910 --> 01:37:41.250
+Dobrin Marchev: Let me see anybody
+
+594
+01:37:43.590 --> 01:37:45.540
+Dobrin Marchev: Who wants to ask something
+
+595
+01:37:46.650 --> 01:37:56.760
+Dobrin Marchev: And by the way, if you have any suggestions, not necessarily for principal components, but about how we do this online. Remember, this is my first time. Maybe I did something wrong. Don't be shy.
+
+596
+01:37:57.570 --> 01:38:04.890
+Dobrin Marchev: To send me an email approach me and say, Well, can we next time to such and such thing in a different, you know, adjust
+
+597
+01:38:07.080 --> 01:38:09.750
+Dobrin Marchev: But if you don't have questions.
+
+598
+01:38:11.940 --> 01:38:15.120
+Dobrin Marchev: I'll stay a few more minutes, and then I'll stop the recording.
+
+599
+01:38:18.480 --> 01:38:19.230
+Dobrin Marchev: Anybody
+
+600
+01:38:23.880 --> 01:38:32.550
+Dobrin Marchev: Know. Okay, then I'll stop the recording. Let's say the lecture is over, but I'll still be online in the next five minutes to see if anybody is
+

@@ -1,0 +1,41 @@
+---
+title: "Homework two"
+author: "Yi Chen(yc3356)"
+date: "February 3, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Homework Two
+
+
+```{r}
+response <- c(19.4,20.6,20,25,24.5,24,24.8,26,25.4,23.1,24.3,23.7,22.6,21.6,22.1,25.6,26.8,26.2,27.6,26.4,27,25.4,24.5,26.3)
+
+fertilizer <- c(rep("A",12),rep("B",12))
+wheat <- c(rep(c(rep("M",3),rep("N",3),rep("O",3),rep("P",3)),2))
+boxplot(response~fertilizer*wheat)
+interaction.plot(fertilizer,wheat,response)
+```
+```{r}
+summary(aov(response~fertilizer*wheat))
+```
+```{r}
+summary(aov(response~fertilizer+wheat))
+```
+```{r}
+fit1<-aov(response~fertilizer)
+tk1<-TukeyHSD(fit1)
+plot(tk1)
+tk1
+```
+```{r}
+fit2<-aov(response~wheat)
+tk2<-TukeyHSD(fit2)
+plot(tk2)
+tk2
+```
+

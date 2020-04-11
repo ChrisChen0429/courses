@@ -1,0 +1,53 @@
+---
+title: "Chapter two:return"
+author: "Yi Chen(yc3356)"
+date: "January 20, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## chapter two: return
+```{r}
+setwd("C:/Users/cheny/Desktop/study/second term/Statistical Method In Finance/week one")
+dat = read.csv("Stock_FX_Bond.csv")
+```
+
+```{r}
+attach(dat)
+n=dim(dat)[1]
+# calculate the net return
+GMReturn=GM_AC[2:n]/GM_AC[1:(n-1)]-1
+FReturn=F_AC[2:n]/F_AC[1:(n-1)]-1
+par(mfrow=c(1,1))
+plot(GMReturn,FReturn)
+```
+### problem one
+```{r}
+cor(GMReturn,FReturn)
+```
+
+### problem two
+```{r}
+GMLogReturn = log( 1 + GMReturn )
+plot( GMReturn, GMLogReturn )
+abline(a=0,b=1)
+cor( GMReturn, GMLogReturn )
+
+```
+
+### problem three
+```{r}
+niter=1e5          #number of iterations 
+below=rep(0,niter) #set up storage set.seed(2009)
+for(i in 1:niter){
+        r=rnorm(45,mean=.05/253,sd=.23/sqrt(253))    #generate random numbers
+        logPrice=log(1e6)+cumsum(r)
+        minlogP=min(logPrice) #minimum price over next 45 days 
+        below[i]=as.numeric(minlogP<log(950000))
+}
+mean(below)
+```
+

@@ -1,0 +1,7 @@
+\begin{figure*}[hbt]
+\ifnextchar[{\eatarg}{}
+[hbt!]
+      \centering
+      \includegraphics[height=5cm]{main.png}
+      \caption{Research Components Summary}
+\end{figure*}

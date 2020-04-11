@@ -1,0 +1,109 @@
+
+# Example 6.5 on pages 232--234
+
+
+library(SDaA); rm(list=ls());
+
+dim(statepop); names(statepop);
+
+
+# PPS sample with replacement form N=3078 US counties
+
+# Use data to estimate number of licensed practicing physicians
+
+
+M.0 <- 255077536  # total US population then was 255 million
+
+M.i <- statepop$popn
+
+t.i <- statepop$phys
+
+plot(x=M.i, y=t.i)
+
+
+# Since the t.i are approximately proportional to the M.i, we 
+#  can expect PPS sampling to lead to lower variance (more 
+#  precise estimation)
+
+
+plot(x=M.i, y=t.i, log="xy")
+
+
+# Histogram of data
+
+hist(t.i, breaks=30, right=F)
+
+# This picture gives a misleading sense of the population 
+#  distriubtion; it will tend to suggest more big t.i-values 
+#  than there actuall are (since they are sampled with 
+#  higher probability)
+
+
+# A histogram of t.i/M.i (physicians per capita) will more 
+#  apprpriately reflect the shape of the distribution of 
+#  physicians per capita, weighted by county population
+
+hist(t.i/M.i, breaks=30, right=F)
+
+# Each unit is an estimate of physicians per capita in US
+
+
+# Estimate number of physicians in the US, with std error
+
+psi.i <- M.i / M.0
+
+t.hat.psi <- mean(t.i/psi.i)
+
+t.hat.psi
+
+# Estimate about 570,000 physicians in the United States
+
+
+# Standard error?
+
+n <- length(t.i); n;
+
+V.hat <- 1/n * var(t.i/psi.i); sqrt(V.hat);
+
+SE <- sd(t.i/psi.i) / sqrt(n); SE;
+
+# Standard error is about 41,000
+
+
+# 95% confidence interval
+
+t.hat.psi + c(-1,1) * 1.96 * SE
+
+# 95% confident there are somewhere between 489,000 and 
+#    651,000 licensed physicians practicing in the US
+
+
+# The SAS output reported in the book uses a t-multiple
+
+t.hat.psi + c(-1,1) * qt(.975, n-1) * SE
+
+
+
+# Sampling weights
+
+w.i <- 1 / (n * psi.i)
+
+weights <- data.frame(county=statepop$county, weight=w.i)
+
+weights[order(w.i), ]
+
+# An Angeleno represents 0.28 people for every time Los Angeles 
+#  is included in the sample (four times in this instance)
+
+# A resident of Charles Mix county represents 275 people!
+
+1/w.i[statepop$county=="Los_Angeles"]
+
+1/w.i[statepop$county=="Charles_Mix"]
+
+# That's because we expect LA to get counted 3.5 times
+
+# Expected number of hits for Charles Mix county is 0.0036!
+
+
+

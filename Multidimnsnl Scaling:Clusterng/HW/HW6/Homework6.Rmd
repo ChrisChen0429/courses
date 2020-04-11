@@ -1,0 +1,129 @@
+---
+title: "Homework 6"
+author: "Yi Chen"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(width = 160)
+
+```
+
+## R Markdown
+
+### 1. data mannipulation
+```{r message=FALSE, warning=FALSE}
+library(readxl)
+library(readr)
+library(dplyr)
+library(tidyr)
+library(smacof)
+data <- read_excel("ALL 2019 NATIONS DATA.xlsx")
+sex <- as.character(data[2,5:ncol(data)-1])
+birth <- as.character(data[1,5:ncol(data)-1])
+country <- unique(as.character(data$...2[4:nrow(data)]))
+data <- data %>% slice(-c(1:3)) %>% dplyr::select(2:12)
+
+## create the proximy 
+dist_list <- list()
+for (k in 1:length(sex)){
+  proximy <- matrix(NA,nrow = length(country),ncol = length(country))
+  rownames(proximy) <- country
+  colnames(proximy) <- country
+  for (i in rownames(proximy)){
+    for (j in colnames(proximy)){
+      if (i == j){
+        proximy[i,j] = 9
+      }else{
+        d <- as.numeric(data %>% filter(`...2`==i &`...3`==j) %>% dplyr::select(k+2))
+        proximy[j,i] = d
+      }
+    }
+  }
+  proximy_dist <- as.dist(proximy)  
+  dist_list[[k]] <- sim2diss(proximy_dist,method = 10,to.dist = TRUE)
+}
+
+dist_list
+```
+
+
+#### 2
+
+###### 2a: individual difference MDS
+
+There is an error when I try the r = 1. I just try r from 2 to 6, instead.
+```{r message=FALSE, warning=FALSE}
+stresses <- c()
+for (r in 2:6){
+  country_ind<- indscal(dist_list,type="ordinal",init="torgerson",ndim = r)
+  stresses <- c(stresses,country_ind$stress)
+  plot(country_ind$gspace,asp=1,pch=' ') 
+  text(country_ind$gspace,colnames(proximy))
+}
+stresses
+plot(2:6,stresses,type = 'l')
+```
+
+There are no big differences between the results from different dimension after r = 3. The overall configuration of the countries are similar. I personally feel the 4 dimension result is the best one: Russia and Japan are closer probably because of the deographic factors. USA and China are closer probably because of their social-economics status.
+
+###### 2b average difference MDS
+
+```{r message=FALSE, warning=FALSE, paged.print=FALSE}
+nations <- read_csv("nations_ALLDATA_1920_lowerhalf.csv") 
+row.names(nations) <- nations %>% pull(X1)
+nations <- nations %>% dplyr::select(c(-1))
+nations <- nations %>% replace(is.na(.),0) 
+S <- as.matrix(nations + t(nations))
+diag(S) <- 9
+S <- as.dist(S)
+S.isoMDS <- MASS::isoMDS(S,k=3)
+plot(S.isoMDS$points,asp = 1,pch=" ") 
+text(S.isoMDS$points,row.names(nations))
+```
+
+There are big difference in the result. In this configuration, China and USA are far away in the dimension 2. Same as Russia and Japan.
+
+#### 3 INDSCAL Interpretation
+
+```{r message=FALSE, warning=FALSE}
+country_ind<- indscal(dist_list,type="ordinal",init="torgerson",ndim = 3)
+plot(country_ind$gspace[,c(1,2)],asp=1,pch=' ') 
+text(country_ind$gspace[,c(1,2)],colnames(proximy))
+
+plot(country_ind$gspace[,c(1,3)],asp=1,pch=' ') 
+text(country_ind$gspace[,c(1,3)],colnames(proximy))
+
+plot(country_ind$gspace[,c(2,3)],asp=1,pch=' ') 
+text(country_ind$gspace[,c(2,3)],colnames(proximy))
+
+```
+
+For the first dimension:Gongo and Cuba are high and Israel and Janpan are low. Maybe this is related to the technology and education difference. 
+
+For the second dimension:Janpan and China are high, while Brazil, Congo, and France are low. May be related to the cultural and demographic difference.
+
+For the third dimension: Congo, Egypt and India are high, while France, USA, and Russia are low. May be related to the economics difference.
+ 
+
+#### 4 
+
+```{r}
+#country_ind<- indscal(dist_list,type="ordinal",init="torgerson",ndim = 4)
+weight_matrix <- matrix(NA,nrow=length(sex),ncol = 3)
+for (i in 1:length(sex)){
+  weight_matrix[i,] <- diag(country_ind$cweights[[i]])
+}
+weight_matrix
+plot(weight_matrix[,c(1,2)],asp=1,pch=' ') 
+text(weight_matrix[,c(1,2)],colnames(data)[4:12])
+
+plot(weight_matrix[,c(1,3)],asp=1,pch=' ') 
+text(weight_matrix[,c(1,3)], birth)
+
+plot(weight_matrix[,c(2,3)],asp=1,pch=' ') 
+text(weight_matrix[,c(2,3)], birth)
+```
+
+

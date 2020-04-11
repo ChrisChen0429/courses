@@ -1,0 +1,79 @@
+---
+title: "Homework 10"
+author: "Yi Chen"
+date: "4/9/2020"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Homework 10
+
+### problem 1
+
+#### question a: single-link clustering
+
+
+```{r message=FALSE, warning=FALSE}
+library(readr)
+winter <- read_csv("olympic dissim data.csv")
+head(winter)
+x <-as.matrix(winter)
+sports <- x[,1]
+x <- x[,2:13]
+y <- matrix(as.numeric(x),12,12)
+rownames(y) <- sports
+colnames(y) <- sports
+spdist <- as.dist(y)
+spdist
+```
+
+Single-link clustering is based on grouping clusters in bottom-up fashion (agglomerative clustering), at each step combining two clusters that contain the closest pair of elements not yet belonging to the same cluster as each other.
+
+First step: based on `spdist`, the smallest distance 3.57 which is the distance between luge and bobsled. Thus, we cluster luge and bobsled. 
+The corresponding first branch length will be $\frac{1}{2}d_1(luge,bobsled)=\frac{1}{2}3.57=1.785$.
+Also, we need to update the proximity matrix `spdist` into a new one called `d2`. The distance between the unclustered sports with the cluster will be updated by the *minimum distance* between the between each element of the first cluster  and each of the remaining elements.
+For example, the distance between XctySki and the first cluster is:
+
+$$d_2(XctySki,C(luge,bobsled))=min(d_1(XctySki,luge),d_1(XctySki,bobsled))=min(6.50,6.57)=6.50$$
+The following step basically repeat the process until all the elements are clustered into a single cluster.
+
+To do the visulization, I use the R function to repeat the step that I did in hand and show the resulting dendrogram.
+
+```{r}
+single_link_HC <- hclust(d = spdist,method = 'single')
+plot(single_link_HC, cex = 0.6)
+```
+
+
+#### question b
+```{r}
+single_link_HC <- hclust(d = spdist,method = 'average')
+plot(single_link_HC, cex = 0.6)
+```
+
+The average method give the result that are easier to interpreated. The average method combine the outdoor sports and indoor sports together. For the indoor sports, the sport emphasis more one the speed are clustered together and the sports emphasis more on the figure are cluster together. For the outdoor sports, the one with short distance are cluster together and long distance are clustered together.
+
+### problem 2
+```{r}
+Hartigan_crime <- read.table("Hartigan_crimes_MLT.txt",sep = '\t',header = TRUE)
+rownames(Hartigan_crime) <- Hartigan_crime$city
+crime <- Hartigan_crime[,2:ncol(Hartigan_crime)]
+crime_dist <- dist(crime)
+crime.HC.ward<- hclust(crime_dist, method="ward")
+plot(crime.HC.ward, cex = 0.6)
+```
+
+The states are clustered together by the space of crime. The states which have simialr number of crimes in general will be closer. For example, Honolulu and Portland are all high in burglary, larceny, and auto-theft, but low in murder, rape, and robbery. However, because the scale of different types of crime is very different, so the contribution each crime make for determine the distance between a pair of state are also different. Burglary, larceny, and auto-theft have a higher average number and bigger standard deviation, which will make more contribution in determine the hierarchical cluster than murder, rape, and robbery. Thus, we can see the overall differenec between the cluster is not very sigfinicant. 
+
+#### Optional question
+```{r}
+crime <- scale(crime)
+crime_dist <- dist(crime)
+crime.HC.ward<- hclust(crime_dist, method="ward")
+plot(crime.HC.ward, cex = 0.6)
+```
+
+As we mentioned above, the scale is very different for each crime. After normalized the data, we can see the distance between clusters are more clear since all the crime can make the contribution in determining the distance equally. The corresponding result shows a little differences. For example, Hartford this time is clustered with Tucson frist. But in general, the result is very similar.

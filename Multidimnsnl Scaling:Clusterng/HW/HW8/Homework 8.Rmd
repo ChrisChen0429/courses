@@ -1,0 +1,129 @@
+---
+title: "Homework 8"
+author: "Yi Chen"
+date: "3/17/2020"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Homework 8
+
+### problem one
+
+There are eight ingredients for each type of pizza, which ingredients are binary scored (contain or not contain).
+
+Without any other prior information, it's safe to assume that each ingredients measure the characteristic of pizza equally. Consequently, the similarity coefficient can be defined as the aggrement (proportation of the same ingredient requirement) of their ingredients:
+
+$$Aggreement (P,Q) = \frac{\sum_{i=1}^{8} I(P_i=Q_j)}{8}$$
+Thus, the agreement level is in the range of 0 to 1. When all the ingredients requirement status are the same for the pair of pizza $P$ and pizza $Q$, the agreement level is 1. Similarly, if all the ingredient requirement status are different for the pair of pizza $P$ and $Q$, the aggreement level is 0. 
+
+Bascially, it measure the proportation of ingredient among the 8 ingredients that the pair of pizza share the same requirement (both contain or both uncontain).
+
+It is a unique format of construct model of feature-matching:
+
+$$S(a,b) = \theta f(A \cap B) - \alpha g(A-B) - \beta g(B-A)$$
+Here, I take $\theta=1/8$, $f(.)$ as the number of indentical elements, and $\alpha = \beta = 0$.
+
+Aggreement is also a unique Gower's coefficient for binary variables and weight for all ingredient variables as the same as 1.
+
+```{r}
+pizza_1 <- c(1,1,0,0,0,0,0,0)
+pizza_2 <- c(0,1,1,0,0,0,0,0)
+pizza_3 <- c(1,1,1,0,0,0,0,0)
+pizzas <- list(pizza_1,pizza_2,pizza_3)
+
+for (i in 1:ncol(combn(3,2))){
+  print(paste("similarity coefficient between ",as.character(combn(3,2)[1,i]), " and ",as.character(combn(3,2)[2,i])))
+  
+  print(mean((pizzas[[combn(3,2)[1,i]]]==pizzas[[combn(3,2)[2,i]]])))
+}
+```
+
+
+### problem two
+In this example, the data is the multivariate data which contains four main variables for measuring the similiarity. All four variables are continuous variable, which is bigger than 0.
+
+There are two possible choice for these ratio variables: Gower’s coefficient and Mahalanobis distance.
+
+The Gowers' coefficient can be calculated by:
+$$d_ij = \sqrt{1 - s_{ij}} = \sqrt{1 - \frac{\sum_a w_{ija} s_{ija}}{\sum_a w_{ija}} }$$
+, where $s_{ija} = 1 - |x_{ia}-x_{ja}| / range(a)$.
+
+The Mahalanobis distance can be calculated by:
+$$d(x,y) = \sqrt{(x-y)^{T}S^{-1}(x-y)}$$
+
+To test which approch performance better. I test both methods with the given IRIS_MLT.txt dat. The one makes the within group distance small and between group distance big will be the one perform better.
+
+```{r}
+iris <- read.table("IRIS_MLT.txt")
+## for the Gower’s coefficient
+range_v <- apply(iris[1:4],2,max) - apply(iris[1:4],2,min)
+gower <- function(x,y){
+  s <- 0
+  for (k in 1:4){
+    s <- s + (1 - abs(x[k]-y[k])/range_v[k])
+  }
+  s <- s / 4
+  return(s)
+}
+
+within_group_distance <- 0
+between_group_distance <- 0
+for (i in 1:(nrow(iris)-1)){
+  for (j in i:nrow(iris)){
+    x <- as.vector(iris[i,1:4])
+    y <- as.vector(iris[j,1:4])
+    distance <- (1 - as.numeric(gower(x,y)))^(1/2)
+    if (iris[i,5] == iris[j,5]){
+     within_group_distance = within_group_distance + distance 
+    }else{
+      between_group_distance = between_group_distance + distance
+    }
+}
+}
+
+within_group_distance / between_group_distance
+
+## for the Mahalanobis distance
+covariance_matrix <- cov(iris[,1:4])
+within_group_distance <- 0
+between_group_distance <- 0
+for (i in 1:(nrow(iris)-1)){
+  for (j in i:nrow(iris)){
+    x <- iris[i,1:4]
+    y <- iris[j,1:4]
+    distance <- sqrt(as.matrix((x - y)) %*% as.matrix(solve(covariance_matrix)) %*% as.matrix(t(x-y)))
+    if (iris[i,5] == iris[j,5]){
+     within_group_distance = within_group_distance + distance 
+    }else{
+      between_group_distance = between_group_distance + distance
+    }
+}
+}
+
+within_group_distance / between_group_distance
+```
+
+The ratio of sum of within group distance to the sum of between group distance for Mahalanobis distance is bigger than  Gower’s coefficient. This means Gower’s coefficient has a better performance, according to our requirement, which gives a relative smaller within group distance compared with the between group distance. Consequently, I pick the Gower’s coefficient.
+
+```{r}
+x_list <- list(iris[1,1:4],iris[51,1:4],iris[101,1:4])
+
+all_comb <- combn(3,2)
+for (i in 1:ncol(all_comb)){
+  print(paste("similarity coefficient between ",as.character(all_comb[1,i]), " and ",as.character(all_comb[2,i])))
+  print((1 - gower(x_list[[all_comb[1,i]]],x_list[[all_comb[2,i]]]))^(1/2))
+}
+```
+
+
+### problem three
+
+In this multivariate data set, all the vaiables are comtinuous ratio variables. Again, Gower’s coefficient and Mahalanobis distance are appropriate for handeling this data set. Here, I recommend the use of Mahalanobis distance because it is usually related to the other multivariate analysis techniques like mutltivariate linear regression which is based on the normal distribution. Besides, the calculation of Mahalanobis distance require relatively less computation.
+
+##### Optional question
+
+The data set in the document which contian additional categorial (nomial) data set should not be incorperated in to the distance calculation directly since they are using the different scale.

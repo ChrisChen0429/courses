@@ -1,0 +1,86 @@
+1. F; 208
+2. F; not tenable
+3. T
+4. T
+5. F; large
+6. F; denom uses F
+7. B
+8. E
+9. D
+10. C
+11. C
+12. D
+13. E
+14. B
+15. A
+16. In addition to specific examples from the APA manual below, also
+    see the table checklist on p. 150.
+ (a) APA Manual (p. 113): Do not use a zero before 
+      a decimal fraction when the statistic cannot be greater than
+      1.
+ (b) APA Manual (p. 113): Use a zero before the decimal 
+      point with numbers that are less than 1 when the statis­tic can 
+      exceed 1.
+ (c) APA Manual (p. 113): The number of decimal places 
+      to use in reporting the results of experiments and data analytic
+      manipulations of the data should be governed by the following 
+      general principle: Round as much as possible while keeping 
+      prospective use and statistical pre­ cision in mind. As a general
+      rule, fewer decimal digits are easier to comprehend than more digits; 
+      therefore, in general, it is better to round to two decimal places or 
+      to rescale the measurement
+ (d) APA Manual (p. 114): When reporting p values, report 
+      exact p values (e.g., p = .031) to two or three dec­ imal places. 
+      However, report p values less than .001 as p < .001.
+ (e) APA Manual (p. 128): Tables should be integral to the text but 
+      should be designed so that they can be understood in isolation.
+ (f) APA Manual (p. 133): Give every table a brief but clear and 
+      explanatory title. The basic content of the table should be easily
+      inferred from the title.
+ (g) APA Manual (p. 134): Abbreviations of technical terms, group names,
+      and the like must be explained in the table title or in a note to 
+      the table.
+ (h) APA Manual (p. 137): The table body contains the data. Express numerical
+      values to the number of decimal places that the precision of measurement
+      justifies (see section 4.35), and if possible, carry all comparable 
+      values to the same number of decimal places.
+ (i) APA Manual (p. 141): Limit the use of rules (i.e., lines) in a table 
+      to those that are necessary for clarity. Appropriately positioned 
+      white space can be an effective substitute for rules.
+
+17a. The pairwise correlations between the group variable and all other
+      variables are expected to be nil because the group was randomized.
+17b. The correlation betwen pk1 and pk5 (.71) indicates a strong linear
+      relationship between pretest and posttest, which suggests pretest 
+      is a suitable covariate.
+17c. The pairwise correlation between pk1 and group is negative, indicating
+      that the treatment group had less pain at baseline. Thus, controlling
+      for pretest will tend to pull the adjusted mean of the treated group 
+      up and the adjusted mean of the control group down.
+
+18. The one-way ANOVA output given for the acupuncture data tests the omnibus
+     null hypothesis that there is no difference in mean headache severity
+     across the groups after 1 year. Given a Type I error rate of .05, we 
+     reject the null hypothesis (F(1,299) = 11.83; p = .0007) and conclude 
+     that there is evidence of a difference in headache severity at one year.
+     (See p. 127 in the APA manual for an example.)
+
+19. The effect of acupuncture treatment on headache severity is moderated
+     by baseline headache severity. As an example, condition on pretest
+     severity ratings of, say, 20 and 60. The prediction equation for 
+     pk1 = 60 is as follows: pk5_i = 1.35 + .69*60 + (.96 - .13*60)*group
+                             pk5_i = 1.35 + .69*60 - 6.84*group
+     pk1 = 20 is as follows: pk5_i = 1.35 + .69*20 + (.96 - .13*20)*group
+                             pk5_i = 1.35 + .69*60 - 1.64*group
+     Thus, we can see that the effect of acupuncture is to reduce headache
+     severity by 1.64 points on average for those with pretest headache 
+     severity score of 20; whereas, the effect of acupuncture is to reduce
+     headache severity by 6.84 points for those with pretest headache
+     severity score of 60. These specific examples illustrate the general
+     trend that the efficacy of acupuncture in reducing headache severity 
+     increases with increasing baseline headache severity. This may be 
+     validated by examining the plot, which shows predicted lines fanning
+     out as baseline severity increases.
+
+FORMULAS TO KNOW:
+See solutions for the 2019 exam.

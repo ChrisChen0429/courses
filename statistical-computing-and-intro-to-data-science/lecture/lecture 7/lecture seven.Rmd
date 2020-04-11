@@ -1,0 +1,386 @@
+---
+title: "Randomness"
+author: "Yi (Chris) Chen"
+date: "October 20, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## lecture seven: randomness
+### random number generataion
+```{r}
+# generate 10 number uniformly over the unit interval
+runif(10)
+
+# to recreat the same random numbers
+set.seed(10)
+runif(10)
+```
+
+##### linear congruential generator(LCG)
+```{r}
+new.random <- function(a=5,c=12,m=16,seed,len){
+        seq <- rep(NA,len)
+        seq[1] <- seed
+        for( i in 2:len){
+                seq[i] <- (a*seq[i-1]+c) %% m
+        }
+        return(seq)
+}
+
+new.random(seed = 10, len = 20)
+
+new.random(a = 131, c = 7, m = 16, seed = 10, len = 20)
+new.random(a = 129, c = 7, m = 16, seed = 10, len = 20)
+new.random(a=1664545, c=1013904223, m=2^32, seed = 10, len = 20)
+
+
+```
+
+
+### Simulating Random Variables from Common Probability Distributions
+##### common distribution
+```{r}
+# rnorm(n, mean = 0, sd = 1)  draws random numbers from distribution 
+# dnorm(x, mean = 0, sd = 1, log = FALSE)   the probability density function (pdf) or probability mass function (pmf) 
+# pnorm(q, mean = 0, sd = 1, lower.tail = TRUE, log.p = FALSE)  cumulative probability function 
+# qnorm(p, mean = 0, sd = 1, lower.tail = TRUE, log.p = FALSE)  quantile function 
+dnorm(0, mean = 0, sd = 1) == 1/sqrt(2*pi)
+rnorm(1)
+rnorm(5)
+x <- rnorm(1000000, mean = 100, sd = 1)
+summary (x)
+hist(x)
+```
+```{r}
+# Example: Gaussians
+library(ggplot2)
+ggplot(data.frame(x = c(-5, 5))) +
+        stat_function(mapping = aes(x = x), fun = dnorm) +
+        labs(title = "Standard Normal Density")
+
+```
+```{r}
+pnorm(0) # P(Z < 0)
+pnorm(1.96) - pnorm(-1.96) # P(-1.96 < Z < 1.96)
+qnorm(.5) # P(Z < ?) = 0.5
+qnorm(.975) # P(Z < ?) = 0.975
+```
+
+##### tesk
+```{r}
+# X ~ Binom(n = 1000; p = 0:20)
+
+#Using the normal approximation to the binomial distribution, compute the approximate probability P(X<=190).
+
+val <- 190; n <- 1000; p <- 0.2
+correction <- (val + 0.5 - n*p)/sqrt(n*p*1-p)
+pnorm(correction) # p(z<correction)
+
+# Calculate the exact probability P(X <= 190)
+pbinom(val,size = n,prob = p) # p(x<=190)
+
+sum(dbinom(0:val,size = n,prob = p))
+
+# Simulate 500 realizations of X and create a histogram (or bargraph) of the values
+x <- rbinom(500,size = n,prob = p)
+ggplot(data = data.frame(x)) +
+        geom_histogram(aes(x = x, y = ..density..)) + 
+        stat_function(mapping = aes(x = x), fun = dnorm,args = list(mean = 200, sd = sqrt(160)), color = "red") +
+        labs(title = "Normal Approximation to the Binomial")
+
+```
+
+#####Example
+```{r}
+#Plot the density function of the student's t distribution with degrees of freedom, df = 1; 2; 5; 30; 100. 
+
+ggplot(data.frame(x = c(-5, 5))) +
+        stat_function(aes(x = x), fun = dnorm, color = "red")+
+        stat_function(aes(x = x, linetype = "df = 1"),fun = dt, args = list(df = 1)) +
+        stat_function(aes(x = x, linetype = "df = 2"),fun = dt, args = list(df = 2)) +
+        stat_function(aes(x = x, linetype = "df = 5"),fun = dt, args = list(df = 5)) +
+        stat_function(aes(x = x, linetype = "df = 30"),fun = dt, args = list(df = 30)) +
+        stat_function(aes(x = x, linetype = "df = 100"),fun = dt, args = list(df = 100)) +
+        labs(title = "Standard Normal and Student's T Densities",linetype='legend')
+
+```
+
+##### tesk
+```{r}
+# gamma density function 
+ggplot(data.frame(x = c(0, 10))) +
+        stat_function(mapping = aes(x = x, color = 'alpha = 2'), fun = dgamma, args = list(shape=2,rate=1))+
+        stat_function(mapping = aes(x = x, color  = 'alpha = 3'), fun = dgamma, args = list(shape=3,rate=1))+
+        stat_function(mapping = aes(x = x, color  = 'alpha = 4'), fun = dgamma, args = list(shape=4,rate=1))+
+        stat_function(mapping = aes(x = x, color  = 'alpha = 5'), fun = dgamma, args = list(shape=5,rate=1))+
+        stat_function(mapping = aes(x = x, color  = 'alpha = 6'), fun = dgamma, args = list(shape=6,rate=1))+
+        labs(title = "Gamma distribution",color='alpha level')
+```
+
+####Tasks
+Suppose we want to simulate from the following linear model:
+*y=b0+b1x+c*
+```{r}
+simulate_new <- function(n,c=rnorm(n,mean=0,sd=2)
+,x=rnorm(n,mean = 0, sd = 1),b0=0.5,b1=2){
+        y <- b0 + b1 * x + c
+        ggplot()+geom_point(mapping = aes(x=x,y=y))
+}
+simulate_new(100)
+```
+
+### sample function
+```{r}
+sample(1:10, 4)
+sample(1:10, 4)
+sample(letters, 5)
+sample(1:10)
+sample(1:10)
+sample(1:10, replace = TRUE)
+```
+#### example
+```{r}
+n <- 1000
+p <- c(0.1, 0.2, 0.7)
+x <- sample(1:3, size = n, prob = p, replace = TRUE)
+head(x, 10)
+rbind(p, p.hat = table(x)/n)
+```
+
+#####task
+```{r}
+n <- 100
+p <- rep(1/6,6)
+x1 <- sample(1:6,size = n,prob = p,replace = TRUE)
+rbind(p, p.hat = table(x1)/n)
+
+x2 <- round(runif(n, min = 0.5,max=6.5))
+rbind(p, p.hat = table(x2)/n)
+```
+
+### Simulating Random Variables from Uncommon Probability Distributions
+
+```{r}
+# transforming i.i.d. uniform [0; 1].distributed random variables into a prescribed target distribution.
+
+n <- 10
+samp <- 100
+table(floor(n*runif(samp)))/samp
+samp <- 10000
+table(floor(n*runif(samp)))/samp
+```
+
+
+##### Inverse Transform Method
+```{r}
+# example
+lambda <- 2
+n      <- 1000
+u      <- runif(n)  # simulating uniform rvs
+Finverse <- function(u,lambda){
+        # function for the inverse transform
+        stopifnot(u>0 & u <1)
+        return(-(1/lambda)*log(1-u))
+}
+x <- Finverse(u,lambda)
+
+ggplot(data = data.frame(x))+
+        geom_histogram(aes(x=x,y=..density..))+
+        stat_function(mapping = aes(x=x),fun = dexp, args = list(rate=2),color='red')+
+        labs(title='inverse transform method to simulate exponent')
+
+```
+
+##### task
+```{r}
+n   <- 1000
+u   <- runif(n)
+findinverse <- function(u){
+        return((u)^(1/3))
+}
+
+x <- findinverse(u)
+ggplot(data = data.frame(x))+
+        geom_histogram(aes(x=x,y=..density..))+
+        labs(title='task')+
+        stat_function(mapping = aes(x=x),fun = function(x){return(3*x^2)} ,color='red')+
+        labs(title='inverse transform method to simulate exponent')
+```
+
+##### rejection sampling
+```{r}
+p <- function(x) {sqrt(1 - x^2)}
+
+generate_one <- function(p_func) {
+        val <- NULL
+        while (is.null(val)) {
+                x <- runif(1, min = -1, max = +1)
+                u <- runif(1)
+                if (u <= p_func(x)) {val <- x}
+        }
+        return(val)
+}
+
+num <- 1000000
+samp <- rep(NA, num)
+for (i in 1:num) {samp[i] <- generate_one(p)}
+hist(samp)
+
+
+ggplot(data = data.frame(samp))+
+        geom_histogram(aes(x=samp,y=..density..))+
+        labs(title='acceptance rejection algorithm')+
+        stat_function(mapping = aes(x=samp),fun = function(x){return((2/pi)*sqrt(1-x^2))} ,color='red')+
+        labs(title='target distribution')
+```
+
+```{r}
+plot(c(0,1), c(0,3), ty = "n", main = "A Sample Distribution",
+ylab = "Density f(x)", xlab = "x")
+curve (dbeta(x, 3, 6), add = TRUE, col = "red")
+text(.65, 1, "target function f", col = "red")
+text(.8, 2.8, "envelope function g")
+lines(c(0,0,1,1), c(0,2.6,2.6,0))
+x1 <- runif(300, min = 0, max = 1);
+y1 <- runif(300, min = 0, max = 2.6)
+selected <- y1 < dbeta(x1, 3, 6)
+points (x1, y1, col = 1+selected, cex = 0.1)
+
+```
+
+
+```{r}
+mean(selected) # Proportion selected
+accepted.points <- x1[selected]
+# Proportion of sample points less than 0.5.
+mean(accepted.points < 0.5)
+# The true distribution.
+pbeta(0.5, 3, 6)
+
+```
+```{r}
+plot(c(0,1), c(0,10), ty = "n", main = "A Sample Distribution",
+ylab = "Density f(x)", xlab = "x")
+curve (dbeta(x, 3, 6), add = TRUE, col = "red")
+text(.65, 1, "target function f", col = "red")
+text(.8, 9.7, "envelope function g")
+lines(c(0,0,1,1), c(0,10,10,0))
+x2 <- runif(100000, 0, 1)
+y2 <- runif(100000, 0, 10)
+selected <- y2 < dbeta(x2, 3, 6)
+mean(selected) # Proportion selected
+points (x2, y2, col = 1+selected, cex = 0.1)
+
+```
+
+```{r}
+# solution part one
+f <- function(x) {
+        stopifnot(x >= 0 & x <= 1)
+        return(60*x^3*(1-x)^2)
+}
+x <- seq(0, 1, length = 100)
+plot(x, f(x), type="l", ylab="f(x)", col = "red")
+
+xmax <- 0.6
+f.max <- 60*xmax^3*(1-xmax)^2
+lines(c(0, 0), c(0, f.max), lty = 1)
+lines(c(0, 1), c(f.max, f.max), lty = 1)
+lines(c(1, 1), c(f.max, 0), lty = 1)
+
+```
+```{r}
+# solution part two
+n.samps <- 1000 # number of samples desired
+n <- 0 # counter for number samples accepted
+samps <- numeric(n.samps) # initialize the vector of output
+while (n < n.samps) {
+        x <- runif(1) #random draw from g
+        u <- runif(1)
+        if (f.max*u < f(x)) {
+                n <- n + 1
+                samps[n] <- x
+        }
+}
+x <- seq(0, 1, length = 100)
+hist(samps, prob = T, ylab = "f(x)", xlab = "x",
+main = "Histogram of draws from Beta(4,3)")
+lines(x, dbeta(x, 4, 3), lty = 2)
+
+```
+
+
+### Monte Carlo Methods
+```{r}
+n <- 10000000
+norms <- rnorm(n, sd = 1/sqrt(2))
+est <- mean(sin(norms)^2)
+est
+est2 <- mean(norms <= 1.36)
+est2
+pnorm(1.36, sd = 1/sqrt(2))
+
+
+n <- 10000000
+norms <- rnorm(n, sd = 1/sqrt(2))
+est <- sqrt(pi)*mean(sin(norms)^2)
+est
+
+
+```
+
+```{r}
+n1 <- 10000; n2 <- 1000
+estvec1 <- rep(NA, 1000); estvec2 <- rep(NA, 1000)
+for (i in 1:1000) {
+norms1 <- rnorm(n1, sd = 1/sqrt(2))
+estvec1[i] <- mean(sin(norms1)^2)
+}
+for (i in 1:1000) {
+norms2 <- rnorm(n2, sd = 1/sqrt(2))
+estvec2[i] <- mean(sin(norms2)^2)
+}
+df <- data.frame(estimates = c(estvec1, estvec2),
+n = c(rep(n1, 1000), rep(n2, 1000)))
+ggplot(df) +
+geom_histogram(aes(x = estimates)) + facet_wrap(~ n, ncol = 2)
+
+```
+
+##### task
+```{r}
+n <- 10000
+mean(rexp(n, rate = 1/3) < 3)
+
+n <- 1000000
+norms <- rnorm(n)
+est <- (1/3)*sqrt(2*pi)*mean(exp((-1/3)*(norms<=3))*exp((1/2)*(norms<=3)^2))
+
+n <- 10000000
+exp <- rexp(n,rate = 1/3)
+est <- mean(exp<3)
+est
+pexp(rate = 1/3, 3)
+```
+
+#### task2
+```{r}
+x <- rbinom(size=16,n = 5000, prob = 0.5)
+mean(x); sd(x)
+
+hist(x)
+
+
+y <- rbinom(size=16,n = 5000000, prob = 0.5)
+mean(y); sd(y)
+
+hist(y)
+
+z <- (y-mean(y))/sd(y)
+hist(z)
+```
+

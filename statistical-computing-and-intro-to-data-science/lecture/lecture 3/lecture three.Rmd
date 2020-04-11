@@ -1,0 +1,295 @@
+---
+title: "lecture three"
+author: "Yi (Chris) Chen"
+date: "September 22, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# lecture three
+
+## Control statement
+
+1. loops
+
+iterates over a statement over a certain number of times.
+
+* for loops
+```{r}
+## eamples
+for(i in 1:5){
+        print(i)
+}
+```
+
+```{r}
+x <- c(5,12,-3)
+for(i in x){
+        print(i^2)
+}
+```
+
+
+```{r}
+y <- c(5, 12, -3)
+for (index in 1:3) {
+        print(y[index]^2)
+}
+```
+```{r}
+mat <- matrix(1:9,ncol=3)
+for(i in 1:3){
+        for(j in 1:3){
+                print(mat[i,j])
+        }
+}
+```
+
+
+* while loops
+```{r}
+i <- 1
+while(i <= 10){
+        print(i)
+        i <- i + 4
+}
+
+```
+
+```{r}
+walk <- 0 
+for( i in 1:100){
+        step <- sample(c(-1,1),size = 1)
+        walk <- c(walk,walk[i] + step)
+}
+plot(walk,type = 'l')
+```
+
+
+```{r}
+walk <-0
+while (abs(walk[length(walk)]) < 3){
+        step <- sample(c(-1,1),size = 1)
+        walk <- c(walk,walk[length(walk)]+step)
+} 
+plot(walk,type='l')
+```
+```{r}
+walk <- 0
+loc <-0
+while (abs(loc)<3){
+        step <- sample(c(1,-1),size = 1)
+        loc <- loc + step
+        walk <- c(walk,loc)
+}
+plot(walk,type = 'l')
+```
+
+2. if and else
+```{r}
+for(i in seq(4)){
+        if(i %% 2 == 0 ){
+                print(log(i))
+        }
+        else{
+                print('odd')
+        }
+}
+```
+```{r}
+x <- runif(1,min = 0,max = 10)
+if(x > 3){
+        y <- 10
+        print('x is great than three')
+}else{
+        y <- 0
+        print('x is less than 3')
+}
+```
+```{r}
+# sum the prime number in a give range
+library(matlab)
+total <- 0 
+number <- 0
+for( i in 1:10){
+        if(isprime(i)){
+                total <- total + i
+                number <- number +1
+        }
+}
+paste('there are', as.character(number),'prime numbers,','and the total is',as.character(total))
+```
+
+## vectorized operators
+```{r}
+## vectorized operators are much easier
+u <- c(1,2,3)
+v <- c(10,-20,30)
+
+sum_vec <- vector(mode = 'numeric',length = length(u))
+for(i in 1:length(u)){
+        sum_vec[i] <- u[i] + v[i]
+}
+sum_vec
+
+c <- u + v
+
+print(sum_vec == c)
+```
+
+```{r}
+vals <- rnorm(1e6)
+system.time(trunc <- ifelse(vals > 0, vals, 0))
+system.time(trunc2 <- vals * (vals >0))
+all(trunc2==trunc)
+```
+```{r}
+## pre-alllocation
+### way1
+vals <- 0
+n <- 50000
+
+system.time(for(i in 1:n){
+        vals <- c(vals,i)
+})
+length(vals)
+head(vals)
+
+### way 2
+vals <- 0 
+system.time(for(i in 1:n){
+        vals[i] <- i
+})
+length(vals)
+head(vals)
+```
+
+## apply
+1. apply(x,margin(1 for row,2 for col),function,...)
+```{r}
+mat <- matrix(1:12, ncol = 6)
+print(mat)
+colsum <- apply(mat,2,sum)
+print(colsum)
+
+x <- matrix(rnorm(200),nrow = 20,ncol = 10)
+print(x)
+colsd <- apply(x,1,sd)
+print(colsd)
+
+quantile_one <-apply(x,2,quantile,probs=c(0.25,0.75))
+print(quantile_one)
+
+quantile(x[,1],probs = c(0.25,0.75))
+```
+
+2. lapply (it return you a list)
+```{r}
+vec1 <- c(1.1,3.4,2.4,3.5)
+vec2 <- c(1.1,3.4,2.4,10.8)
+not_robust <- list(v1=vec1,v2=vec2)
+lapply(not_robust,mean)
+sapply(not_robust,mean)
+
+unlist(lapply(not_robust,mean)) == sapply(not_robust,mean)
+```
+
+## examples
+```{r}
+setwd("C:/Users/cheny/Desktop/study/statistical computing and intro to data science/lecture/lecture 3")
+HC <- scan('HonorCode.txt',what = '')
+HC <- factor(HC, levels = unique(HC) )
+
+findword <- function(tv){
+        words <- split(1:length(tv),tv)
+        return(words)
+}
+
+wl <- findword(HC)
+wl[1:3]
+
+freqlist <- function(wordlist) {
+        freqs <- sapply(wordlist,length)
+        return(wordlist[order(freqs)])
+}
+freq <- sapply(wl,length)
+freq
+tail(freqlist(wl),5)
+```
+
+## tapply
+```{r}
+vec <- c(rnorm(10),runif(10),rnorm(10,mean = 1))
+group <- factor(c(rep('norm1',10),rep('unif',10),rep('norm2',10)))
+
+grouptapply1 <- tapply(vec,group,mean)
+grouptapply1
+
+grouptapply2 <- tapply(vec,group,range)
+grouptapply2
+```
+
+
+# EDA 
+(question---searh for answer---refine your question and share your finding)
+```{r}
+diamonds <- read.csv('diamonds.csv', as.is = TRUE) ## as.is means defaultly change the string into factor
+str(diamonds)
+
+diamonds$carat <- factor(diamonds$carat)
+tapply(diamonds$price,INDEX = diamonds$cut,FUN = mean)
+tapply(diamonds$price,INDEX = diamonds$color,FUN = mean)
+```
+1. commone two questions:
+* what type of variation occures within my variables
+* what type of convariation occures between my variables
+
+#### variation
+1.1 visualizing the distribution of the variable
+ * categrorical variables: bar graph
+ * continues variabels: hist
+```{r}
+## bar graph
+library(dplyr)
+diamonds$cut <- factor(diamonds$cut,levels = c('Fair','Good','Very Good','Premium','Ideal'))
+arrange(diamonds,cut) ## arange the column in the data frame as the level base.
+head(diamonds)
+
+table(diamonds$cut)
+names(table(diamonds$cut))
+
+barplot(height = table(diamonds$cut),main = 'diamonds cut', names.arg = names(table(diamonds$cut)) )
+```
+```{r}
+## hisogram for continous variables
+diamonds$carat <- as.numeric(diamonds$carat)
+par(mfrow=c(1,2))
+hist(diamonds$carat , main = 'Histogram of Carats', xlab = 'Carats')
+hist(diamonds$carat[diamonds$carat < 30], breaks = 100, main = 'histogram of carats',xlab = 'carats')
+
+```
+
+```{r}
+##boxplot
+par(mfrow=c(1,2))
+boxplot(price ~ cut, data=diamonds,ylab='Price',xlab='cut')
+boxplot(carat ~ cut, data = diamonds,ylab='carat',xlab='cut')
+```
+```{r}
+## scater plot
+plot(x=diamonds$carat,y=diamonds$price,xlab = 'carat',ylab = 'price')
+```
+
+```{r}
+medalist <- read.csv('all_medalists.csv')
+
+gold_USA <- medalist[medalist$NOC=='USA' & medalist$Medal=='Gold',]
+
+table(gold_USA$Year)
+
+plot(table(gold_USA$Year))
+```
+

@@ -1,0 +1,108 @@
+---
+title: "Homework3"
+author: "Yi Chen"
+date: "2/6/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Homework3
+
+### Part A
+
+#### 1 symeertrize the confusion probability matrix
+```{r}
+confusion <-  matrix(c(97,4,4,7,2,9,87,8,37,9,8,16,93,12,12,11,59,17,96,12,9,15,26,12,86),nrow = 5,byrow = T)
+confusion
+
+symmetric_confusion <- (confusion + t(confusion))/2
+symmetric_confusion
+```
+
+
+#### 2 transform into dissimilarity
+```{r}
+#dissimilarity <- abs(symmetric_confusion - apply(symmetric_confusion,1,max))
+dissimilarity <- abs(symmetric_confusion - max(symmetric_confusion))
+dissimilarity
+```
+
+Note, after this step some diag elements in matrix is still not zero.
+
+#### 3 check the traingular inequality. Since the matrix is symmetric, we only need to check the low half of the matrix.
+```{r}
+# all combination of 3 points out of 5
+comb_3 <- combn(5,3)
+
+dis_satisfied <- c()
+for (i in 1:ncol(comb_3)){
+  if ((dissimilarity[comb_3[,i][1],comb_3[,i][2]] > dissimilarity[comb_3[,i][1],comb_3[,i][3]] + dissimilarity[comb_3[,i][2],comb_3[,i][3]]) |
+      (dissimilarity[comb_3[,i][1],comb_3[,i][2]] < dissimilarity[comb_3[,i][1],comb_3[,i][3]] - dissimilarity[comb_3[,i][2],comb_3[,i][3]])){
+          dis_satisfied <- c(dis_satisfied,dissimilarity[comb_3[,i][1],comb_3[,i][2]] - (dissimilarity[comb_3[,i][1],comb_3[,i][3]] + dissimilarity[comb_3[,i][2],comb_3[,i][3]]))
+      }
+}
+dis_satisfied
+```
+
+There is no break of triangle inequality.
+
+#### 4
+```{r}
+diag(dissimilarity) <- 0
+dissimilarity
+```
+
+
+### Part B
+
+#### 5 square the matrix
+```{r}
+d_square <- dissimilarity^2
+d_square
+```
+
+#### double-center
+```{r}
+b <- d_square
+for (i in 1:ncol(d_square)){
+  for (j in 1:ncol(d_square)){
+    b[i,j] <- -0.5 * (d_square[i,j] - colMeans(d_square)[j] - rowMeans(d_square)[i] + mean(d_square))
+  }
+}
+b
+```
+
+
+### Part C
+#### 7 PCA
+```{r}
+Bcomp <- eigen(b)
+wts <- diag(sqrt(Bcomp$values))
+principal <- Bcomp$vectors %*% wts
+round(principal,2)
+```
+
+Let check the scree plot.
+```{r}
+princ <- princomp(x = b,cor = T, scores = T)
+print(princ$sdev,digits = 2)
+plot(princ$sdev, xlab = "Principal Component",ylab = "Eigenvalue",type = "b", main = 'scree plot1')
+abline(h=1,col='Red')
+plot(cumsum(princ$sdev)/sum(princ$sdev), xlab = "Principal Component",ylab = "Proportion of Variance Explained",type = "b", main = 'scree plot2')
+abline(h=0.8,col='Red')
+```
+
+Thus, we only need 2 dimentsions.
+
+#### 8 Two-dimension expression
+
+```{r}
+plot(principal[,1:2],pch="")
+points <- c("E","H",'N',"S","W")
+text(principal[,1:2],points)
+```
+
+Firstly, same to Shepard, W and N, S and H are closer like a cluster. While, E is single point. If result from Shepard rotate counterclockwisely in 90 degree, it is very similar to my result.

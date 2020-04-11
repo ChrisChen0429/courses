@@ -1,0 +1,134 @@
+---
+title: "HW4 review"
+author: "Yi Chen(yc3356)"
+date: "December 1, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Homework 4 review
+```{r}
+x_limt <- 407760
+a_hat <- 2.654
+
+
+f <- function(x,a=a_hat,xmin=x_limt){
+        
+        stopifnot(all(x >= xmin))
+        
+        return(((a-1)/xmin)*(x/xmin)^(-a))
+}
+
+library(ggplot2)
+ggplot(data.frame(x=c(x_limt,1000000)))+
+        stat_function(aes(x=x),fun = f)+
+        labs(title="pareto distribution",x='x',y='f(x)')
+```
+
+```{r}
+upper.income <- function(u,a=a_hat,xlim=x_limt){
+        stopifnot(u>=0,u<=1)
+        
+        return(xlim*(1-u)^(-1/(a - 1)))
+}
+
+upper.income(0.5)
+```
+
+```{r}
+u <- runif(1000)
+pareto <- upper.income(u)
+
+ggplot()+
+        geom_histogram(aes(x=pareto,..density..))+
+        stat_function(aes(x=pareto),fun = f)+
+        xlim(407760.5, 2e06)
+
+```
+
+```{r}
+sim_media <- median(pareto)
+actual_media <- x_limt*(.5)^(1/(-a_hat+1))
+sim_media;actual_media
+```
+
+## part two
+```{r}
+genres <- read.csv("moretti.csv", as.is = TRUE)
+head(genres)
+```
+
+```{r}
+poisloglik <- function(lambda,data){
+        return(sum(log((lambda^data*exp(-lambda))/factorial(data))))
+}
+
+poisloglik(lambda = 1, data = c(1,0,0,1,1))
+```
+
+```{r}
+count_new_genres <- function(year){
+        return(sum(genres$Begin==year))
+}
+
+count_new_genres(1803)
+count_new_genres(1850)
+```
+
+```{r}
+new_genres <- c()
+for(i in 1740:1888){
+        number_this_year <- count_new_genres(i)
+        new_genres <- c(new_genres,number_this_year)
+}
+names(new_genres) <- 1740:1888
+new_genres
+```
+
+```{r}
+y <- c()
+for(i in seq(0,3,0.01)){
+        y_this <- poisloglik(data=new_genres,lambda = i)
+        y <- c(y,y_this)
+}
+
+ggplot()+
+        geom_point(mapping = aes(x=seq(0,3,0.01),y=y),col='steelblue')+
+        geom_vline(xintercept=0.273,lwd=1,col='pink')+
+        labs(title='log maximum likelihood function',x='lambda',y='loglikelihood')+
+        scale_x_continuous(breaks=seq(0 , 3, 0.2))
+```
+
+```{r}
+new_poisloglik <- function(lambda,data){
+        return(-sum(log((lambda^data*exp(-lambda))/factorial(data))))
+}
+
+nlm(new_poisloglik,data=new_genres,1)
+```
+
+```{r}
+intergenre_intervals <- diff(sort(genres$Begin))
+moretti.coef <- sd(intergenre_intervals)/mean(intergenre_intervals)
+
+```
+
+```{r}
+rpois(161, lambda = 0.273)
+```
+
+```{r}
+intergenre_calc <- function(new.genres) {
+  names(new.genres) <- 1:length(new.genres)
+  new.genres        <- new.genres[new.genres !=0]
+  years             <- as.numeric(rep(names(new.genres), new.genres))
+  return(diff(sort(years)))
+}
+
+intergenre_intervals2 <- intergenre_calc(new_genres)
+all(intergenre_intervals == intergenre_intervals2)
+```
+

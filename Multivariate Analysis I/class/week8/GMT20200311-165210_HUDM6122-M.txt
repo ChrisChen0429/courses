@@ -1,0 +1,29 @@
+00:08:50	Xinyu Pan:	I don’t see an option for raising hands
+00:09:16	Xinyu Pan:	Oh wait. I see it right under the participant list
+00:09:27	Teresa:	There will be feedback
+00:09:50	Colleen Oppenzato:	I am going to mute myself so there is no feedback for now.
+00:09:53	Teresa:	They need to open the chat option
+00:10:06	Colleen Oppenzato:	"Raise hand" is in chat option
+00:10:21	alialjabri1:	no issues
+00:30:47	Xinyu Pan:	Can you hear me
+00:30:48	Xinyu Pan:	?
+00:30:54	Monica Chan:	we can hear you Xinyu
+00:31:13	Xinyu Pan:	I don’t think Professor MArchev can hear me
+00:31:56	Monica Chan:	the slides are also uploaded on Canvas
+00:34:12	Xinyu Pan:	Yup I downloaded it. I’m having a hard time following which point on the slide he is referring to. All good now
+00:45:19	dalalalhomaizi:	i have a question
+01:01:37	Monica Chan:	has this R file been uploaded? i don’t see it on Canvas atm
+01:02:34	Xinyu Pan:	It’s titled moose.txt
+01:02:36	Xinyu Pan:	Under file
+01:02:38	Nicola Law:	Yes its on the dataset
+01:02:43	Nicola Law:	Go to the files
+01:02:44	Monica Chan:	on but the R code
+01:02:50	Nicola Law:	Its on the files
+01:02:54	Sophie C:	Its under files
+01:02:55	Monica Chan:	i see moose.txt
+01:03:30	Xinyu Pan:	Oh under files
+01:03:44	Xinyu Pan:	11-PCA.r
+01:03:53	Monica Chan:	i see it! :D thanks
+01:03:56	Xinyu Pan:	Uploaded this morning at 10 something
+01:05:54	Teresa's iPad:	It is different. I hope I can follow. So far, it’s okay.
+01:07:14	Teresa's iPad:	Good point!

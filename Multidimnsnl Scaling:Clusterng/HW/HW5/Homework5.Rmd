@@ -1,0 +1,98 @@
+---
+title: "Homework5"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Homework 5
+
+#### part 1
+
+```{r message=FALSE, warning=FALSE}
+#install.packages("smacof")
+library(readr)
+library(smacof)
+library(dplyr)
+library(MASS)
+nations <- read_csv("nations_ALLDATA_1920_lowerhalf.csv")
+row.names(nations) <- nations %>% pull(X1)
+(nations <- nations %>% dplyr::select(c(-1)))
+```
+
+
+#### part 2
+
+
+```{r}
+nations <- nations %>% replace(is.na(.),0)
+(S <- as.matrix(nations + t(nations)))
+S.isoMDS <- MASS::isoMDS(S,k = 2,trace = TRUE)
+
+S.isoMDS$stress
+
+plot(S.isoMDS$points,asp = 1,pch=" ")
+text(S.isoMDS$points,row.names(nations))
+```
+
+
+
+Close neighbors between Egypt and USA does not make sense.
+
+
+#### part 3
+```{r}
+(DD <- sim2diss(S,method = 10))
+(Dx <- sim2diss(S,method = 10,to.dist = TRUE))
+diag(DD) <- 0
+DD.isoMDS <- MASS::isoMDS(DD,k = 2,trace = TRUE)
+
+DD.isoMDS$stress
+
+plot(DD.isoMDS$points,asp = 1,pch=" ")
+text(DD.isoMDS$points,row.names(nations))
+```
+
+Firstly, the stress decrease a lot which means a big overall improvement of the model fit. Second the configuration of the new solution make much more sense. The developed countries like USA and Japan and France are group closer, while the developing countries like Cuba, Congo, and Egypt are closer.
+
+
+
+#### part 4
+
+```{r}
+(nn_sm <- smacof::smacofSym(Dx,ndim = 2,type = "ordinal"))
+plot(nn_sm$conf,asp=1,pch=' ') 
+text(nn_sm$conf,rownames(nations))
+```
+
+The results from isoMDS and smacof are very similar to each other. But smacof gives a much smaller stress. This means smacof have a better model fit. But the difference is limited in terms of interpreation and application of the results.
+
+
+#### part 5
+
+For one dimension
+
+```{r}
+for (i in 1:10){
+  nn_sm <- smacof::smacofSym(Dx,ndim = 1,type = "ordinal",init = "random")
+  plot(nn_sm$conf,asp=1,pch=' ') 
+  text(nn_sm$conf,rownames(nations))
+}
+
+```
+
+For two dimension
+
+```{r}
+for (i in 1:10){
+  nn_sm <- smacof::smacofSym(Dx,ndim = 2,type = "ordinal",init = "random")
+  plot(nn_sm$conf,asp=1,pch=' ') 
+  text(nn_sm$conf,rownames(nations))
+}
+
+```
+
+
+There is almost no local minimum problem in the one dimension solution with random start. But there are obvious local mimimum problem when the solution space is two dimension. 

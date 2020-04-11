@@ -1,0 +1,67 @@
+---
+title: "Lab1"
+author: "Yi Chen"
+date: "9/16/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Lab 1 Assignments
+## Task 1
+```{r}
+# load the library
+library(car)
+```
+
+```{r}
+## load the data (please do not run, since the path is based on my own pc)
+load("~/Desktop/yi/professional_study/courses/lienar regression and expriment design/labs/ecls.Rdata")
+```
+```{r}
+dim(ecls)
+head(ecls,5)
+```
+
+Clearly, there are *7362* cases with *5* variables (including the outcome variable).
+
+## Task 2
+```{r}
+names(ecls)
+```
+
+
+# Task 3
+```{r}
+lm1 <- lm(formula = MATH5 ~ MATHK, data = ecls)
+summary(lm1)
+```
+
+the estimated intercept is 75.45441, and the estimated value of mathk is 1.54790. The R-squre value is 0.4465.
+
+This result means:
+The expected score of fifth grade math score is 75.45 for the student whos kindergarten math score is 0 (this many be meaningless and not realistic). On average, we expect the fifth grade math score will increasee 1.54 when the kindergarten math score is 1 unit bigger. In this model, the kindergarten math score as a predictor can approximately explain 44.6 percent of the variance of fifth grade math score.
+
+# Task 4
+```{r}
+ecls$GENDER <- as.factor(ecls$GENDER)
+lm2 <- lm(formula = MATH5 ~ MATHK + SES + GENDER, data = ecls)
+summary(lm2)
+```
+
+
+the estimated intercept is 78.09038, and the estimated value of mathk is 1.38130, the estimated coefficient value is 4.10341 for gener. The R-squre value is 0.4791
+
+This result means:
+The expected score of fifth grade math score is 78.09038 for the student whos kindergarten math score is 0 (this many be meaningless and not realistic). On average if we fix the effect fome the gender as the same (we fix the gender value), we expect the fifth grade math score will increasee 1.38 when the kindergarten math score is 1 unit bigger. Similary, if we fix the value of kindergarten math score as the same, we expect the fifth grade math score will increasee 4.10341 the gender is indexed as 1 rather than 0.
+In this model, the kindergarten math score as a predictor can approximately explain 47.91 percent of the variance of fifth grade math score.
+
+# Task 5
+```{r}
+slm2 <- summary(lm2)
+attributes(slm2)
+slm2$coefficients
+```
+

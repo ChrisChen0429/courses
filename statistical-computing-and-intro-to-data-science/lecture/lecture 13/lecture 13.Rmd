@@ -1,0 +1,137 @@
+---
+title: "lecture 13"
+author: "Yi Chen(yc3356)"
+date: "December 8, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## lecture
+
+```{r}
+setwd("C:/Users/cheny/Desktop/study/statistical computing and intro to data science/lecture/lecture 13")
+library('DBI')
+library('RSQLite')
+drv <- dbDriver("SQLite")
+con <- dbConnect(drv, dbname="baseball.db")
+
+
+dbListTables(con) # List tables in our database
+dbListFields(con, "Batting") # Fields in Batting table
+dbListFields(con, "Pitching") # Fields in Pitching table
+
+
+batting <- dbReadTable(con,'batting')
+dim(batting)
+```
+
+# Test
+```{r}
+library(plyr)
+library(dplyr)
+Salaries <- dbReadTable(con,'Salaries')
+
+my.sum.func <- function(team.yr.df){
+        return(sum(team.yr.df$salary))        
+}
+
+payroll <- ddply(Salaries,.(yearID,teamID),my.sum.func)
+payroll <- payroll[payroll$yearID==2010,]
+payroll <- payroll[order(payroll$V1,decreasing = T),]
+payroll[1:3 ,]
+
+```
+
+
+```{r}
+dbGetQuery(con, paste("SELECT playerID, yearID, AB, H, HR","FROM Batting","LIMIT 10"))
+batting[1:10, c("playerID", "yearID", "AB", "H", "HR")]
+
+```
+
+
+## task
+```{r}
+dbGetQuery(con, paste("SELECT playerID, yearID, AB, H, HR",
+"FROM Batting",
+"WHERE yearID >= 1990
+AND yearID <= 2000",
+"ORDER BY HR DESC",
+"LIMIT 5"))
+dbGetQuery(con, paste("SELECT playerID, yearID, MAX(HR)",
+"FROM Batting"))
+
+test1 <- batting %>% 
+        select(playerID,yearID,AB,H,HR) %>%
+        filter(yearID>=1990 & yearID<=2000) %>%
+        arrange(desc(HR))
+test1[1:5,]
+
+test2 <- batting %>%
+                select(playerID,yearID,HR)
+
+test2 <- test2[which.max(test2$HR),]
+test2
+```
+
+```{r}
+dbGetQuery(con, paste("SELECT playerID, AVG(HR)",
+"FROM Batting",
+"GROUP BY playerID",
+"ORDER BY AVG(HR) DESC",
+"LIMIT 5"))
+
+
+
+```
+
+```{r}
+dbGetQuery(con, paste("SELECT teamID, AVG(HR)",
+"FROM Batting",
+"WHERE yearID >= 1990",
+"GROUP BY teamID",
+"ORDER BY AVG(HR) DESC",
+"LIMIT 5"))
+
+meanHR <- function(data){
+        return(mean(data$HR,na.rm = TRUE))
+}
+datanew <- batting[batting$playerID>=1990,]
+meanoutcome <- daply(datanew, .(teamID),meanHR)
+meanoutcome[order(meanoutcome,decreasing=TRUE)[1:5]]
+```
+
+```{r}
+dbGetQuery(con, paste("SELECT *",
+"FROM Salaries",
+"ORDER BY playerID",
+"LIMIT 8"))
+dbGetQuery(con, paste("SELECT yearID, teamID, lgID,
+playerID, HR",
+"FROM Batting",
+"ORDER BY playerID",
+"LIMIT 7"))
+
+```
+
+```{r}
+dbGetQuery(con, paste("SELECT yearID, playerID, salary, HR",
+"FROM Batting JOIN Salaries
+USING(yearID, playerID)",
+"ORDER BY playerID",
+"LIMIT 7"))
+
+```
+
+test
+```{r}
+dbGetQuery(con, paste("select playerID, yearID, E from Fielding","where yearID >= 1990","Group by playerID","order by E DESC"))
+```
+
+```{r}
+dbGetQuery(con, paste("select playerID, yearID, E from Fielding","where yearID >= 1990","Group by playerID","order by E DESC"))
+```
+

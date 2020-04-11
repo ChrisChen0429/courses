@@ -1,0 +1,134 @@
+---
+title: "Homework8"
+author: "Yi Chen"
+date: "4/7/2020"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Homework 8
+
+```{r}
+## read the table 
+trackwomen <- read.table("TrackWomen.dat", header = TRUE,sep = "\t")
+head(trackwomen)
+```
+
+#### question a
+```{r}
+## create the correlation matrix
+library(psych)
+(trackwomen.fa = principal(trackwomen[2:ncol(trackwomen)], 
+                           nfactors = 2, 
+                           rotate = 'none',
+                           scores = TRUE,
+                           covar = FALSE))
+```
+
+The second factor one has high loading on the short-disctance sports, which can be interpreated as explosiveness (except x800m).
+
+While the first factor has high loading on the long-distance sport, which can be interpreated as endurance.
+
+#### question b
+```{r}
+plot(trackwomen.fa$scores, xlab = "Factor 1", ylab = 'Factor 2',type = 'n')
+text(trackwomen.fa$scores,labels = trackwomen$Country,cex=.7)
+abline(h = 0, v = 0)
+
+```
+
+As we can see, SAM, COK, and PNG are three outliers in the first factor.
+
+While KOR, N is the outlier in the second factor.
+
+#### question c
+```{r}
+(trackwomen.fa.var = principal(trackwomen[2:ncol(trackwomen)], nfactors = 2, rotate = 'varimax',scores = TRUE,covar = FALSE))
+```
+
+The second factor one has high loading on the short-disctance sports, which can be interpreated as explosiveness.
+
+While the first factor has high loading on the long-distance sport, which can be interpreated as endurance.
+
+This time all the loadings are positive and the high and low value are more clearly distinguished for the sport below the 400m and above 400m.
+
+
+#### question d
+```{r}
+trackwomen.fa.mle = factanal(covmat = cor(trackwomen[2:ncol(trackwomen)]), 
+                             factors = 3, 
+                             rotation = "none")
+trackwomen.fa.mle$loadings
+```
+
+It becomes harder to interperated the three factors.
+The first factor has high loading almost on all the sports.
+The second factor has high loading value on the long-distance sprots.
+The thrid factor onle depend on the x400m, x800m, and marathon.
+
+
+
+#### question e
+```{r}
+trackwomen.fa.mle = factanal(covmat = cor(trackwomen[2:ncol(trackwomen)]),
+                             factors = 3,
+                             rotation = "varimax")
+trackwomen.fa.mle$loadings
+```
+
+The first factor has high loading on the short-distance sport.
+The second factor has high loading value on the long-distance sprots.
+The thrid factor onle depend on the x400m and marathon.
+
+All factors have a negative loading on the x800m.
+
+#### question f
+```{r}
+trackwomen.fa.mle = factanal(covmat = cor(trackwomen[2:ncol(trackwomen)]),
+                             factors = 3, 
+                             rotation = "none")
+trackwomen.fa.mle
+
+```
+
+The chi-square test statistics is 9.73 with 3 degree of freedom,
+the p-value is 0.2221.
+The null hypothesis, H0, is that the number of factors in the model, in our example 2 factors, is sufficient to capture the full dimensionality of the data set.
+Conventionally, we reject H0 if the p-value is less than 0.05. Such a result indicates that the number of factors is too small. In contrast, we do not reject H0 if the p-value exceeds 0.05.
+In this case, we could conclude that there is a significant evidence of model fit and the number of factor is enough in the model.
+
+
+#### question g
+```{r}
+trackwomen$X100m <- 100/trackwomen$X100m
+trackwomen$X200m <- 200/trackwomen$X200m
+trackwomen$X400m <- 400/trackwomen$X400m
+trackwomen$X800m <- 800/(trackwomen$X800m*60)
+trackwomen$X1500m <- 1500/(trackwomen$X1500m*60)
+trackwomen$X3000m <- 3000/(trackwomen$X3000m*60)
+trackwomen$Marathon <- 42195/(trackwomen$Marathon*60)
+
+## repeat the d
+(trackwomen.fa.mle = factanal(covmat = cov(trackwomen[2:ncol(trackwomen)]), 
+                             factors = 3, 
+                             rotation = "none"))
+
+## repeat the e
+(trackwomen.fa.mle = factanal(covmat = cov(trackwomen[2:ncol(trackwomen)]), 
+                             factors = 3, 
+                             rotation = "varimax"))
+```
+
+
+#### question h
+
+I personlly perfer the model after the transformation, which make the data in the same scale as speed and reduce the error from the scale.
+
+I perfer the factor analysis based on the covariance matrix with varimax rotation since the loading is easier to interpreate. 
+
+The first factor has the high loading value on the short-distance sports,
+the seconf factor has the high loading value on the long-distance sports,
+and the thrid factor has the high loading value on x400, x800m, and marathon.

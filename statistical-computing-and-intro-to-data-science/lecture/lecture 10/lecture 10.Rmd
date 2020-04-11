@@ -1,0 +1,324 @@
+---
+title: "lecture 10"
+author: "Yi Chen(yc3356)"
+date: "November 18, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## lecture 10: Distributions as Models
+
+### CATS
+```{r}
+library(MASS)
+head(cats)
+```
+the distribution of the data
+```{r}
+hist(cats$Hwt)
+# quantile function             
+quantile(cats$Hwt,c(0,0.25,0.5,0.75))
+# ecdf function
+plot(ecdf(cats$Hwt),main='Empirical CDF of Cat Heart Weights')
+```
+```{r}
+hist(cats$Hwt,probability = TRUE,ylim = c(0,0.17))
+lines(density(cats$Hwt), lty = "dashed")
+rug(cats$Hwt)
+```
+```{r}
+ggplot(cats) +
+        geom_histogram(aes(x = Hwt, y = ..density..)) +
+        geom_density(aes(x = Hwt))
+
+ggplot(cats) +
+                stat_ecdf(aes(x=Hwt))
+
+
+```
+#### Estimation Example
+```{r}
+# sample distribution
+samp_size <- 100
+samp1     <- rnorm(samp_size, mean = 10, sd = 3)
+mean_est1 <- mean(samp1)
+mean_est1
+
+n          <- 500
+samp_means <- rep(NA, n)
+
+for (i in 1:n) {
+  samp_means[i] <- mean(rnorm(samp_size, mean = 10, sd = 3))
+}
+
+ggplot(data.frame(samp = samp_means)) +
+  geom_histogram(aes(x = samp, y = ..density..)) +
+  geom_density(aes(x = samp))
+
+# Hist: 500 estimates of pop. mean based on sample size 100.
+# Estimates are centered around true value; some variation.
+
+```
+
+#### Sample Distribution of the Sample Mean
+```{r}
+samp_size  <- c(5, 10, 25, 50, 100)
+n          <- 500 
+samp_means <- cbind(rep(NA, n*length(samp_size)),
+                    rep(NA, n*length(samp_size)))
+
+
+for (j in 1:length(samp_size)) {
+  for (i in 1:n) {
+    row <- (j-1)*n + i
+    samp_means[row, 1] <- mean(rnorm(samp_size[j], mean = 10, sd = 3))
+    samp_means[row, 2] <- samp_size[j]
+  }
+}
+
+colnames(samp_means) <- c("Values", "SampleSize")
+
+ggplot(data.frame(samp_means)) +
+  geom_histogram(aes(x = Values, y = ..density..)) +
+  geom_density(aes(x = Values)) +
+  facet_wrap(~SampleSize)
+
+```
+
+###Method of Moment
+#### Example of Gamma distribution
+
+# a = \mu_1^2/(\mu_2 - \mu_1^2)
+# s = (\mu_2 - \mu_1^2)/ \mu_1
+# v = \mu_2 - \mu_1^2
+```{r}
+gam.MMest <- function(data){
+    m <- mean(data)
+    v <- var(data)
+    
+    return(c(a = (m^2)/v,s = v/m))
+}
+
+gam.MMest(cats$Hwt) 
+```
+
+```{r}
+cat.MM <- gam.MMest(cats$Hwt)
+gam_args <- list(shape = cat.MM["a"], scale = cat.MM["s"])
+ggplot(cats) +
+        geom_histogram(aes(x = Hwt, y = ..density..)) +
+        geom_density(aes(x = Hwt), linetype = "dashed") +
+        stat_function(aes(x = Hwt), fun = dgamma,args = gam_args, color = "red")
+
+```
+
+```{r}
+gam.mean <- function(a, s) {a*s}
+gam.var  <- function(a, s) {a*s^2}
+
+gam.diff <- function(params, data) {
+  a <- params[1]
+  s <- params[2]
+  return((mean(data) - gam.mean(a,s))^2 + (var(data) - gam.var(a,s))^2)
+}
+
+nlm(gam.diff, c(19, 1), data = cats$Hwt)
+
+cat.MM
+nlm(gam.diff, c(19, 1), data = cats$Hwt)$estimate
+```
+
+**Task**
+1. Simulate 100 random variables from a gamma distribution with shape parameter equal to 19 and scale parameter equal to 45.Run the gam.MMest() with these values as the input.
+2. Do the same thing but simulate 10; 000 random variables. Next, 1000000 random variables.
+3. Does it seem like our estimates are converging to the truth?
+
+```{r}
+gam.MMest(rgamma(100, shape = 19, scale = 45))
+gam.MMest(rgamma(10000, shape = 19, scale = 45))
+gam.MMest(rgamma(1000000, shape = 19, scale = 45))
+```
+
+###Method of Maximum Likelihood
+**Tasks**
+1. Write a function gam.ll which takes as input a parameter vector (with shape and scale) and a data vector and from that returns the log likelihood assuming the data are independent draws from a gamma distribution with scale and shape indicated by the input parameters. HINT: Use dgamma().
+2. Test your function on the cats heart weight data and parameter values scale = 19 and shape = 0:5.
+
+
+```{r}
+gam.ll <- function(params,data){
+   # Input: parameter vector (length2, shape and scale)
+   # Input: data 
+  a <- params[1]
+  s <- params[2]
+  return(-sum(dgamma(data, shape = a, scale = s, log = TRUE))) 
+  # function should multiply -1 so that when we use nlm we can actully calculate the maximum value   
+}
+
+nlm(gam.ll, c(19, 1), data = cats$Hwt)$minimum
+nlm(gam.ll, c(19, 1), data = cats$Hwt)$estimate
+cat.MM <- gam.MMest(cats$Hwt)
+gam.ll(cat.MM, cats$Hwt)
+
+
+cat.MLE <- nlm(gam.ll, c(19, 1), data = cats$Hwt)$estimate
+
+MLE_args <- list(shape = cat.MLE[1], scale = cat.MLE[2])
+MM_args <- list(shape = cat.MM[1], scale = cat.MM[2])
+
+ggplot(cats) +
+  geom_histogram(aes(x = Hwt, y = ..density..)) +
+  geom_density(aes(x = Hwt), linetype = "dashed") +
+  stat_function(aes(x = Hwt), fun = dgamma, args = MM_args, color = "red") +
+  stat_function(aes(x = Hwt), fun = dgamma, args = MLE_args, color = "blue")
+
+```
+
+### Checking Fit: Summary Statistics
+#### qqplot
+
+```{r}
+# Model (theoretical) quantiles
+qgamma(c(0.01, 0.05, 0.95, 0.99), shape = cat.MM[1], scale = cat.MM[2])
+# Empirical (data) quantiles
+quantile(cats$Hwt, c(0.01, 0.05, 0.95, 0.99))
+
+a <- cat.MM[1]
+s <- cat.MM[2]
+theory_quant <- qgamma((1:99)/100, shape = a, scale = s)
+qqplot(cats$Hwt, theory_quant)
+abline(0, 1, col = "red")
+```
+```{r}
+plot(ecdf(pgamma(cats$Hwt, shape = a, scale = s)),
+main = "Calibration of gamma distribution for cat hearts")
+abline(0, 1, col = "red")
+
+```
+
+#### Kolmogorov-Smirnoff Test
+```{r}
+ks.test(cats$Hwt, pgamma, shape = a, scale = s)
+
+
+n <- length(cats$Hwt)
+train <- sample(1:n, size = round(.9*n))
+cat.MM <- gam.MMest(cats$Hwt[train])
+a <- cat.MM["a"]
+s <- cat.MM["s"]
+a
+s
+ks.test(cats$Hwt[-train], pgamma, shape = a, scale = s)
+# Can also test whether two samples come
+# from the same distribution.
+ks.test(cats$Hwt[cats$Sex == "F"], cats$Hwt[cats$Sex == "M"])
+
+```
+
+###Bootstrap
+```{r}
+# Recall
+cat.MM <- gam.MMest(cats$Hwt)
+cat.MM
+# A single bootstrap resample from cats$Hwt
+n <- nrow(cats)
+resamp <- sample(1:n, n, replace = TRUE)
+head(sort(cats$Hwt))
+head(sort(cats$Hwt[resamp]))
+gam.MMest(cats$Hwt[resamp])
+
+```
+
+```{r}
+# 1000 bootstrap resamples from cats$Hwt
+B <- 1000
+param_ests <- matrix(NA, nrow = B, ncol = 2)
+colnames(param_ests) <- c("a", "s")
+for (b in 1:B) {
+        resamp <- sample(1:n, n, replace = TRUE)
+        param_ests[b, ] <- gam.MMest(cats$Hwt[resamp])
+}
+head(param_ests)
+
+```
+
+```{r}
+# Use histogram to approx sampling distribution
+param_ests <- data.frame(param_ests)
+
+ggplot(param_ests) +
+        geom_histogram(aes(x = a)) +
+        geom_vline(xintercept = mean(param_ests$a), col = "red")
+
+ggplot(param_ests) +
+        geom_histogram(aes(x = s)) +
+        geom_vline(xintercept = median(param_ests$s), col = "red")
+
+bootstrap.a <- mean(param_ests$a)
+bootstrap.s <- mean(param_ests$s)
+bootstrap.a
+bootstrap.s
+
+```
+
+```{r}
+# Use bootstrap replicates to estimate the
+# standard error of the estimates
+sd(param_ests$a)
+sd(param_ests$s)
+# Use bootstrap replicates to estimate 95 percent
+# confidence intervals for the estimates
+CI.a <- quantile(param_ests$a, probs = c(0.025, 0.975))
+CI.s <- quantile(param_ests$s, probs = c(0.025, 0.975))
+
+```
+
+```{r}
+ggplot(param_ests) +
+        geom_histogram(aes(x = a)) +
+        geom_vline(xintercept = mean(param_ests$a), col = "red") +
+        geom_vline(xintercept = CI.a[1], col = "red",linetype = "dashed") +
+        geom_vline(xintercept = CI.a[2], col = "red",linetype = "dashed")
+
+ggplot(param_ests) +
+        geom_histogram(aes(x = s)) +
+        geom_vline(xintercept = mean(param_ests$s), col = "red") +
+        geom_vline(xintercept = CI.s[1], col = "red",linetype = "dashed") +
+        geom_vline(xintercept = CI.s[2], col = "red",linetype = "dashed")
+
+```
+
+```{r}
+# Recall
+set.seed(1)
+samp_size <- 100
+samp1 <- rnorm(samp_size, mean = 10, sd = 3)
+mmean_est1 <- mean(samp1)
+
+```
+
+**task**
+1. Calculate 1000 bootstrap resamples from the data samp1 and for each calculate and store the sample estimate of the mean.
+2. Calculate the mean and standard deviation of your bootstrap resamples.
+3. The above is supposed to approximate the sampling distribution,but for the normal distribution, we know the sampling
+distribution is N (10; 9=100). How close are the bootstrap estimates of the mean and variance of the sampling distribution to the truth?
+
+```{r}
+# Calulate bootstrap resamples
+n <- length(samp1)
+B <- 1000
+boot.means <- rep(NA, B)
+
+for (b in 1:B) {
+  resamp_data   <- sample(samp1, n, replace = TRUE)
+  boot.means[b] <- mean(resamp_data)
+}
+mean(boot.means)
+sd(boot.means) # Close to 3/10?
+
+ggplot() + geom_histogram(aes(x = boot.means))
+```
+

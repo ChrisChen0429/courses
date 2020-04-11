@@ -1,0 +1,49 @@
+---
+title: "logistic"
+author: "Yi Chen(yc3356)"
+date: "April 18, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+PCA <- read.csv("USD2017.1.1-present.csv")
+PCA <- PCA[,-1]
+PCA
+PCA <- scale(PCA)
+PCA = prcomp(PCA)
+PCA$rotation
+write.csv(PCA$x,"PCA.CSV")
+
+
+```
+```{r}
+PCA$sdev[1]/sum(PCA$sdev)
+(PCA$sdev[1]+PCA$sdev[2])/sum(PCA$sdev)
+(PCA$sdev[1]+PCA$sdev[2]+PCA$sdev[3])/sum(PCA$sdev)
+```
+
+
+## logsitc
+```{r}
+regression_original <- read.csv("result.csv")
+regression_original <- regression_original[,-1]
+regression_original
+regression <- as.data.frame(regression_original)
+regression_train <- regression[1:(length(regression$PC1)-50),] 
+regression_test <- regression[((length(regression$PC1)-49):length(regression$PC1)),]
+regression_train
+model <- lm(BTC.Close ~., data = regression_train, family = binomial)
+summary(model)
+regression_test[,c("PC1","popular.index")]
+y_hat <- predict(model,newdata = regression_test[,c("PC1","popular.index")] )
+y_hat
+plot(y_hat,regression_test$BTC.Close)
+abline(0,1)
+
+1- sum((y_hat - regression_test$BTC.Close)^2)/sum((regression_test$BTC.Close - mean(regression_test$BTC.Close))^2)
+```
+

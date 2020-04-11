@@ -1,0 +1,93 @@
+---
+title: "Lab 3"
+author: 'Name: Yi Chen; UNI: yc3356'
+date: "October 2, 2017"
+output:
+  word_document: default
+  pdf_document: default
+  html_document: default
+---
+
+
+```{r, echo = FALSE}
+set.seed(1) # Please don't remove this code!
+```
+
+# Instructions 
+Before you leave lab today make sure that you upload a .pdf file to the canvas page (this should have a .pdf extension). This should be the PDF output after you have knitted the file, we don't need the .Rmd file (don't upload the one with the .Rmd extension).  The file you upload to the Canvas page should be updated with commands you provide to answer each of the questions below.  You can edit this file directly to produce your final solutions.  Note, however, in the file you upload you should the above header to have the date, your name, and your UNI.  Similarly, when you save the file you should replace **UNI** with your actualy UNI.
+
+# Tasks
+
+In this lab, we will use data from homicides in Baltimore City that are collected by the Baltimore Sun newspaper. The data is presented in a map that is publically available at the following website: \url{http://data.baltimoresun.com/news/police/homicides/}. I've scraped the data from the website and saved it in a file **BaltimoreHomicides.txt**.  Load the data with the following:
+
+```{r}
+setwd("C:/Users/cheny/Desktop/study/statistical computing and intro to data science/lab/lab 3")
+
+Baltimore <- readLines('BaltimoreHomicides.txt')
+```
+
+The data we have corresponds to all the homicides in 2010.  There are 224 lines of HTML in the dataset (verify this using **length(data)**) and 224 homicides in 2010.
+```{r}
+length(Baltimore)
+```
+
+
+(1) In the image below, you can see one of the homicides in our dataset.  Use a **grep()** call to find which row in the dataset corresponds to the death of Khloe Lewis.  (You could search, for example, for her name and the row you should return is 52).  
+
+![image](image.png)
+```{r}
+express_one <- 'Khloe Lewis'
+grep(pattern=express_one,Baltimore)
+```
+
+
+(2) Suppose we wanted to identify the records for all the victims of shootings (as opposed to other causes).  Using the following bit of code and some of your own exploration, how many of the homicides in our dataset are the result of shootings?
+
+```{r}
+deaths1 <- grep("shooting", Baltimore)
+deaths2 <- grep("Shooting", Baltimore)
+length(deaths1)
+length(deaths2)
+setdiff(deaths1, deaths2)
+```
+
+ **explain**
+1. when the data is write in the file, sometimes people write 'Shooting' and 'shooting' for the same thing. Just one begin with **lower case letter** while one begin with **uppercase letter**.   
+Thus, we need to find both these two kind of information all together.
+2. *death1* and *death2* have a lot of information in common.use **setdiff** function, which only return the different element in both vectors. As we can see there are only one elements different in these two results. death1 have one more element.
+
+
+(3) The following code creates a vector of the ages of the homicide victims in the dataset:
+
+```{r}
+express_two <- '<br />Age:.+year(s)?\\sold</dd>'
+
+ages <- regmatches(Baltimore,gregexpr(pattern = express_two,Baltimore))
+ages
+ages <- substr(ages,12,nchar(ages)-5)
+ages <- sapply(ages,strsplit,'\\syear(s)?\\sold')
+ages <- unlist(ages)
+names(ages) <- NULL
+```
+
+(a) Explain what the regular expression ">Age:\\s.*years old<" searches for.
+1. Regular expression describes a pattern of specific string which can be used to match and check whether another string contains this particular substring. 
+2. ">Age:\\s.*years old<" is this specific pattern, which means this string being with '>Age:' and end with 'years old<'.
+3. "\\s.*" have two many parts: \\s means Blank character, asterisk means repeated zero or more times
+4. in this way all the information about age in the patter of **>Age: (some blank space) years old<** can be matched.   
+(b) Explain in words what the output of the first line of code provides.
+1. **regexpr** will returns the location of the rst match with attributes like the length of the match. **data** is the main string where it will match the regular expression. The result of this function can help to find the location of the substring of the age information.  
+(c) The second line of code.
+1. use **regmatches** we can then extract the strings and the output of regexpr() and returns the actual matching strings.  
+(d) The third line of code.
+1. **nchar()** is the function takes a character vector as an argument and returns a vector whose elements contain the sizes of the corresponding elements of x. In this way we can calculate the total number of characters in every string.
+2. every element in the age_vec begin with ">" and end with "<", it is not what i need.
+3. by using **substring** i can extract certain substring from the given string. In this way for every elements in age_vec, we substring from the second character to the second last character. Thus, "<" and ">" have been excluded.   
+(4) Use the same strategy as we used in question (3) to create a vector holding each victims' name.  Hint: I had to use the fact that the first letter of the name is capitalized and the specific structure of the HTML code after the name in writing my regular expression.
+```{r}
+express_three <- ">[A-Z].*</a></dt>"
+names <- regmatches(Baltimore,gregexpr(pattern = express_three,Baltimore))
+names <- substr(names,2,nchar(names)-9)
+names
+```
+

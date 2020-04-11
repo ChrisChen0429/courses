@@ -1,0 +1,107 @@
+---
+title: "Homework One revirew"
+author: "Yi Chen(yc3356)"
+date: "November 28, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## part one
+```{r}
+setwd("C:/Users/cheny/Desktop/study/statistical computing and intro to data science/homework/homework 1")
+
+housing <- read.csv('properties.csv')
+
+```
+
+```{r}
+dim(housing)
+```
+```{r}
+apply(is.na(housing),2,sum)
+```
+
+```{r}
+housing_new <- housing[housing$assessed_value!=0,]
+```
+
+```{r}
+nrow(housing)-nrow(housing_new)
+```
+```{r}
+library(dplyr)
+logvalue <- log(housing_new$assessed_value)
+summary(logvalue)
+```
+
+```{r}
+logunits <- log(housing_new$res_units)
+```
+
+```{r}
+after2000 <- ifelse(housing_new$year_built>2000,TRUE,FALSE) 
+```
+
+# part two
+```{r}
+library(ggplot2)
+ggplot()+
+        geom_point(aes(x=logunits,y=logvalue))
+```
+
+```{r}
+ggplot()+
+        geom_point(aes(x=logunits,y=logvalue,col=after2000))
+
+```
+
+```{r}
+housing_new$logunite <- logunits
+housing_new$logvalue <- logvalue
+housing_new$after2000 <- after2000 
+
+# whole data
+cor(logunits,logvalue,use = 'pairwise.complete.obs')
+
+# manhattan
+cor(housing_new$logunite[housing_new$boro_name=='Manhattan'],housing_new$logvalue[housing_new$boro_name=='Manhattan'],use = 'pairwise.complete.obs')
+
+# Brooklyn
+cor(housing_new$logunite[housing_new$boro_name=='Brooklyn'],housing_new$logvalue[housing_new$boro_name=='Brooklyn'],use = 'pairwise.complete.obs')
+
+# AFTER 2000
+cor(housing_new$logunite[housing_new$after2000],housing_new$logvalue[housing_new$after2000],use = 'pairwise.complete.obs')
+
+# before 2000
+cor(housing_new$logunite[!housing_new$after2000],housing_new$logvalue[!housing_new$after2000],use = 'pairwise.complete.obs')
+
+
+```
+
+```{r}
+plot_data <- housing_new[(housing_new$boro_name=='Manhattan' | housing_new$boro_name=='Brooklyn'),]
+ggplot(data=plot_data)+
+        geom_point(aes(x=plot_data$logunite,y=plot_data$logvalue,col=boro_name))
+```
+
+
+```{r}
+med.value <- median(housing_new$assessed_value[housing_new$boro_name=='Manhattan'],na.rm = TRUE)
+med.value
+```
+
+```{r}
+ggplot(data = housing_new)+
+        geom_boxplot(aes(x=logvalue,y=boro_name))
+
+boxplot(housing_new$logvalue~housing_new$boro_name)
+```
+
+```{r}
+tapply(housing_new$assessed_value,INDEX = housing_new$boro_name,median)
+```
+
+

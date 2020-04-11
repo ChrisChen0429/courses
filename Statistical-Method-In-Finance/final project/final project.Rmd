@@ -1,0 +1,317 @@
+---
+title: '5261'
+author: "Yi Chen(yc3356)"
+date: "April 12, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library('ggplot2')
+library('forecast')
+library('tseries')
+```
+
+## Part One: Arima of Bitcoin(besed on the daliy data and only data after 2017)
+```{r message=FALSE, warning=FALSE}
+library(readxl)
+
+BTC <- read_excel("BTC-USD(1).xlsx")
+BTC$Date <- as.Date(BTC$Date)
+BTC <- BTC[,c("Date","Close")]
+BTC <- BTC[BTC$Date>="2018-01-01",]
+return <- (BTC$Close[2:length(BTC$Close)] - BTC$Close[1:length(BTC$Close)-1]) / BTC$Close[1:length(BTC$Close)-1]
+return <- ts(return)
+return <- tsclean(return)
+ts.plot(return)
+return
+fit<-auto.arima(return, seasonal=FALSE)
+tsdisplay(residuals(fit), lag.max=30)
+fit
+adf.test(price_ma,alternative = "stationary")
+price_ma = ts(na.omit(return), frequency=7)
+# one month has 8640 5mins
+decomp = stl(price_ma, s.window="periodic")
+deseasonal_cnt <- seasadj(decomp)
+plot(decomp)
+
+
+
+BTC$Type <- "BTC"
+Price <- BTC$Close[length(BTC$Close):1]
+Time <- 1:length(Price)
+ggplot()+
+        geom_line(aes(x=Time,y=Price))
+```
+
+```{r}
+hold <- window(ts(deseasonal_cnt))
+
+fit_no_holdout = arima(ts, order=c(3,0,2))
+fcast_no_holdout <- forecast(fit_no_holdout,h=100)
+plot(fcast_no_holdout, main=" ")
+lines(ts(deseasonal_cnt))
+```
+
+
+In order to get better analysis, log the data. This make the data looks nicer. But I AM NOT SURE whether there exist better transformation.
+```{r}
+price <- log(Price)
+ggplot()+
+        geom_line(aes(x=Time,y=price))
+```
+
+
+decompse the factors
+```{r}
+price_ma = ts(na.omit(price), frequency=30)
+# one month has 8640 5mins
+decomp = stl(price_ma, s.window="periodic")
+deseasonal_cnt <- seasadj(decomp)
+plot(decomp)
+```
+
+I don't know whether I can do this directly
+```{r}
+fit<-auto.arima(deseasonal_cnt, seasonal=FALSE)
+tsdisplay(residuals(fit), lag.max=50)
+fit
+```
+
+### question: this result is not good.
+
+
+ADF test
+```{r}
+price_ma <- diff(price_ma,differences = 1)
+adf.test(price_ma,alternative = "stationary")
+plot(price_ma)
+```
+
+test the prediction
+```{r}
+hold <- window(ts(deseasonal_cnt))
+
+fit_no_holdout = arima(ts(deseasonal_cnt[-c((length(Price)-50):length(Price))]), order=c(13,1,12))
+```
+
+```{r}
+fcast_no_holdout <- forecast(fit_no_holdout,h=50)
+plot(fcast_no_holdout, main=" ")
+lines(ts(deseasonal_cnt))
+```
+
+# the result is not good
+
+
+```{r}
+BTC <- read.csv("XBT-5min.asc")
+BTC$Date <- as.Date(BTC$Date,"%m/%d/%y")
+Price <- BTC$Close[BTC$Date>="2018-01-01"]
+log_pric <- log(Price)
+log_pric <- ts(log_pric)
+price_ma = ts(na.omit(log_pric), frequency=288)
+# one month has 8640 5mins
+decomp = stl(price_ma, s.window="periodic")
+deseasonal_cnt <- seasadj(decomp)
+plot(decomp)
+
+fit<-auto.arima(deseasonal_cnt, seasonal=FALSE)
+tsdisplay(residuals(fit), lag.max=30)
+fit
+```
+
+```{r}
+hold <- window(ts(deseasonal_cnt))
+fit_no_holdout = arima(ts(deseasonal_cnt[-c((length(Price)-90):length(Price))]), order=c(2,1,3))
+fit_no_holdout
+fcast_no_holdout <- forecast(fit_no_holdout,h=90)
+plot(fcast_no_holdout,xlim=c(18000,18500),ylim=c(8.7,9.2),main=" ")
+lines(ts(deseasonal_cnt))
+
+```
+
+
+
+
+# another try: before and after 2017 
+```{r}
+turing_point <- "2017-12-15"
+
+price_before <- BTC$Close[length(BTC$Close):1][BTC$Date <= turing_point]
+price_later <- BTC$Close[length(BTC$Close):1][BTC$Date >= turing_point]
+log_price_before <- log(price_before)
+log_price_later <- log(price_later)
+log_price_before <- ts(log_price_before)
+log_price_later <- ts(log_price_later)
+ts.plot(log_price_before)
+ts.plot(log_price_later)
+```
+
+```{r}
+price_ma_before = ts(na.omit(log_price_before), frequency=30)
+# one month has 8640 5mins
+decomp_before = stl(price_ma_before, s.window="periodic")
+deseasonal_cnt_before <- seasadj(decomp_before)
+plot(decomp_before)
+```
+
+
+```{r}
+fit<-auto.arima(deseasonal_cnt_before, seasonal=FALSE)
+tsdisplay(residuals(fit), lag.max=30)
+fit
+```
+
+
+```{r}
+price_ma_later = ts(na.omit(log_price_later), frequency=30)
+# one month has 8640 5mins
+decomp_later = stl(price_ma_later, s.window="periodic")
+deseasonal_cnt_later <- seasadj(decomp_later)
+plot(decomp_later)
+```
+
+
+```{r}
+fit<-auto.arima(deseasonal_cnt_later, seasonal=FALSE)
+tsdisplay(residuals(fit), lag.max=30)
+fit
+```
+
+
+### part two: PCA 
+read the data
+```{r warning=FALSE}
+library(readxl)
+BTC <- read_excel("BTC-USD(1).xlsx")
+BTC$Date <- as.Date(BTC$Date)
+BTC <- BTC[,c("Date","Close")]
+BTC$Type <- "BTC"
+
+Dash <- read.csv("DASH-USD.csv",sep = ",")
+Dash$Date <- as.Date(Dash$Date)
+Dash <- Dash[,c("Date","Close")]
+Dash$Type <- "Dash"
+
+ETH <- read.csv("ETH-USD(1).csv",sep = ",")
+ETH$Date <- as.Date(ETH$Date)
+ETH <- ETH[,c("Date","Close")]
+ETH$Type <- "ETH"
+
+LTC <- read.csv("LTC-USD(1).csv",sep = ",")
+LTC$Date <- as.Date(LTC$Date)
+LTC <- LTC[,c("Date","Close")]
+LTC$Type <- "LTC"
+
+XRP <- read.csv("XRP-USD.csv",sep = ",")
+XRP$Date <- as.Date(XRP$Date)
+XRP <- XRP[,c("Date","Close")]
+XRP$Type <- "XRP"
+
+DATA <- rbind(BTC,Dash,LTC,ETH,XRP)
+DATA
+```
+
+```{r}
+library(ggplot2)
+
+
+
+length(popular_index)
+length(Price)
+ggplot(data=BTC)+
+        geom_line(aes(x=Date,y=Close))+
+        labs(title="Bitcoin price")
+
+ggplot(data = DATA)+
+        geom_line(aes(y=Close,x=Date,col=Type))+
+        xlab("Date")+
+        ylab("price")+
+        facet_grid(Type~.,scales = "free_y")
+```
+
+Pick the data range from 2016 to today
+```{r}
+Dash_price <- Dash$Close[Dash$Date>="2016-01-01"]
+ETH_price <- ETH$Close[ETH$Date>="2016-01-01"]
+LTC_price <- LTC$Close[LTC$Date>="2016-01-01"]
+XRP_price <- XRP$Close[XRP$Date>="2016-01-01"]
+
+PCA_data <- cbind(Dash_price,ETH_price,LTC_price,XRP_price)
+PCA_data <- scale(PCA_data,center = TRUE,scale = TRUE)
+PCA = prcomp(PCA_data, scale. = TRUE)
+PCA
+biplot(PCA)
+```
+
+```{r}
+PCA$sdev[1]/sum(PCA$sdev)
+(PCA$sdev[1]+PCA$sdev[2])/sum(PCA$sdev)
+(PCA$sdev[1]+PCA$sdev[2]+PCA$sdev[3])/sum(PCA$sdev)
+```
+We can only pick first two PC or Three
+
+## part three: BitCoin and popular index
+```{r message=FALSE, warning=FALSE}
+popular_index <- read.csv("Popular Index.csv")
+popular_index <- ts(log(popular_index$Search_Results))
+popular_index <- tsclean(popular_index)[1:1008]
+ts.plot(popular_index)
+popular_index = window(popular_index)
+
+BTC <- read_excel("BTC-USD(1).xlsx")
+BTC <- BTC[,c("Date","Close")]
+BTC <- BTC[BTC$Date>="2015-07-01",]
+BTC <- ts(log(BTC$Close))[length(BTC$Close):1]
+BTC = window(BTC)
+
+ts.plot(BTC)
+```
+
+
+```{r}
+cor(BTC,popular_index,method = "kendal")
+cor(BTC,popular_index,method = "pearson")
+cor(BTC,popular_index,method = "spearman")
+```
+
+                 PC1         PC2        PC3          PC4
+Dash_price 0.5028783 -0.42635569  0.2950596  0.691573618
+ETH_price  0.5046777  0.04269377 -0.8618274  0.027042335
+LTC_price  0.5035905 -0.40218335  0.2523258 -0.721787275
+XRP_price  0.4886825  0.80910235  0.3263818  0.004215763
+
+
+```{r}
+pc_calculator <- function(data){
+        return(data[1]*0.5028783+data[2]*0.5046777+data[3]*0.5035905+data[4]*0.4886825)
+}
+pc_cal2 <- function(data){
+        return(data[1]*(-0.42635569)+data[2]*0.04269377+data[3]*(-0.40218335)+data[4]*(0.8090235))
+}
+PC1 <- apply(PCA_data,1,pc_calculator)
+PC2 <- apply(PCA_data,1,pc_cal2)
+```
+
+```{r}
+result <- cbind(PC1,PC2)
+result <- as.data.frame(result)
+write.csv(result,file = "result2.csv")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+

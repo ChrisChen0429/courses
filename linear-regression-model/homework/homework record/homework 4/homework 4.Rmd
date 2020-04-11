@@ -1,0 +1,313 @@
+---
+title: "homework 4"
+author: "Yi (Chris) Chen"
+date: "October 12, 2017"
+output:
+  word_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### homework four
+#### problem 3.3
+##### a. prepare a box plot for ACT score
+```{r}
+setwd("C:/Users/cheny/Desktop/study/linear regression model/homework/homework four")
+data_3 <- read.table('3.3.txt',header = FALSE, col.names = c('GPA','ACT','intelligence test score','high school class rank'))
+par(mfrow=c(1,2))
+boxplot(data_3$ACT,main ='box plot of ACT',ylab='ACT score')
+hist(data_3$ACT)
+```
+
+##### c. plot the residual against the fitted values
+```{r}
+reg_3 <- lm(data_3$GPA ~ data_3$ACT)
+residual_3 <- reg_3$residuals
+fitted_value_3 <- reg_3$fitted.values
+plot(reg_3,1)
+```
+
+##### d. plot the normal probability plot of residuals.
+```{r}
+par(mfrow=c(2,2))
+qqnorm(reg_3$residuals)
+qqline(reg_3$residuals,col="red")
+plot(reg_3,2)
+hist(reg_3$residuals,main = 'hist of residual',xlab = 'residuals')
+```
+```{r}
+# calculate the coefficient of correlation between ordered residuals and their expected values under normality
+
+ordered_residual <- reg_3$residuals[order(reg_3$residuals)]
+# according to the table B6 (n = 120, ?? = 0.05) z equals to 0.987
+MSE <- sum(reg_3$residuals^2)/(length(reg_3$residuals)-2)
+a <- vector()
+for(i in 1:length(residual_3)){
+        a_new <- ( i - 0.375)/(120 + 0.25)
+        a <- c(a,a_new)
+}
+expected_value <- sqrt(MSE) * qnorm(a)
+correlation <- cor(ordered_residual,expected_value)
+correlation
+```
+
+##### e. Brown-Forsythe Test
+```{r}
+# order the ACT
+low_26 <- which(data_3$ACT < 26)
+residual_low <- residual_3[low_26]
+
+up_26 <- which(data_3$ACT >= 26)
+residual_up <- residual_3[up_26]
+
+median_low <- median(residual_low)
+median_up <- median(residual_up)
+
+d_low <- vector()
+for( i in 1:length(residual_low)){
+        d_low_new <- abs(residual_low[i]-median_low) 
+        d_low <- c(d_low,d_low_new)
+}
+
+d_up <- vector()
+for( i in 1:length(residual_up)){
+        d_up_new <- abs(residual_up[i]-median_up) 
+        d_up <- c(d_up,d_up_new)
+}
+
+mean_d_low <- mean(d_low)
+mean_d_up  <- mean(d_up)
+
+diff_low <- vector()
+for(i in 1:length(d_low)){
+        diff_low_new <- (d_low[i] - mean_d_low)^2
+        diff_low <- c(diff_low,diff_low_new)
+}
+
+diff_up <- vector()
+for(i in 1:length(d_up)){
+        diff_up_new <- (d_up[i] - mean_d_up)^2
+        diff_up <- c(diff_up,diff_up_new)
+}
+
+s <- sqrt((sum(diff_up)+sum(diff_low))/118)
+# result of t_BF
+t_BF <- (mean_d_up - mean_d_low)/(0.417275 * sqrt(1/length(residual_up)+1/length(residual_low)))
+#calculate t_critical
+t_critical <- qt(0.995,118)
+
+# test
+abs(t_BF) <= t_critical
+```
+
+##### f. test for potential variables
+```{r}
+par(mfrow=c(1,2))
+plot(reg_3$residuals ~ data_3$intelligence.test.score, ylab = 'residuals', xlab='intelligence test score')
+plot(reg_3$residuals ~ data_3$high.school.class.rank, ylab = 'residuals', xlab='high school class rank')
+```
+
+#### problem 3.9
+```{r}
+data_9 <- read.table('3.9.txt',header = FALSE, col.names = c('numbrs of rooms','residules'))
+plot(data_9$residules ~ data_9$numbrs.of.rooms,xlab='number of rooms',ylab='residuals' ,main='residuals v.s. predictors')
+hist(data_9$residules)
+```
+
+#### problem 3.16
+##### a. plot the scatter 
+```{r}
+data_16 <- read.table('3.16.txt',header = FALSE, col.names = c('concentration of solution','time'))
+plot(data_16$concentration.of.solution ~ data_16$time, ylab='concentration of solution',xlab='time')
+```
+
+##### b. Box-Cox Transformations
+```{r}
+result <- data.frame()
+result$lambda <- vector()
+result$SSE <- vector()
+
+k2 <- prod(data_16$concentration.of.solution)^(1/length(data_16$concentration.of.solution))
+
+# test 0
+wi <- k2*log(data_16$concentration.of.solution)
+reg_16_0 <- lm(wi~data_16$time)
+sse_0 <- sum(reg_16_0$residuals^2)
+result[1,] <- c(0,sse_0)
+
+# test other values
+test <- c(-0.2,-0.1,0.1,0.2)
+for(j in 1:length(test)){
+        i <- test[j]
+        k1 <- 1/(i*k2^(i-1))
+        wi <- k1*(data_16$concentration.of.solution^i - 1)
+        reg <- lm(wi~data_16$time)
+        sse <- sum(reg$residuals^2)
+        result[j+1,] <- c(i,sse)
+}
+print(result)
+
+# this problem can also be solved in this way
+library(MASS)
+tr <- boxcox(data_16$concentration.of.solution~data_16$time,Lambda=seq(-1,+1,20))
+# obviously, lambda should be 0
+```
+
+##### c. estimate the y'
+```{r}
+y_dot <- log10(data_16$concentration.of.solution)
+reg_16_c <- lm(y_dot~data_16$time)
+summary(reg_16_c)
+```
+
+##### d. print the picture to compare the results
+```{r}
+reg_16_orginal <- lm(data_16$concentration.of.solution~data_16$time)
+par(mfrow=c(1,2))
+plot(y_dot~data_16$time,main='after transformation',xlab='time',ylab='concentration.of.solution')
+abline(reg_16_c)
+plot(data_16$concentration.of.solution~data_16$time,main='before transformation',xlab='time',ylab='concentration.of.solution')
+abline(reg_16_orginal)
+```
+
+##### e. analysis the new residuals
+```{r}
+# residual against fitted value
+plot(reg_16_c,1)
+```
+
+```{r}
+# test normality
+qqnorm(reg_16_c$residuals)
+qqline(reg_16_c$residuals)
+```
+
+
+
+#### problem 24
+##### a. estimate the orginal data
+```{r}
+data_24 <- read.table('3.24.txt',header = FALSE, col.names = c('blood pressure','age'))
+reg_24 <- lm(data_24$blood.pressure ~ data_24$age)
+par(mfrow=c(1,2))
+plot(reg_24$residuals ~ data_24$age, main='blood pressure v.s. age',xlab='age',ylab='blood pressure')
+plot(data_24$blood.pressure ~ data_24$age)
+abline(reg_24)
+```
+
+##### b. estimate after omitting one possible outlier
+```{r}
+data_24_new <- data_24[-7,]
+reg_24_new <- lm(data_24_new$blood.pressure ~ data_24_new$age)
+par(mfrow=c(2,2))
+plot(reg_24_new$residuals ~ data_24_new$age, main='blood pressure v.s. age',xlab='age',ylab='blood pressure')
+plot(data_24_new$blood.pressure ~ data_24_new$age)
+abline(reg_24_new)
+qqnorm(data_24$blood.pressure)
+qqline(data_24$blood.pressure)
+qqnorm(data_24_new$blood.pressure)
+qqline(data_24_new$blood.pressure)
+```
+
+#### Problem 3.31
+
+```{r}
+data_31 <- read.table('3.31.txt',header = FALSE,col.names = c('indentical number','sales prive','finished square feet','nuber of bedrooms','number of bathrooms','air conditioning','garage size','pool','year built','quality','style','lot size','adjacent of high way'))
+set.seed(1)
+# obtain a random sample
+sample_31 <- sample(500,200)
+data_31 <- data_31[sample_31,]
+reg_31 <- lm(data_31$sales.prive~data_31$finished.square.feet)
+summary(reg_31)
+
+# plot
+par(mfrow=c(2,2))
+plot(reg_31$residuals~data_31$finished.square.feet,main='residuals v.s. predictor', xlab='fished square feet', ylab='residuals')
+qqnorm(reg_31$residuals)
+qqline(reg_31$residuals,col="red")
+plot(data_31$sales.prive~data_31$finished.square.feet,main='x v.s. y',xlab='finished square feet',ylab='sales price')
+plot(reg_31,1)
+
+# outlier test
+boxplot(reg_31$residuals)
+```
+
+```{r}
+# remove the residual outliers
+outlier <- vector()
+a <- as.numeric(reg_31$residuals)
+for(i in 1:6){
+        new_large <- as.numeric(which.max(a))
+        outlier <- c(outlier,new_large)
+        a <- a[-new_large]
+
+}
+a <- as.numeric(reg_31$residuals)
+for(i in 1:2){
+        new_large <- as.numeric(which.min(a))
+        outlier <- c(outlier,new_large)
+        a <- a[-new_large]
+
+}       
+data_31 <- data_31[-outlier,]
+
+# box cox transformation
+library(MASS)
+tr_31 <- boxcox(data_31$sales.prive~data_31$finished.square.feet,Lambda=seq(-2,+2,100))
+
+# new regression
+y_new_31 <- data_31$sales.prive^(-1/2)
+new_regress_31 <- lm(y_new_31 ~ data_31$finished.square.feet )
+par(mfrow=c(2,2))
+plot(new_regress_31$residuals~data_31$finished.square.feet,main='new residuals v.s. predictor', xlab='fished square feet', ylab='residuals')
+qqnorm(new_regress_31$residuals)
+qqline(new_regress_31$residuals,col="red")
+plot(y_new_31~data_31$finished.square.feet,main='x v.s. new y',xlab='finished square feet',ylab='new sales price')
+plot(new_regress_31,1)
+
+# take into the new x
+y1 <- new_regress_31$coefficients[1] + 1100 * new_regress_31$coefficients[2]
+y1_true <- (1/y1)^2
+y2 <- new_regress_31$coefficients[1] + 4900 * new_regress_31$coefficients[2]
+y2_true <- (1/y2)^2
+```
+
+#### Problem 3.32
+```{r}
+data_32 <- read.table('3.32.txt',header = FALSE, col.names = c('identifican number','PSA level','cancer volume','weight','age','benign prostatic hyperplasia','seminal vesicle invasion','capsular penetration','gleason score'))
+reg_32 <- lm(data_32$PSA.level~data_32$cancer.volume)
+summary(reg_32)
+
+par(mfrow=c(2,2))
+plot(reg_32$residuals~data_32$cancer.volume,main='residuals v.s. predictor', xlab='cancer volume', ylab='residuals')
+qqnorm(reg_32$residuals)
+qqline(reg_32$residuals)
+plot(reg_32,3)
+plot(reg_32$residuals~data_32$PSA.level,xlab = 'residuals',ylab = 'PSA level')
+
+#remove the outlier of predictor
+par(mfrow=c(1,2))
+boxplot(data_32$cancer.volume)
+data_32 <- data_32[order(data_32$cancer.volume)[1:93],]
+
+tr_32 <- boxcox(data_32$PSA.level~data_32$cancer.volume,Lambda=seq(-2,+2,100))
+
+y_new_32 <- log10(data_32$PSA.level)
+new_reg_32 <- lm(y_new_32~data_32$cancer.volume)
+summary(new_reg_32)
+
+par(mfrow=c(2,2))
+plot(new_reg_32$residuals~data_32$cancer.volume,main='new PSA.level v.s. predictor', xlab='cancer.volume', ylab='residuals')
+qqnorm(new_reg_32$residuals)
+qqline(new_reg_32$residuals)
+plot(y_new_32~data_32$cancer.volume,main='x v.s. new y',xlab='cancer.volume',ylab='new PSA.level')
+plot(new_reg_32,1)
+
+y <- new_reg_32$coefficients[1] + new_reg_32$coefficients[2] * 20
+y_true <- 10^y
+
+```
+

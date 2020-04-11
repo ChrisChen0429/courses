@@ -1,0 +1,129 @@
+---
+title: "Homework five"
+author: "Yi Chen(yc3356)"
+date: "February 26, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Homework five
+```{r}
+# read the data
+setwd("C:/Users/cheny/Desktop/study/second term/Advanced Data Analysis/homework/homework five")
+adolesent <- read.csv("adolescent.csv")
+shuttle <- read.csv("Shuttle.csv")
+```
+
+###problem one
+####(a)
+
+Use logistic regression to model the effect of the temperature on the probability of thermal distress.
+```{r}
+fit1 <- glm(factor(shuttle$ThermalDistress)~shuttle$Temperature,family = binomial("logit"))
+summary(fit1)
+exp(coef(fit1))
+```
+**analysis**
+
+As we can see from the table, the result of the fitted regression is:
+
+$$logit(\pi(TD|Temperature))=15.0429-0.2322Temperature$$
+
+####(b) 
+
+Estimate $\beta1$, the effect of temperature on the probability of thermal distress. Interpret your result.
+
+**Analysis**
+
+As we can see from the result: the estimated value of $\beta_1=-0.2322$. This indecate that on average, if we ignore the effect of other underlying factors, if the temperature increase 1 unit(1 fahrenheit), the the odd of at least one primary O-ring suffered termal distress would be $e^{-0.2322}=0.7927875$ times as before. i.e. will have approximately 20.72% of decrease. 
+
+####(C)
+
+Construct a 95% confidence interval to describe the effect of the temperature on the odds of thermal distress, Interpret your result.
+```{r}
+confint(fit1)
+exp(confint(fit1))
+```
+
+**Analysis**
+
+As we can see from the table, the confidence interval of $\beta_1$ is between -0.5154718 and  -0.06082076. This indecate that, on average, if we ignore the effect of other underlying factors, we have 95 percent of confidenct to conclude that if the temperature increase 1 unit(1 fahrenheit), the the odd of at least one primary O-ring suffered termal distress would between  $e^{-0.5154718}=0.5972188$ and $e^{-0.06082076}=0.9409919$ times as before. i.e. will have approximately 6% to 40% of decrease. 
+
+#### (D)
+
+Predict the probability of thermal distress at 31oF;
+the temperature at the time of the Challenger fligh.
+
+**Analysis**
+
+$$logit(\pi(TD=1|Temperature))=15.0429-0.2322T\times31=7.8447$$
+$$\pi(TD=1)=e^{7.8447}=2552.172$$
+$$\frac{p(TD=1)}{1-P(TD=1)}=2552.172$$
+$$p(TD=1)=0.9996083$$
+
+####(E)
+
+At what temperature does the predicted probability equal 0.5?
+
+**Analysis**
+
+$$odd(TD=1)=\frac{p(TD=1)}{1-P(TD=1)}=1$$
+$$logit(\pi(TD=1|Temperature))=log(1)=0$$
+$$15.0429-0.2322T\times Temperature=0$$
+$$Temperature=64.78424$$
+
+###problem Two
+####(a)
+
+Estimate $\beta_1$ and $\beta_2$ and interpret your result.
+```{r}
+fit2 <- glm(cbind(adolesent$Yes,adolesent$No)~adolesent$Gender+adolesent$Race,family = binomial("logit"))
+summary(fit2)
+exp(coef(fit2))
+```
+
+**Analysis**
+
+1. the estimated value of $\beta_1=0.6478$, thie means if we fix race (i.e. let the race to be both black or both white), on average, for thoes who is male, their odd of having sexual intercourse would be $e^{0.6478}=1.911331$ times the odd of having sexual intercourse for the famle.
+
+
+2. the estimated value of $\beta_2=-1.3135$, this means if we fix the gender factor (i.e. let the gender to be both male or both female), o2n average, for thoes who is white, their odd of having sexual intercourse would be $e^{-1.3135}=0.2688773$ times the odd of having sexual intercourse for the black.
+
+####(b)
+
+Construct a 95% confidence interval to describe the effect of gender on the odds of Intercourse controlling for race, Interpret your result
+```{r}
+confint(fit2)
+exp(confint(fit2))
+```
+
+**Analysis**
+
+As we can see from the table, the confidence interval of $\beta_1$ is between 0.2105773 and  1.09436472. This indecate that,  if we fix the gender factor (i.e. let the gender to be both male or both female) , on average we have 95 percent of confidenct to conclude that for thoes who is white, their odd of having sexual intercourse would be $e^{0.2105773}=1.2343904$ to $e^{1.09436472}=2.9872843$ times the odd of having sexual intercourse for the black.
+
+####(c)
+Construct a 95% confidence interval to describe the effect of race on the odds of Intercourse controlling for gender, Interpret your result.
+
+**Analysis**
+
+As we can see from the table, the confidence interval of $\beta_2$ is between -1.7824267 and -0.84865350. This indecate that, if we fix race (i.e. let the race to be both black or both white), on average,  we have 95 percent of confidenct to conclude that for thoes who is male, their odd of having sexual intercourse would be  $e^{-1.7824267}=0.1682294$ to $e^{-0.84865350}=0.4279908$ times the odd of having sexual intercourse for the famle.
+
+####(d)
+
+Test H0 : $\beta_1 = \beta_2 = 0$.
+
+**Analysis**
+
+Here we need to use the method of likelihood ratio test. Null deviance is Null deviance: 37.516984  on 3  degrees of freedom and Residual deviance:  0.058349  on 1  degrees of freedomn. Thus the test statistics is 37.516984 - 0.058349 = 37.45864. P = 2. We reject H0 since $37.45864> \chi^{2}_{2}(0.95)=5.99$. i.e. for race and gender, atl least one of them will have a significant inference on the whether having sexual intercourse
+
+####(e)
+
+Test H0 : $\beta_1 = 0$
+
+**Analysis**
+
+As we can see from the table that the p-value of $\beta_1 = 0.00399  \leq 0.05$. And the z value is 2.879. Thus, we can reject the H0. i.e. for race will have a significant inference on the whether having sexual intercourse
+

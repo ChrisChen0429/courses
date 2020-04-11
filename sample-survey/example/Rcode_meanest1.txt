@@ -1,0 +1,32 @@
+
+
+# Simulate 1000 SRSs, calculate empirical covg rate of CI
+ 
+mean.est1 <- function(y, n, n.samples=1000, alpha=.05)
+{
+ z.star <- qnorm(1 - alpha/2)
+ N <- length(y)
+ ybar.U <- mean(y)
+ out <- rep(0, 4)
+ for(i in 1:n.samples)
+ {
+  samp <- sample(1:N, n)
+  y.samp <- y[samp]
+  ybar <- mean(y.samp)
+  abs.err <- abs(ybar - ybar.U)
+  Vhat <- var(y.samp)/n * (1 - n/N)
+  CI <- ybar + c(-1,1) * z.star * sqrt(Vhat)
+  if(CI[1] <= ybar.U && ybar.U <= CI[2])
+   { cover <- 1 }
+  else
+   { cover <- 0 }
+  out <- out + c(ybar, abs.err, 2*z.star*sqrt(Vhat), cover)
+ }
+ out <- round(out/n.samples, digits=4)
+ cat("      ybar", "abs.err", "width", "  covg", "\n")
+ print(out)
+ return(date())
+}
+
+
+

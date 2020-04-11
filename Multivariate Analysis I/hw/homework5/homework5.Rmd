@@ -1,0 +1,121 @@
+---
+title: "homework5"
+author: "Yi Chen"
+date: "2/21/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Homework 5
+
+### problem 1
+
+#### question a
+
+```{r}
+## load the data
+data <- read.table('T11-7.DAT',header = F)
+zone <- as.numeric(as.factor(data$V6))
+```
+
+In this case, we need to compare the mean of five variables ($p=5$) in three different groups ($g=3$) using multivariate analysis of variance (MANOVA). Let $\tau_l$ represent the $l$-th treatment effect. In this case the treatment effect comes from the difference in zone. With constraint of $\sum_{l=1}^{g} n_l\tau_l=0$ ($n_l$ is the number of observation in the $l$-th treatment group), we have the hypohtesis of there are **no** treatment effects.
+
+$$H_0: \tau_1 = \tau_2 = \tau_3 = 0$$
+This hyphothesis is tested by considering the relative sizes of the treatment and residual sums of squares and cross producets.
+
+#### question b
+
+```{r message=FALSE, warning=FALSE}
+library(dplyr)
+n1 = as.numeric(table(zone)[1])
+n2 = as.numeric(table(zone)[2])
+n3 = as.numeric(table(zone)[3])
+(n = c(n1,n2,n3))
+g = length(unique(data$V6))
+p = ncol(data) -1
+## calculate the mean of variable for each group
+(group.bar <- data %>% group_by(V6) %>% summarise_all(funs(mean)))
+## calculate the overall mean
+(x.bar <- colMeans(data[,1:5]))
+## calculate treatment sum of squre (B)
+B <- 0
+for (i in 1:g){
+  B <- B + n[i] * t(as.matrix(group.bar[i,2:(p+1)] - x.bar)) %*% (as.matrix(group.bar[i,2:(p+1)] - x.bar))
+}
+## calculate the residual sum of square (W)
+W <- 0
+for (i in 1:g){
+  group.cov <- cov(data %>% filter(zone==i) %>% select(1:5))
+  W <- W + (n[i]-1) * group.cov
+}
+## calculate the wilks' lambda
+(Lambda = det(W)/det(B + W))
+```
+
+#### question c
+
+```{r}
+# F statistics
+(F.statistics <- ((sum(n)-p-2)/p)* ((1- sqrt(Lambda))/sqrt(Lambda)))
+```
+
+#### question d
+
+```{r}
+# F-critical
+alpha = 0.05
+(F.critical <- qf(1 - alpha, 2*p, 2*(sum(n)-p-2) ))
+```
+
+
+#### question e
+
+Since the F statistics is bigger than the F ciritical value, we can conclude that: we need to reject the $H_0$ hyphothesis. In other words, there exist statistically significant treatment effects.
+
+I also use the package to double check the result. We get the same conclusion.
+```{r}
+dependent.vars = as.matrix(data[,1:5])
+group.indicator = as.factor(data$V6)
+(ex.manova = summary(manova(dependent.vars ~ group.indicator), test = "Wilks"))
+```
+
+#### question f
+
+We have calculate the corresponding B and W in the question b for calculate lambda. Here we report the result
+```{r}
+B
+W
+```
+
+To double check, I compare these values with the results from package.
+```{r}
+## check B
+all(round(B,2)==round(ex.manova$SS[1]$group.indicator,2))
+## check W
+all(round(W,2)==round(ex.manova$SS[2]$Residuals,2))
+```
+
+
+#### question g
+
+```{r}
+solve(W) %*% B
+```
+
+```{r}
+(e.values <- eigen(solve(W) %*% B, only.values = TRUE)$values)
+lambda.new <- 1
+for (i in 1:min(p,g-1)){
+  lambda.new <- lambda.new * (1/(1+e.values[i]))
+}
+lambda.new
+```
+
+```{r}
+round(lambda.new,5) == round(Lambda,5)
+```
+
+The results match with each other.

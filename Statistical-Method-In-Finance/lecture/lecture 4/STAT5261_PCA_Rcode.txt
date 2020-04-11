@@ -1,0 +1,62 @@
+# read data
+company = c("GS","JPM","MS","C","WFC","BAC","USB")
+# change to your own directory where the data is located
+path = "C:/Users/Brian/Google Drive/TA/W4261,5261 Statistical Methods in Finance/2018 Spring/PCA lecture notes/data/"
+n = dim(read.csv(paste(path,company[1],".csv",sep="")))[1]
+stock_price = matrix(0, nrow= n, ncol= length(company))
+for (i in 1:length(company)) {
+		filename = paste(path,company[i],".csv",sep="")
+	stock_price[,i] =	read.csv(filename)$Adj.Close
+}
+stock_return = (stock_price[1:(n-1),] - stock_price[2:n,])/stock_price[2:n,]
+
+# time series plots
+par(mfrow=c(3,1))
+for (i in 1:3) {
+plot(stock_return[,i],ylab=company[i],type="l",xlab="Date")
+}
+
+par(mfrow=c(4,1))
+for (i in 4:7) {
+plot(stock_return[,i],ylab=company[i],type="l",xlab="Date")
+}
+
+#------------------------------------------------------------------------
+# load the library for plotting heat map
+install.packages("corrplot")
+library(corrplot)  
+col3 <- colorRampPalette(c("red", "white", "blue"))
+# change back to display one figure at a time
+par(mfrow=c(1,1))
+# set up the labels
+temp = cor(stock_return)
+colnames(temp) = company
+rownames(temp) = company
+# Heat map
+corrplot(temp,method="color",col=col3(100))
+# Alternative way
+corrplot.mixed(temp,lower ="number", upper= "color", col=col3(100))
+
+
+# PCA
+pca = prcomp(stock_return)
+pca # loadings
+summary(pca) # variance explained
+plot(pca)
+
+
+############
+# for bond #
+############
+filename = paste(path,"CMT.csv",sep="")
+CMT = read.csv(filename)[,-1]
+n = dim(CMT)[1]
+CMT_return = (CMT[2:n,] - CMT[1:(n-1),])/(CMT[1:(n-1),])
+pca = prcomp(CMT_return)
+
+# plot the first 3 PCs
+matplot(pca$rotation[,1:3],type="l",ylab="value", xaxt = "n" ,col=c(1,2,4))
+axis(1, at=1:dim(CMT)[2], labels=rownames(pca$rotation))
+legend("topleft", legend=c("PC1","PC2","PC3") ,col=c(1,2,4), lty=1:2, cex=0.8)
+# other plots and summary can be done similar to the case of stocks
+

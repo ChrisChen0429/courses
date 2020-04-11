@@ -1,0 +1,102 @@
+1. T
+2. F; max variance ratio of 14.1/4.2 = 3.4, which is greater than 3 and is cause for concern that group population variances may differ
+3. T; we will cover this material on Monday 10/14
+4. T
+5. T
+6. T
+7. F
+8. T
+9. F
+10. F; the deviations of observed values from their mean should be squared
+11. T
+12. T
+13. F; it violates the analytic requirement of no multicollinearity
+14. T; with dummy coding the intercept represent the mean of the reference group (here group 3) and the slope on the remaining groups represent their respective deviations from the reference group; so, the intercept plus the slope on group 1 dummy will give the mean for the first group
+15. T
+16. F; the contrast coefficients must add up to zero and here 1 + 1/2 + 1/2 = 2; possible solutions include (1, -1/2, -1/2) or (-1, 1/2, 1/2); we will cover this material on Monday 10/14
+17. F; (TSS - RSS)/RSS
+18. F; t distribution is symmetric, F distribution is skewed right; we haven't covered this material
+19. F; the SE for a contrast depends on (a) the residual SE, (b) the group sample sizes, and (c) the contrast coefficients; we will cover this material on Monday 10/14
+20. F; df_R - df_F = (n - 1) - (n - 5) = 4
+21. G
+22. B
+23. D
+24. C (this is the traditional ANOVA model)
+25. H (this is the traditional ANCOVA model)
+26. A
+27. E
+28. F
+29. A; material will be covered Monday 10/14
+30. A; material will be covered Monday 10/14
+31. B; material will be covered Monday 10/14 or perhaps after exam depending on how far we get
+32. B
+33. A; 54 = n - 6; n = 60 
+34. D
+35. C
+36. A
+37. In addition to specific examples from the APA manual below, also
+    see the table checklist on p. 150.
+ (a) APA Manual (p. 113): Do not use a zero before 
+      a decimal fraction when the statistic cannot be greater than
+      1.
+ (b) APA Manual (p. 113): Use a zero before the decimal 
+      point with numbers that are less than 1 when the statis­tic can 
+      exceed 1.
+ (c) APA Manual (p. 113): The number of decimal places 
+      to use in reporting the results of experiments and data analytic
+      manipulations of the data should be governed by the following 
+      general principle: Round as much as possible while keeping 
+      prospective use and statistical pre­ cision in mind. As a general
+      rule, fewer decimal digits are easier to comprehend than more digits; 
+      therefore, in general, it is better to round to two decimal places or 
+      to rescale the measurement
+ (d) APA Manual (p. 114): When reporting p values, report 
+      exact p values (e.g., p = .031) to two or three dec­ imal places. 
+      However, report p values less than .001 as p < .001.
+ (e) APA Manual (p. 128): Tables should be integral to the text but 
+      should be designed so that they can be understood in isolation.
+ (f) APA Manual (p. 133): Give every table a brief but clear and 
+      explanatory title. The basic content of the table should be easily
+      inferred from the title.
+ (g) APA Manual (p. 134): Abbreviations of technical terms, group names,
+      and the like must be explained in the table title or in a note to 
+      the table.
+ (h) APA Manual (p. 137): The table body contains the data. Express numerical
+      values to the number of decimal places that the precision of measurement
+      justifies (see section 4.35), and if possible, carry all comparable 
+      values to the same number of decimal places.
+ (i) APA Manual (p. 141): Limit the use of rules (i.e., lines) in a table 
+      to those that are necessary for clarity. Appropriately positioned 
+      white space can be an effective substitute for rules.
+38. You could make the case for either approach here. Graphically, there 
+    doesn't appear to much going on in the way of interaction here. Nevertheless,
+    the p-value for the test of interaction is .08, which is suggestive. Note
+    that the sample size here is very large (n = 7362), so even small deviations
+    from parallel relationships will be picked up as significant, so my preference
+    would be to analyze as if there is no two-way interaction given the plot. But, 
+    again, you could make the case either way so long as you use appropriate 
+    evidence. Option 1 (my preferred option): I would test pairwise comparisons of
+    the parent status factor, averaging over the levels of head start. Option 2 
+    (also acceptable if argued appropriately): test the simple effects of parental
+    status for (a) those who received head start and (b) those who did not separately.    
+39. Option 1: Averaging across the levels of head start, we find significant 
+    differences between all three levels of the parental status factor. In particular,
+    the mean of the other group is 10.5 points higher than the mean of the one parent
+    group (p < .001); the mean of the other group is 5.6 points higher than the mean of
+    the step parent group (p = .0003); and the mean f the one parent group is 4.91 
+    points lower than the mean of the step parent group (p = .003).
+
+FORMULAS TO KNOW:
+-Incremental F test
+-df = Sample size - Number of parameters estimated
+-df_F
+-df_R
+-df_numerator = df_R - df_F
+-df_denominator = df_F
+-Regression model formulas including those with categorical predictors, 
+  continuous predictors, interactions between cat and cat predictors (i.e.,
+  two-way ANOVA) interactions betweeen cat and contin predictors, dummy
+  coding and effect coding interpretations of coefficients.
+- Also need to know how to create contrasts with contrast coefficients and
+  how to interpret them.
+- Know how to estimate the residual standard error (sigma^2_epsilon) with data.

@@ -1,0 +1,42 @@
+
+
+# Example 4.7: Domain estimation
+
+library(SDaA); rm(list=ls());
+
+dim(agsrs); names(agsrs);
+
+N <- 3078; n <- 300;
+
+x <- (agsrs$state=="AK" | agsrs$state=="AZ" | agsrs$state=="CA" | 
+      agsrs$state=="CO" | agsrs$state=="HI" | agsrs$state=="ID" | 
+      agsrs$state=="MT" | agsrs$state=="NV" | agsrs$state=="NM" |
+      agsrs$state=="OR" | agsrs$state=="UT" | agsrs$state=="WA" | 
+      agsrs$state=="WY" )
+
+# x is the domain indicator for western region
+
+n.d <- sum(x); n.d;
+
+
+# First estimate the mean farmland per county in the West
+
+ybar.d <- sum(x*y) / sum(x)
+
+V.hat <- n*(n.d-1) / (n.d*(n-1)) * var(y[x==1])/n.d * (1 - n/N)
+
+SE.ybar <- sqrt(V.hat)
+
+ybar.d / 1e6;  SE.ybar / 1e6;  # est and std error (millions of acres)
+
+(ybar.d + c(-1,1) * 1.96 * SE.ybar) / 1e6;  #  95% confidence interval
+
+
+# Estimate the total farmland per county in the West
+
+u <- x*y;  t.yd.hat <- N * mean(u);
+
+SE.t <- N * sd(u)/sqrt(n) * sqrt(1 - n/N)
+
+t.yd.hat / 1e6;  SE.t / 1e6;  # est and std error (millions of acres)
+

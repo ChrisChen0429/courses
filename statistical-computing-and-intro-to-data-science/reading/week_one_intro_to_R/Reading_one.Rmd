@@ -1,0 +1,76 @@
+---
+title: "Reading_one"
+author: "Yi (Chris) Chen"
+date: "October 22, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+1. use **alt** + **-** is a easier way to get **<-**
+
+2. Type "this" then press Cmd/Ctrl + ???
+
+3. This common action can be shortened by surrounding the assignment with parentheses, which causes assignment and "print to screen" to happen.
+
+```{r  this is the chunk's name!}
+library(tidyverse)
+
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy))
+
+filter(mpg, cyl == 8)
+```
+
+4. Text formatting
+*italic* _italic_
+**bold** __bold__
+`code`
+superscript^2^ suberscript~2~
+
+
+5. Headings  
+# 1st Level Header
+
+## 2nd Level Header
+
+### 3rd Level Header
+
+6. Lists
+*   Bulleted list item 1
+
+*   Item 2
+
+    * Item 2a
+
+    * Item 2b
+
+1.  Numbered list item 1
+
+1.  Item 
+2. The numbers are incremented automatically in the output.
+
+
+8. Links and images
+<http://example.com>
+
+[linked phrase](http://example.com)
+
+![optional caption text](path/to/img.png)
+
+9. Tables 
+First Header  | Second Header
+------------- | -------------
+Content Cell  | Content Cell
+Content Cell  | Content Cell
+
+
+```{r}
+knitr::kable(
+  mtcars[1:5, ], 
+  caption = "A knitr kable."
+)
+```
+

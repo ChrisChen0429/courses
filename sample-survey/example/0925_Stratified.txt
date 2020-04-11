@@ -1,0 +1,107 @@
+
+
+# Chapter 3 Exercise 7
+
+# Estimate population mean and total based on stratified sample
+
+# First key in the data
+
+rm(list=ls())
+
+y <- rep(rep(0:8,4),c( c(1,2,0,1,0,2,0,1,0), # BioSci faculty
+                    c(10,2,0,1,2,1,1,0,2),   # Physical sciences
+                    c(9,0,1,0,2,0,1,0,0),    # Social Science
+                    c(8,2,0,1,0,0,0,0,0)))   # Humanities
+
+Depts <- c("BioSci", "PhysicalSci", "SocialSci", "Humanities")
+
+strat <- rep(Depts, c(7, 19, 13, 11))
+
+Data <- data.frame(y=y, strat=strat)
+
+Data$strat <- factor(Data$strat, levels=levels(Data$strat)[c(1,3,4,2)])
+
+# I wanted them in the order BioSci, PhysicalSci, SocialSci, Humanities, 
+#  but R will put them in alphabetical order.  Better way to do this?
+
+boxplot(y ~ strat, data=Data)
+
+
+
+# I like to work with stratified samples as "lists" in R
+
+y <- split(Data$y, Data$strat); y; 
+
+n.h <- sapply(y, length); n.h;
+
+N.h <- c(102, 310, 217, 178); names(N.h) <- names(n.h); N.h;
+
+n <- sum(n.h); n; N <- sum(N.h); N;
+
+ybar.h <- sapply(y, mean); ybar.h;
+
+s.h <- sapply(y, sd); s.h;
+
+round(data.frame(cbind(N.h, n.h, ybar.h, s.h)), 2)
+
+
+
+# Estimate total number of publications by t.hat_strat
+
+t.hat_strat <- sum(N.h * ybar.h); 
+
+V.hat.t <- sum(N.h^2 * s.h^2 / n.h * (1 - n.h/N.h))
+
+SE.t <- sqrt(V.hat.t)
+
+t.hat_strat; SE.t;  # estimate and standard error
+
+# Estimate 1321 total publications, std error of 256
+
+
+
+# In terms of publications per faculty member we get
+
+ybar_strat <- t.hat_strat / N;
+
+SE.ybar <- SE.t / N;
+
+ybar_strat; SE.ybar;  # estimate and standard error
+
+# Estimate 1.64 publications per faculty, std error of .32
+
+
+# Treating the data as an SRS we'd have gotten
+
+mean(Data$y); sqrt(var(Data$y)/n * (1 - n/N));
+
+# Estimate of 1.66 with standard error of 0.33
+
+
+
+# Estimate percentage of faculty with no publications
+
+z <- split(Data$y==0, Data$strat)
+
+p.hat_h <- sapply(z, mean);
+
+p.hat_strat <- sum(N.h * p.hat_h) / N;
+
+V.hat.p <- sum(N.h^2 *p.hat_h*(1-p.hat_h)/(n.h-1)*(1-n.h/N.h))/N^2
+
+SE.p <- sqrt(V.hat.p)
+
+p.hat_strat; SE.p;  # estimate and standard error
+
+# Estimate 57% of faculty have no publications, SE of 6.6%
+
+
+# Treating the data as an SRS we'd have gotten
+
+p.hat <- mean(Data$y==0); 
+
+p.hat; sqrt(p.hat * (1 - p.hat) / (n-1) * (1 - n/N));
+
+# estimate of 56% with standard error of 6.9%
+
+

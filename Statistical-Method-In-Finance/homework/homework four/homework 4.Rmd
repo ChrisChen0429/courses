@@ -1,0 +1,78 @@
+---
+title: "Homework 4"
+author: "Yi Chen(yc3356)"
+date: "February 17, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+##Homework 4
+```{r}
+setwd("C:/Users/cheny/Desktop/study/second term/Statistical Method In Finance/homework/homework four")
+data <- read.table("FamaFrench_mon_69_98.txt",header = TRUE,col.names = c('date','Mkt-RF','SMB','HML','RF'))
+library("Ecdat")
+data(CRSPmon)
+```
+
+(a) Perform principal component analysis (PCA) on the monthly returns of GE, IBM and Mobil. Report the following quantities.
+
+```{r}
+# fristly, calculate the month return so that we can use the CPA
+data2 <- as.data.frame(CRSPmon[,1:3])
+pca <- prcomp(data2)
+summary(pca)
+```
+(i)The proportion of total variance explained by the first principal component.
+```{r}
+cat(" proportion of total variance explained by the first principal component is:0.5719")
+```
+(ii)The loading vectors (the eigenvectors).
+```{r}
+pca$rotation
+```
+(iii)The principal components for the first two observations.
+```{r}
+pca$x[1:2,]
+```
+
+(b) Now, for each of following cases, fit the Fama-French three factor model on GE, IBM and
+Mobil respectively. Comment on any difference between the two cases.
+```{r}
+FF_data = read.table("FamaFrench_mon_69_98.txt",header=T)
+attach(FF_data)
+library("Ecdat")
+library("robust")
+Mkt.RF = FF_data[,2]
+SMB = FF_data[,3]
+HML = FF_data[,4]
+RF = FF_data[,5]
+data(CRSPmon)
+ge = 100*CRSPmon[,1] - RF
+ibm = 100*CRSPmon[,2] - RF
+mobil = 100*CRSPmon[,3] - RF
+stocks=cbind(ge,ibm,mobil)
+```
+
+(i) Using data in the first 180 months only;
+```{r}
+data_first_180 <- stocks[1:180,]
+fit1 = lm(data_first_180~Mkt.RF[1:180]+SMB[1:180]+HML[1:180])
+options(digits=3)
+fit1
+```
+(ii) Using data in the last 180 months only
+```{r}
+data_last_180 <- stocks[181:360,]
+fit2 = lm(data_last_180~Mkt.RF[181:360]+SMB[181:360]+HML[181:360])
+options(digits=3)
+fit2
+```
+
+Answer:
+(i)	Firstly, the coefficients on the variable "Mkt.RF"  decrease a little, which means that the excessive return of the market portfolio contributes less to those of three stocks.
+(ii)	Secondly, according to the coefficient for SMB, in general, all of the three companies are more behave like the big company.(which is obviously true in the reality). But in detail, for the change in the coefficient for SMB, we can see that, the mobile are more like a small company in the last 180 compaired with the first 180 days. while the other two companies just tends to behave more like a big company.
+(iii)	Thirdly, changes in coefficients for HML suggest that the GE and IBM are more likely to be recognized as Growth Stock while Mobil is regarded as Value Stock.
+

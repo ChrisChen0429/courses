@@ -1,0 +1,56 @@
+
+
+# Homework 6 problem 2
+
+# Enter data
+
+rm(list=ls())
+
+M0 <- 940; N <- 20; n <- 4;
+
+M.i <- c(17, 56, 23, 64)
+
+m.i <- c(10, 25, 12, 30)
+
+ybar.i <- c(327, 361, 303, 334)/10
+
+s2.i <- c(263, 214, 236, 291) / 10
+
+
+
+# Method 1: Use unbiased estimator
+
+t.hat.unb <- (N/n) * sum(M.i * ybar.i)
+
+s2.t <- var(M.i * ybar.i)
+
+V.1 <- N^2 * s2.t/n * (1 - n/N)
+
+V.2 <- (N/n) * sum( M.i^2 * s2.i/m.i * (1 - m.i/M.i) )
+
+ybar.hat.unb <- t.hat.unb / M0
+
+SE.ybar.unb <- sqrt(V.1 + V.2) / M0
+
+ybar.hat.unb; SE.ybar.unb;
+
+
+
+# Method 2: Ratio estimation
+
+# Will perform much better since cluster sizes disparate
+
+ybar.hat.r <- sum(M.i * ybar.i) / sum(M.i) 
+
+s2.r <- var(M.i * (ybar.i - ybar.hat.r))
+
+V.1 <- 1 / (mean(M.i)^2) * s2.r/n * (1 - n/N)
+
+V.2 <- 1/(n * N * mean(M.i)^2) * sum(M.i^2 * s2.i/m.i * (1 - m.i/M.i))
+
+SE.ybar.r <- sqrt(V.1 + V.2)
+
+ybar.hat.r;  SE.ybar.r;
+
+
+

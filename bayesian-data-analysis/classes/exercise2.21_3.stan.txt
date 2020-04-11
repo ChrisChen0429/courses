@@ -1,0 +1,20 @@
+data {
+  int J;
+  int n[J];
+  int y[J];
+  vector[J] u;  // group-level predictor
+}
+parameters {
+  vector[J] theta;
+  real a;
+  real b;
+  real<lower=0> sigma_theta;
+}
+transformed parameters {
+  vector[J] p;
+  p = inv_logit(theta);
+}
+model {
+  y ~ binomial(n, p);
+  theta ~ normal(a + b*u, sigma_theta);
+}

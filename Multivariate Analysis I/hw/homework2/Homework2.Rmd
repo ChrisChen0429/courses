@@ -1,0 +1,138 @@
+---
+title: "Homework2"
+author: "Yi Chen"
+date: "1/29/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Problem 1
+
+a) Not valid. In matrix multiplication, the number of colum in A (5) is not equal to the number of row in B (3).
+
+b) Valid. We do the matrix addation first which will give a $3 \times 5$ matrix (since both B and E have the same order as $3 \times 5$ ). Then  the number of colum in D (3) is equal to the number of row in the second matrix (3).
+
+c) Valid. We do the matrix multiplication first which will give a $3 \times 3$ matrix. Then, the order of C is also $3 \times 3$, which is vaild for the addtion.
+
+d) Not valid. In matrix multiplication, the number of colum in E (5) is not equal to the number of row in B (3).
+
+e) Not valid. We do the matrix multiplication first which will give a $3 \times 3$ matrix. Then, the order of A is different $4 \times 5$, which is not vaild for the addtion.
+
+f) Valid. We do the matrix multiplication between D and E first which will give a $5 \times 5$ matrix. Then, the number of column in A is also 5, which is vaild.
+
+## Problem 2
+
+To calculate the lenght
+```{r}
+x <- c(5,1,3)
+y <- c(-1,3,1)
+# the length of x
+sqrt(sum(x^2))
+# the length of y
+sqrt(sum(y^2))
+
+```
+
+
+To calculate the angle.
+```{r}
+acos(sum(x*y)/(sqrt(sum(x^2))*sqrt(sum(y^2))))
+```
+
+## Problem 3
+
+Given any arbitrary matrix $A$ with order of $n \times p$. Given the Algebraic Rule for Transpose
+
+$$(A'A)' = A'(A')' = A'A$$
+
+## Problem 4
+
+### question 1
+
+a) $$E(X^{(1)})={\mu^{'}_{X}}^{(1)}=[4,3]'$$
+
+b) $$E(AX^{(1)})=AE(X^{(1)})= 4 \times 1 + 3 \times 2 = 10$$
+
+c) $$cov(X^{(1)})=cov(\begin{bmatrix}x_1\\x_2\end{bmatrix})= \begin{bmatrix} 3 & 0 \\ 0 & 1\end{bmatrix}$$
+
+d) $$cov(AX^{(1)})= Acov(X^{(1)})A'$$
+ See the calculation below:
+```{r}
+A <- matrix(c(1,2),nrow = 1)
+sigma_1 <- matrix(c(3,0,0,1),nrow = 2)
+A %*% sigma_1 %*% t(A)
+```
+ 
+e) $$E(X^{(2)})={\mu^{'}_{X}}^{(2)}=[2,1]'$$
+
+f) $$E(BX^{(2)})=BE(X^{(2)})$$
+ See the calculation below:
+```{r}
+B <- matrix(c(1,-2,2,-1),nrow = 2,byrow = T)
+mu_2 <- matrix(c(2,1),nrow = 2)
+B %*% mu_2
+```
+g) $$cov(X^{(2)})=cov(\begin{bmatrix}x_3\\x_4\end{bmatrix})= \begin{bmatrix} 9 & -2 \\ -2 & 4\end{bmatrix}$$
+
+h) $$cov(BX^{(2)})= Bcov(X^{(2)})B'$$
+ See the calculation below:
+```{r}
+sigma_2 <- matrix(c(9,-2,-2,4),nrow = 2)
+B %*% sigma_2 %*% t(B)
+```
+ 
+ i) $$cov(X^{(1)},X^{(2)})=E((X^{(1)}-{\mu_{X}}^{(1)})(X^{(2)}-{\mu_{X}}^{(2)})') = \begin{bmatrix} cov(x_1,x_3),cov(x_1,x_4) \\ cov(x_2,x_3), cov(x_2,x_4) \end{bmatrix}) = \begin{bmatrix} 2,2 \\ 1,0 \end{bmatrix}$$
+
+
+ j) $$cov(AX^{(1)},BX^{(2)})=E(A(X^{(1)}-{\mu_{X}}^{(1)})(X^{(2)}-{\mu_{X}}^{(2)})'B') = \begin{bmatrix} cov(x_1,x_3),cov(x_1,x_4) \\ cov(x_2,x_3), cov(x_2,x_4) \end{bmatrix}) = A \begin{bmatrix} 2,2 \\ 1,0 \end{bmatrix}B'$$
+See the calculation below:
+```{r}
+sigma_3 <- matrix(c(2,2,1,0),nrow = 2,byrow = T)
+A %*% sigma_3 %*% t(B)
+```
+
+
+### question 2
+
+a) calculate the matrix of deviation.
+```{r}
+X <- matrix(c(-1,3,-2,2,4,2,5,2,3),nrow = 3,byrow = T)
+X <- scale(X,scale = F)
+X
+```
+
+Find the rank of matrix of deviation. 
+```{r}
+qr(scale(X,scale = F))$rank
+```
+
+Clearly, it is not full rank. There is one dimension actually depend on the other two which has the volume as zero.
+
+b) 
+calculate sample variance-covariance matrix
+
+```{r}
+# if the degree of freedom is n-1
+cov(X)
+# if the dgree of freeedom is n
+cov(X) * (2/3)
+```
+
+generalized sample variance
+```{r}
+round(det(cov(X)),2)
+```
+
+The generalized sample variance is propotion to the aera that the deviation matrix can creat. Since the deviation matrix is not full rank, the area is 0, thus the generalized sample variance is also 0.
+
+total sample variance
+```{r}
+# if the degree of freedom is n -1
+sum(diag(cov(X)))
+# if the degree of freedom is n
+sum(diag(cov(X)*(2/3)))
+```
+

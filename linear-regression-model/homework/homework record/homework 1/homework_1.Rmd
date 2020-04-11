@@ -1,0 +1,24 @@
+---
+title: "homework_one"
+author: "Yi (Chris) Chen"
+date: "September 11, 2017"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# homework one
+### chapter 1 problem 19
+###question a
+![solution of question a](C:/Users/cheny/Desktop/1.png)
+```{r}
+## import the data
+setwd("C:/Users/cheny/Desktop")
+data_19 <- read.table('19.txt',header = FALSE, col.names = c('GPA','ACT'))
+head(data_19,n = 10)
+## question a
+reg_19 <- lm(data_19$GPA ~ data_19$ACT)
+reg_19
+```

@@ -1,0 +1,14 @@
+data {
+  int J;
+  int n[J];
+  int y[J];
+}
+parameters {
+  vector<lower=0, upper=1>[J] p;
+  real<lower=0> alpha;
+  real<lower=0> beta;
+}
+model {
+  y ~ binomial(n, p);
+  p ~ gamma(alpha, beta);
+}

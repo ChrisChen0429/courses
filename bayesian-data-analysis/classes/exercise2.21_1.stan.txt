@@ -1,0 +1,20 @@
+data {
+  int J;
+  int n[J]; // # of respondents in each state
+  int y[J]; // # of respondents who said they're very liberal in each state
+}
+parameters {
+  vector<lower=0, upper=1>[J] p;
+  real<lower=0> alpha;
+  real<lower=0> beta;
+}
+model {
+  y ~ binomial(n, p);
+  p ~ beta(alpha, beta);
+/*
+  for (j in 1:J){
+    target += binomial_lpmf(y[j] | n[j], p[j]);
+    target += beta_lpdf(p[j]| alpha, beta);
+  }
+  */
+}

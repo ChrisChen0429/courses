@@ -1,0 +1,147 @@
+---
+title: "homework4"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Homework 4
+
+#### 1 
+##### a)
+```{r}
+data <- data.frame('Stratum' = c(1,2,3,4),
+                   'Area'=c(222.81,49.61,50.25,197.81),
+                   'Number of tows made'=c(4,6,3,5),
+                   'Average number of bushels per tow'=c(0.44,1.17,3.92,1.80),
+                   'Sample variance for stratum'=c(0.068,0.042,2.146,0.794))
+t_hat <- sum(25 * data$Area * data$Average.number.of.bushels.per.tow) ; t_hat
+
+N_h <- (25 * data$Area)
+n_h <- data$Number.of.tows.made
+s_h <- data$Sample.variance.for.stratum
+SE_t_hat <- sqrt(sum(N_h^2 * (1 - n_h/N_h) * (s_h/n_h))) ; SE_t_hat
+```
+
+
+##### b)
+```{r}
+data2 <- data.frame('Stratum' = c(1,4),
+                   'Area'=c(322.67,197.81),
+                   'Number of tows made'=c(8,5),
+                   'Average number of bushels per tow'=c(0.63,0.40),
+                   'Sample variance for stratum'=c(0.083,0.046))
+t_hat <- sum(25 * data2$Area * data2$Average.number.of.bushels.per.tow) ; t_hat
+
+N_h <- (25 * data2$Area)
+n_h <- data2$Number.of.tows.made
+s_h <- data2$Sample.variance.for.stratum
+SE_t_hat <- sqrt(sum(N_h^2 * (1 - n_h/N_h) * (s_h/n_h))) ; SE_t_hat
+```
+
+
+
+### 2 
+#### a)
+```{r}
+library(SDaA)
+N <- 3078
+n <- nrow(agsrs)
+t_x <- 2087759
+
+y <- agsrs$acres92 
+ybar <- mean(y)
+x <- agsrs$farms87
+xbar <- mean(x)
+
+B.hat <- ybar / xbar
+t_y.hat <- B.hat * t_x ;t_y.hat 
+e <- y - B.hat * x
+SE.B <- 1 / xbar * sqrt(var(e) / n * (1 - n/N))
+SE.t_yr <- t_x * SE.B ; SE.t_yr
+```
+```{r}
+t_y.hat + c(-1,1) * 1.96 * SE.t_yr
+```
+
+#### b)
+```{r}
+N <- 3078
+t_x <- 2087759
+n <- nrow(agsrs)
+# the sample data
+x <- agsrs$farms87
+y <- agsrs$acres92
+
+# summary statistics
+xbar <- mean(x)
+ybar <- mean(y)
+s.y <- sd(y)
+xbar;ybar;s.y^2
+```
+```{r}
+lsfit(x,y)$coefficients
+B1.hat <- cor(x,y) * sd(y) / sd(x)
+plot(x,y)
+abline(ybar-B1.hat * xbar,B1.hat)
+```
+```{r}
+#regression estimate
+x_bar.U <- t_x / N
+ybar.hat.reg <- ybar + B1.hat * (x_bar.U - xbar)
+ybar.hat.reg
+```
+
+```{r}
+## standard error
+B0.hat <- ybar - B1.hat * xbar
+e <- y - B0.hat - B1.hat * x
+var(e) ; var(y) * (1- cor(x,y)^2) # should be the same
+SE.ybar.reg <- sd(e) / sqrt(n) * sqrt(1 - n/N)
+SE.ybar.reg
+```
+```{r}
+# estimate and standard error for population total
+N * ybar.hat.reg
+N* SE.ybar.reg
+```
+
+```{r}
+# 95% CI should be 
+N * (ybar.hat.reg + c(-1,1) * 1.96 * SE.ybar.reg)
+```
+
+### c
+
+In this problem the N_d (domain size) is unknown
+```{r}
+N <- 3078 # as we can know from problem 2 : total number of countries in the United States
+y.samp <- agsrs$acres92
+domain.samp <- (agsrs$farms87 >= 600)
+
+domain.total <- function(y.samp, domain.samp, d, N){
+  n <- length(y.samp)
+  x <- (domain.samp==d)
+  y <- y.samp; u <- x*y
+  u.bar <- mean(u)
+  s2.u <- var(u)
+  t.yd.hat <- N * u.bar
+  V.hat <- N^2 * s2.u/n * (1 - n/N)
+  SE <- sqrt(V.hat)
+  answer <- c(point.est=t.yd.hat, std.error=SE)
+  return(answer)
+}
+```
+
+For the domain of countries fewer than 600 farms
+```{r}
+domain.total(y.samp, domain.samp, d=0, N)
+```
+
+For the domain of countries with 600 or more farms
+```{r}
+domain.total(y.samp, domain.samp, d=1, N)
+```
+

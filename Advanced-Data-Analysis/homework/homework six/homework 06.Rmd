@@ -1,0 +1,40 @@
+---
+title: "homework 06"
+author: "Yi Chen(yc3356)"
+date: "April 3, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Homework 06
+
+```{r}
+data <- c(143,164,188,188,190,192,206,209,213,216,220,227,230,234,246,265,304)
+data <- data[order(data)]
+st <- c()
+for (i in 1:length(data)){
+        st_this <- 1 - (i-0.5)/length(data)
+        st <- c(st,st_this)
+}
+st
+
+left <- log(-log(st))
+log_t <- log(data)
+log_t
+```
+```{r}
+plot(x=log_t,y=left)
+m <- lm(left~log_t)
+abline(m)
+```
+
+```{r}
+m
+```
+Thus, $\beta=6.854$ and $\beta log(\alpha)=-37.233$.
+And, $\alpha = exp(-37.233/6.854)=0.004373016$
+
+

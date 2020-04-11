@@ -1,0 +1,46 @@
+---
+title: "chapter t1"
+author: "Yi Chen(yc3356)"
+date: "November 24, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## chapter eight case example
+```{r}
+setwd("C:/Users/cheny/Desktop/study/linear regression model/note/examples/chapter eight")
+t1 <- read.table('t1.txt',header = FALSE,col.names = c('y','x1','x2'))
+
+# correlation of the orginal data
+cor(t1$x1,t1$x1^2)
+cor(t1$x2,t1$x2^2)
+
+t1$new_x2 <- (t1$x2-mean(t1$x2))/10
+t1$new_x1 <- (t1$x1-mean(t1$x1))/0.4
+t1$new_x1_2 <- (t1$new_x1)^2
+t1$new_x2_2 <- (t1$new_x2)^2
+
+reg <- lm(data = t1,y~new_x1+new_x2+new_x2_2+new_x1_2+new_x1:new_x2)
+summary(reg)
+
+plot(reg)
+plot(x=t1$x1,y=reg$residuals)
+plot(x=t1$x2,y=reg$residuals)
+```
+
+```{r}
+library(alr3)
+pureErrorAnova(reg)
+```
+
+```{r}
+reg1 <- lm(data = t1,y~new_x1+new_x2)
+anova(reg1)
+
+anova(lm(data = t1,y~new_x1+new_x2+new_x1_2+new_x2_2+new_x1:new_x2))
+
+```
+

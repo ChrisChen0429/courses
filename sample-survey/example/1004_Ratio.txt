@@ -1,0 +1,34 @@
+
+
+# Example 4.5
+
+x <- c(1, 0, 8, 2,76,60,25, 2, 1,31)
+
+y <- c(0, 0, 1, 2,10,15, 3, 2, 1,27)
+
+p.hat <- sum(y) / sum(x); p.hat;
+
+SE.p <- sqrt(p.hat*(1-p.hat)/(sum(x)-1))
+
+SE.p
+
+# This analysis is WRONG WRONG WRONG!!!
+
+# This is a ratio estimation problem
+
+n <- 10
+
+xbar <- mean(x); ybar <- mean(y);
+
+B.hat <- ybar / xbar; B.hat;
+
+SE.B <- 1/xbar * sd(y-B.hat*x) / sqrt(n)
+
+# No FPC, which is conservative
+
+SE.B
+
+plot(x, y, pch=19); abline(0, B.hat, lty=2, col="red");
+
+
+

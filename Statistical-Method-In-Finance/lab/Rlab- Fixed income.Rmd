@@ -1,0 +1,56 @@
+---
+title: 'R-Lab: Fixed income Securities'
+author: "Yi Chen"
+date: "1/22/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R-Lab: Fixed income Securities
+```{r}
+# C = cupon payment(semiannual)
+# T = time to maturity(in years)
+# r = vector of yields to maturity (semiannual rates)
+# F = face value / par value
+# P = bond prices corresponding to all values of yield to maturity in the input vector r
+
+bondprice = function(C,T,r,F){
+  P = C / r + (F - C / r) * (1 + r)^(-2 * T)
+}
+
+```
+Suppose we need to compute the yield to maturity for a 30-year par 1,000 bond with coupon payments of 40 selling at 1,200.
+
+We could calculate the bond prices for a grid of interest rates using the previous function.
+
+The price-yield function is then interpolated to find the yield to maturity when the price is 1,200.
+```{r}
+P = 1200 # current price of the bond 
+C = 40 # cupon payment
+T = 30 # time to maturity
+F = 1000 # par value of the bond
+
+r = seq(0.02,0.05,length=300) # grid of interest rates
+value = bondprice(C,T,r,F)
+yield2m = spline(value,r,xout = P) # spline interpolation
+yield2m
+
+```
+```{r}
+plot(r, value, xlab = "yield to maturity", ylab = "bond price",
+type = "l", main = "F = 1000, C = 40, T = 30", lwd = 2)
+abline(h = 1200)
+abline(v = yield2m)
+```
+As an alternative, R has a built-in nonlinear root finder
+uniroot(),which can be used to solve the yield to maturity directly.
+uniroot()solves for the root where the equation equals zero.
+In the above example, it is equivalent to solve for the root of r when the difference of the bond price function and the current price is 0.
+```{r}
+uniroot(function(r) bondprice(C,T,r,F)-P, c(.02,.05))
+```
+
+Note that in the first argument, the function has to solely depend onr.  And we have to specify the range where the root lies inside in the second argument.

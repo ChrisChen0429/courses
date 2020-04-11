@@ -1,0 +1,75 @@
+---
+title: '5241'
+author: "Yi Chen(yc3356)"
+date: "April 15, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Homework 05
+```{r}
+H<-matrix(readBin("histograms.bin", "double", 640000), 40000, 16)
+dim(H)
+```
+first write the function of Multinomial EM
+```{r}
+MultinomialEM <- function(H, K, tau) {
+        
+        init = sample(1:nrow(H), size = K, replace = F)
+        centroid = H[init, ]
+        centroid = ifelse(centroid == 0, 0.01, centroid)
+        
+        delta = Inf
+        A = matrix(0, nrow(H), K)
+        phi = matrix(0, nrow(H), K)
+        c = rep(1 / K, length.out = K)
+        b = matrix(0, K, ncol(H))
+        m = rep(0, length.out = nrow(H))
+        while (delta >= tau) {
+                A_old = A
+                
+                ## E-step
+                phi = exp(H %*% t(log(centroid)))
+                A = t(c * t(phi)) / rowSums(t(c * t(phi)))
+                
+                ## M-step
+                c = colSums(A)
+                b = t(A) %*% H
+                centroid = b / rowSums(b)
+                ## Measurement of iteration
+                delta = norm(A - A_old, "O")
+        }      
+        ## Reparameterization
+        m <- apply(A, 1, FUN = which.max)
+        return(m)
+}  
+```
+
+try differenct parameter
+```{r}
+set.seed(1)
+em_1 <- MultinomialEM(H, 3, 0.1)
+em_2 <- MultinomialEM(H, 4, 0.1)
+em_3 <- MultinomialEM(H, 5, 0.1)
+# Reset the histograms into their original "position" in the image, then visualize the result matrix in grayscale to represent the clustering
+hist_1 <- matrix(em_1, 200, 200)
+hist_2 <- matrix(em_2, 200, 200)
+hist_3 <- matrix(em_3, 200, 200)
+image(hist_1, col = gray((3:8) / 8), axes = FALSE)
+```
+
+```{r}
+image(hist_1[, ncol(hist_1):1], col = gray((3:8) / 8), axes = FALSE)
+```
+
+```{r}
+image(hist_2[, ncol(hist_2):1], col = gray((3:8) / 8), axes = FALSE)
+```
+
+```{r}
+image(hist_3[, ncol(hist_3):1], col = gray((3:8) / 8), axes = FALSE)
+```
+

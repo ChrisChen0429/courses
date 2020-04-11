@@ -1,0 +1,330 @@
+---
+title: "lecture four"
+author: "Yi (Chris) Chen"
+date: "September 29, 2017"
+output:
+  word_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## lecture four
+#### character strings and string operations
+1. string is a symbol in a written language that anything you can enter on a keyboard
+2. a string is a sequence of characters.
+```{r}
+#character can be many types: scalars, vectors, matrices,list or dataframe.
+mode('d')
+mode('cat,squirrel')
+
+class('d')
+class('cat,squirrel')
+
+# nchar() is the function that calculate the number of characters in a given string.
+nchar(' ');nchar('  ');nchar('')
+
+
+class('\n')
+class("\"")
+class("\t")
+
+nchar("\n") # create new line
+nchar("\"") # quotes within a string
+nchar("\t") # tab
+```
+
+#### string as elements of a vector
+```{r}
+# length calculate the number of string rather than the number of elements(characters) in this string
+length("cat,squirrel,hedgehog")
+length(c("cat,squirrel,hedgehog"))
+
+#nchar calculate the number of character in the string.
+nchar("cat,squirrel,hedgehog")
+nchar(c("cat,squirrel,hedgehog"))
+```
+
+#### display the string
+
+```{r}
+print("cat,squirrel")
+# cat() coerces its argument to strings, so can be useful when printing warnings
+cat('cat,squirrel')
+x <- 6
+y <- 7
+cat('I have',x,'cats and',y,'hedgehogs as pets')
+
+```
+
+```{r}
+print('cat, \nsquirrel')  #\n in print() will not change the line 
+cat('cat, \nsquirrel')  # \n in cat() will change the line
+print('In R, an \"array"\ is a muti-dimension matrix.')
+cat("A group of hedgehogs is called an \"array\".")
+
+```
+
+```{r}
+# \t means tab
+print('columbia\tuniversity')
+cat('columbnia\tuniversity') 
+```
+
+### substrings
+```{r}
+phrase <- 'Christmas Bonus'
+substr(phrase,start = 8,stop = 12)
+# take the substring of the string phrase from the 8th character to the 12ed character
+substr(phrase,start = 13, stop = 13) <- 'g'
+# revalue the subtring 
+phrase
+
+fav_animals <- c('cat','squirrl','hedgehog')
+# when use substr() for a list, it substring every element in the list
+substr(fav_animals,start = 1, stop = 2)
+substr(fav_animals,start = nchar(fav_animals)-1,stop = nchar(fav_animals))
+substr(fav_animals,start = 4, stop = 4)
+```
+
+
+#### dividing strings into vectors
+```{r}
+# dividing the strings into vectors for different symbol
+todo <- 'lecture, lab, homework'
+strsplit(todo,split = ',')
+
+
+strsplit(c(todo,'midterm, final'),split = ',')
+# paste the elements together
+paste('cat','squirrel','hedge')
+paste('cat','squirrel','hedge',sep = ',')
+
+animals <- c('cat','suqirrel','hedgrhog')
+# paste can match the elements one to one automatically 
+paste(animals,1:3)
+paste(animals,"(",1:3,")")
+paste(animals, "(" , 1:3 , ")" ,sep= "" , callaps = ";" )
+```
+
+
+```{r}
+# test
+lum_vector <- c("columbia","slumber party","sugarplum")
+substr(lum_vector,start= c(3,2,7),stop = c(5,4,9))
+# paste: turns vectors into a string
+strsplit(lum_vector,split = 'lum')
+paste(lum_vector,"[",c(3,5,7),"-",c(5,49),"]",collapse = ";")
+```
+
+##### Honor Code Example
+```{r}
+setwd("C:/Users/cheny/Desktop/study/statistical computing and intro to data science/lecture four")
+# readlines gives us the line which is always a line of sentence
+HC <- readLines("HonorCode.txt")
+# scan gives us the words
+HC2 <- scan("HonorCode.txt",what = "")
+length(HC);length(HC2)
+head(HC,5);head(HC2,5)
+
+```
+
+```{r}
+## FIND THE INDEX OF CERTAIN WORD
+grep("students",HC) 
+grep("students",HC2)
+
+# this return the sentence(lines) in which there have 'students'
+HC[grep("students",HC)]
+# this return the word 'students'
+HC2[grep("students",HC2)]
+
+# grepl is the function return whether or not the word can be matched in the given string.
+head(grepl('students',HC),15)
+# there two have the same function
+HC[grepl('students',HC)] == HC[grep("students",HC)]
+
+```
+
+##### Using functions we've learned today, let's make HC a vector with each element a word of the Honor Code (instead of a line of text). Of course, could do this with scan().
+```{r}
+# make the HC a long string
+HC <- paste(HC,collapse = ' ')
+HC
+# split every word in this long string
+HC.words <- strsplit(HC,split = ' ')[[1]]
+head(HC.words,10)
+
+```
+```{r}
+# we can count words using table()
+word_count <- table(HC.words)
+word_count <- sort(word_count, decreasing = TRUE)
+head(word_count, 10)
+tail(word_count, 10)
+```
+
+##### test
+```{r}
+# grep : search for patterns in a string
+semicolons <- grep(";",names(word_count))
+names(word_count)[semicolons]
+
+# gsub(pattern, replacement, x) function searches for a specific substring given by pattern in a vector x of strings and replaces it with the substring specified by replacement.
+
+names(word_count)<-gsub(";","",names(word_count))
+names(word_count)[semicolons]
+```
+
+### Summary:
+1. nchar(): Finds the length of a string.
+2. substring(): Extracts substrings and substitutes.
+3. strsplit(): Turns strings into vectors.
+4. paste(): Turns vectors into a string.
+5. grep(): Search for patterns in a string.
+6. gsub(): Replaces patterns in a string with another string.
+
+### Regular Expressions
+```{r}
+fav_animals <- "cat, squirrel,  hedgehog, octopus"
+
+strsplit(fav_animals,split = ",")
+strsplit(fav_animals,split = ",  ")
+```
+
+### regular expressions 
+```{r}
+# | means or
+grep("cat|dog", c("categorize", "work doggedly")) 
+grep("A|b",c("Alabama","buleberry","categorize"))
+grep("A|b",c("Alabama","p(A|b)"))
+# \\| means |
+grep("A\\|b", c("Alabama", "blueberry", "work doggedly", "P(A|b)"))
+```
+
+#### rules for regular expression:
+1. Indicate sets of characters with brackets **[]**.  
+ * "[a-z]" matches any lower case letters.  
+ * "[:punct:]" matches all punctuation marks.   
+2. The caret **^** negates a character range when in the leading position.   
+ * "[^aeiou]" matches any characters except lower-case vowels.   
+3. The period . stands for any character and doesn't need brackets.   
+ * "c..s" matches "cats", "class", "c88s", "c s", etc.
+4. some 'how often' rules:
+|  Quantier  |  Description                         |
+|------------|--------------------------------------|
+|   **+**    |Repeated one or more times.           |
+|  ** * **   |Repeated zero or more times.          |
+|   **?**    |Repeated zero or one times.           |
+|  **{n}**   |Repeated exactly n times.             |
+| **{n, } ** |Repeated n or more times.             |
+| **{n, m}** |Repeated between n and m times.       |
+   
+ * "[0-9][0-9][a-zA-z]+" matches strings with two digits followed by one or more letters.   
+  * "(abc){3}" matches three consecutive occurences of "abc".   
+  * "abc{3}" matches "abccc".
+  * "M[rs][rs]?nn.?" matches "Mr", "Ms", "Mrs", "Mr.", "Ms.", "Mrs.".
+  * The above also matches "Mrr", "Msr", "Mss", "Mrr.", "Msr.", "Mss." (and nothing else).
+   
+5. The dollar sign **$** means that a pattern only matches at the end of a line.   
+ * "[a-z,]$" matches strings ending in lower-case letters or a comma.   
+ 
+6. The caret **^** outside of brackets means that a pattern only matches at the beginning of a line.   
+ * "^[^A-Z]" matches strings not beginning with capital letters.
+
+7. the function that we can use regular expression:   
+* strsplit()   
+* grep()   
+* gsub()   
+
+```{r}
+grep("^[^A-Z]",c("Hello","cat","1dsad93"))
+grep("^[A-Z]",c("Hello","cat","1dsad93"))
+grep("[a-z,]$",c("Hello","cat","1dsad93"))
+```
+
+###honorcode example
+```{r}
+HC <- readLines("HonorCode.txt")
+HC <- paste(HC, collapse = " ") # One long string
+HC.words <- strsplit(HC, split=" ")[[1]] # Last Time
+head(HC.words, 10)
+tail(HC.words, 10)
+HC.words <- strsplit(HC, split="(\\s|[[:punct:]])+")[[1]]
+head(HC.words, 10)
+tail(HC.words, 10)
+```
+
+#### earthquakes
+```{r}
+quakes <- readLines("NCEDC_Search_Results.html")
+tail(quakes)
+length(quakes) ## this contain some lines are not about data
+data_regex <- "^[0-9]{4}/[0-9]{2}/[0-9]{2}" ## format of data
+
+grep(quakes,pattern = data_regex)
+head(grep(quakes,pattern = data_regex))
+tail(grep(quakes,pattern = data_regex,value = TRUE))
+# if invert is true, it return the element that do not match
+grep(quakes,pattern = data_regex, invert = TRUE, value = TRUE) 
+```
+
+#### commom commands in grep() family:
+1. **grep()** returns the indices containing a match.
+2. **grepl()** returns a logical indicating which elements contain a match.
+3. **regexpr()** returns the location of the rst match with attributes like the length of the match.
+4. **gregexpr()** works similarly to regexpr(), but returns all matching locations. `g' for global.
+5. **regmatches()** takes strings and the output of regexpr() or gregexpr() and returns the actual matching strings.
+
+```{r}
+grep('a[a-z]',"Alabama")
+grepl('a[a-z]',"Alabama")
+regexpr('a[a-z]',"Alabama")
+gregexpr('a[a-z]',"Alabama")
+regmatches("Alabama",gregexpr('a[a-z]',"Alabama"))
+```
+
+#### earth quake example
+```{r}
+coord_exp <- "-?[0-9]+\\.[0-9]{4}"
+full_exp <- paste(coord_exp,"\\s+",coord_exp,sep = "")
+head(grep(quakes,pattern = full_exp,value = TRUE),15)
+coord_log <- grepl(quakes,pattern = full_exp)
+matches <- gregexpr(pattern = full_exp,text = quakes[coord_log])
+head(matches,1)
+
+coords <- regmatches(quakes[coord_log],matches)
+head(coords,4)
+tail(coords,4)
+
+coors_split <- sapply(coords,strsplit,split="\\s+")
+head(coors_split)
+
+cs_unlisted <- unlist(coors_split)
+coords_mat <- matrix(cs_unlisted,ncol=2,byrow = TRUE)
+head(coords_mat)
+
+
+colnames(coords_mat) <- c("latitude","longitude")
+head(coords_mat)
+```
+```{r}
+
+library(maps)
+map("world")
+points(coords_mat[,"longitude"], coords_mat[,"latitude"],
+pch = 19, col = "red", cex = .5)
+
+
+```
+
+### read html
+```{r}
+con <- url("http://www.columbia.edu", "r")
+x <- readLines(con, warn = FALSE)
+head(x,20)
+length(x)
+```
+

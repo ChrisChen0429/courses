@@ -1,0 +1,96 @@
+---
+title: "Lab2"
+author: "Yi Chen"
+date: "9/16/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Lab 1 Assignments
+## Task 1
+```{r}
+library(car)
+dat <- data.frame(state.x77)
+lm1 <- lm(Murder~.,data=dat)
+slm1 <- summary(lm1)
+slm1
+```
+
+$$Murder = \beta_0 + \beta_1 Population + \beta_2 Income + \beta_3 Illiteracy + \beta_4 Life.Exp + \beta_5 HS.Grad + \beta_6 Frost + \beta_6 Area + \epsilon$$
+
+```{r}
+## R-square
+slm1$r.squared
+# residual standard error
+slm1$sigma
+# degree of freedom
+slm1$df[2]
+```
+
+
+# Task 2
+
+High leverage: hat-value measures the distance from that point to the mean of the predictor variable. It is the Mahalanobis distance.
+
+High Inference: Cook’s distance is a measure of the influence of a point. It may be though of as a measure that takes the product of a point’s discrepancy and its leveage
+
+
+# Task 3
+```{r}
+influencePlot(lm1)
+```
+
+Clearly, Nevada has the highest studentized residual, Alaska has the highest levarage (hat value), and Alaska has the highest inference (Cook's distance)
+
+# Task 4
+Personally, I do not think we should delet the data for Alaska. The social and economic condition for Alaska is very different with other statats in USA, which explain why their data is outliers. These data does not have error or human-made mistakes. If the research is about the whole USA, Alaska and other places like Hawaii should all be included. Or just run two different analyses with and without Alaska.
+
+# Task 5
+
+```{r}
+qqPlot(lm1)
+```
+Studentized residuals follows the t distribution, which indicate the normality assumption is hold.
+
+# Task 6
+```{r}
+residualPlot(lm1, type = "rstudent")
+```
+
+Generally speaking, the error variance is constant. There is only a slight bigger variance when the fitted value is between 6 and 10, but it is not obvious.
+
+# Task 7
+```{r}
+par(mfrow=c(2,4))
+crPlot(lm1, variable = "Population")
+crPlot(lm1, variable = "Income")
+crPlot(lm1, variable = "Illiteracy")
+crPlot(lm1, variable = "Life.Exp")
+crPlot(lm1, variable = "HS.Grad")
+crPlot(lm1, variable = "Frost")
+crPlot(lm1, variable = "Area")
+```
+
+The non-parametric regression and OLS regression lines are close for almost all 7 variables. 
+For area, income the non-linearity, and HS.Grad the non-linearity is a little violated.
+It would be better to do some transfermation of these variable before regression.
+Generlly speacking, the linearity assumption is hold.
+
+# Task 8
+```{r}
+round(cor(dat), 1)
+vif(lm1)
+```
+
+All variable have relatively small VIF which means there is no clear multicollinearity.
+The variable with the biggest VIF is Illiteracy.
+The $R_{j}$ square value is calculated by make the Illiteracy as the outcome variable and all other original predictors as the perdictors. The corresponding R-square is the $R_{j}$ square value.
+```{r}
+lm2 <- lm(Illiteracy ~.-Murder,data=dat)
+slm2 <- summary(lm2)
+slm2$r.squared
+```
+

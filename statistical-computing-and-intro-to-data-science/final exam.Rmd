@@ -1,0 +1,365 @@
+---
+title: "finanl key"
+author: "Yi Chen(yc3356)"
+date: "December 13, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## sample distribution
+```{r}
+library(ggplot2)
+samp_size  <- c(5, 10, 25, 50, 100)
+n          <- 500 
+samp_means <- cbind(rep(NA, n*length(samp_size)),
+                    rep(NA, n*length(samp_size)))
+colnames(samp_means) <- c("Values", "SampleSize")
+
+
+for (j in 1:length(samp_size)) {
+  for (i in 1:n) {
+    row <- (j-1)*n + i
+    samp_means[row, 1] <- var(rnorm(samp_size[j], mean = 10, sd = 3))
+    samp_means[row, 2] <- samp_size[j]
+  }
+}
+
+ggplot(data.frame(samp_means)) +
+  geom_histogram(aes(x = Values, y = ..density..)) +
+  geom_density(aes(x = Values)) +
+  facet_wrap(~SampleSize)
+```
+
+## method of moments
+```{r}
+gam.MMest <- function(data) {
+  #estimates \hat{a} and \hat{s} that best fit the data
+  m <- mean(data)
+  v <- var(data)
+  return(c(a = m^2/v, s = v/m))
+}
+
+cat.MM   <- gam.MMest(cats$Hwt)
+gam_args <- list(shape = cat.MM[1], scale = cat.MM[2])
+
+ggplot(cats) +
+  geom_histogram(aes(x = Hwt, y = ..density..)) +
+  geom_density(aes(x = Hwt), linetype = "dashed") +
+  stat_function(aes(x = Hwt), fun = dgamma, args = gam_args, color = "red")
+
+# use nlm
+gam.diff <- function(params, data) {
+  a <- params[1]
+  s <- params[2]
+  return((mean(data) - a*s )^2 + (var(data) - a*s^2)^2)
+}
+
+nlm(gam.diff, c(19, 1), data = cats$Hwt)
+```
+
+## maximum likelihood method(MLE)
+```{r}
+gam.ll <- function(params, data) {
+  # Input: parameter vector (length2, shape and scale)
+  # Input: data
+  a <- params[1]
+  s <- params[2]
+  return(-sum(dgamma(data, shape = a, scale = s, log = TRUE)))
+}
+cat.MLE <- nlm(gam.ll, c(19, 1), data = cats$Hwt)$estimate
+
+
+MLE_args <- list(shape = cat.MLE[1], scale = cat.MLE[2])
+MM_args <- list(shape = cat.MM[1], scale = cat.MM[2])
+
+
+loglikelihood <- function(data,parameter){
+        shape1 <- parameter[1]
+        shape2 <- parameter[2]
+        return(-sum(dbeta(data,shape1,shape2,log = TRUE)))
+}
+
+nlm(loglikelihood,c(as.numeric(mm.estimate[1]),shape2 = as.numeric(mm.estimate[2])),data=baseball$OBP)$estimate
+
+ggplot(cats) +
+  geom_histogram(aes(x = Hwt, y = ..density..)) +
+  geom_density(aes(x = Hwt,col='ture density of data'), linetype = "dashed") +
+  stat_function(aes(x = Hwt,col='method of moment'), fun = dgamma, args = MM_args) +
+  stat_function(aes(x = Hwt,col='method of maximum likelihood'), fun = dgamma, args = MLE_args)
+```
+
+## QQplot
+```{r}
+a <- cat.MM["a"]
+s <- cat.MM["s"]
+qqplot(cats$Hwt, qgamma((1:99)/100, shape = a, scale = s),ylab = "Theoretical Quantiles")
+abline(0, 1, col = "red")
+
+```
+
+## Calibration Plots and ECDF plot
+```{r}
+plot(ecdf(cats$Hwt),main = "Empirical CDF of Cat Heart Weights")
+# this method can be used to test whether data is follows a given distribution
+plot(ecdf(pgamma(cats$Hwt,shape = a,scale = s)),main='calibration of gamma distribution')
+abline(0,1,col='red')
+```
+
+## ks test
+```{r}
+n <- length(cats$Hwt)
+train <- sample(1:n, size = round(.9*n))
+cat.MM <- gam.MMest(cats$Hwt[train])
+a <- cat.MM["a"]
+s <- cat.MM["s"]
+ks.test(cats$Hwt[-train], pgamma, shape = a, scale = s)
+
+```
+
+## bootstrap
+```{r}
+# 1000 bootstrap resamples from cats$Hwt
+B <- 1000
+param_ests <- matrix(NA, nrow = B, ncol = 2)
+colnames(param_ests) <- c("a", "s")
+for (b in 1:B) {
+        resamp <- sample(1:n, n, replace = TRUE)
+        param_ests[b, ] <- gam.MMest(cats$Hwt[resamp])
+}
+
+param_ests <- data.frame(param_ests)
+
+# confidence interval
+CI.a <- quantile(param_ests$a, probs = c(0.025, 0.975))
+CI.s <- quantile(param_ests$s, probs = c(0.025, 0.975))
+
+ggplot(param_ests) +
+  geom_histogram(aes(x = a)) +
+  geom_vline(xintercept = mean(a), col = "red") +
+  geom_vline(xintercept = CI.a[1], col = "red", linetype = "dashed") +
+  geom_vline(xintercept = CI.a[2], col = "red", linetype = "dashed")
+```
+
+## apply
+```{r}
+states <- data.frame(state.x77, Region = state.region)
+# Maximum entry in each column
+apply(states[,1:8], MARGIN = 2, FUN = max)
+apply(states[,1:8], MARGIN = 2, FUN = which.max)
+rownames(states)[apply(states[,1:8], MARGIN = 2, FUN = which.max)]
+
+# Rewrite the books so the Northeast gets less frost
+top.3.names = function(v, names.v) {
+        names.v[order(v, decreasing=TRUE)[1:3]]
+}
+apply(states[, 1:7], MARGIN = 2, FUN = top.3.names,names.v = rownames(states))
+
+
+```
+
+## sapply or lapply
+```{r, eval=FALSE, include=FALSE}
+sprint_split <- split(sprint.m,sprint.m$CityData)
+
+myfunction <- function(df){
+        return(min(df$time))        
+}
+sapply(sprint_split,myfunction)
+
+my.strike.lm <- function(country.df) {
+return(lm(strike.volume ~ left.parliament,
+data = country.df)$coeff)
+}
+strikes.split <- split(strikes, strikes$country)
+strike.coef <- sapply(strikes.split[1:12], my.strike.lm)
+
+
+```
+
+
+# tapply
+```{r, eval=FALSE, include=FALSE}
+find.rows <- function(rows,data){
+        return(rows[which.min(data$Time[rows])])
+}
+#abtain the index of the min time of each citydata
+sprint.m.rows <- tapply(1:nrow(sprint.m),sprint.m$CityDate,find.rows,sprint.m)
+sprint.m.fastest <- sprint.m[sprint.m.rows, ]
+```
+
+## mapply
+```{r}
+mapply(rep, 1:4, 4:1)
+
+```
+
+## merge
+```{r, eval=FALSE, include=FALSE}
+df2.2 <- merge(x = fha, y = ua, by.x = "City", by.y = "NAME", all.x = TRUE)
+nrow(df2.2)
+```
+
+## aggragrate
+```{r, eval=FALSE, include=FALSE}
+aggregate(states[, 1:8], list(states$Region), mean)
+```
+
+## ddply
+```{r, eval=FALSE, include=FALSE}
+strike.coef.75 <- ddply(strikes, .(country, yearPre1975),
+my.strike.lm)
+
+```
+
+
+## SQL
+```{r, eval=FALSE, include=FALSE}
+library(DBI)
+library(RSQLite)
+drv <- dbDriver("SQLite")
+con <- dbConnect(drv, dbname="baseball.db")
+
+dbGetQuery(con, paste("SELECT yearID, playerID, salary, HR",
+        "FROM Batting JOIN Salaries USING(yearID, playerID)",
+        "ORDER BY playerID",
+        "LIMIT 7"))
+
+dbGetQuery(con, paste("SELECT yearID, AVG(HR) as avgHR",
+        "FROM Batting",
+        "WHERE yearID >= 1990",
+        "GROUP BY yearID",
+        "HAVING avgHR >= 4.5",
+        "ORDER BY avgHR DESC"))
+
+```
+
+## game
+```{r, eval=FALSE, include=FALSE}
+# Simulate 100 throws with the x and y
+# location modeled by N(0, 50^2).
+throws <- 100
+std.dev <- 50
+x <- rnorm(throws, sd = std.dev)
+y <- rnorm(throws, sd = std.dev)
+drawBoard(board)
+points(x, y, pch = 20, col = "red")
+# Score the throws and add the values to the plot
+scores <- scorePositions(x, y, board)
+text(x, y + 8, scores, cex = .75)
+
+```
+
+## Envelope Rejection Method
+```{r, eval=FALSE, include=FALSE}
+f <- function(x) {
+stopifnot(x >= 0 & x <= 1)
+return(60*x^3*(1-x)^2)
+}
+x <- seq(0, 1, length = 100)
+plot(x, f(x), type="l", ylab="f(x)", col = "red")
+xmax <- 0.6
+f.max <- 60*xmax^3*(1-xmax)^2
+lines(c(0, 0), c(0, f.max), lty = 1)
+lines(c(0, 1), c(f.max, f.max), lty = 1)
+lines(c(1, 1), c(f.max, 0), lty = 1)
+
+
+n.samps <- 1000 # number of samples desired
+n <- 0 # counter for number samples accepted
+samps <- numeric(n.samps) # initialize the vector of output
+while (n < n.samps) {
+        x <- runif(1) #random draw from g
+        u <- runif(1)
+        if (f.max*u < f(x)) {
+                n <- n + 1
+                samps[n] <- x
+        }
+}
+x <- seq(0, 1, length = 100)
+hist(samps, prob = T, ylab = "f(x)", xlab = "x",
+main = "Histogram of draws from Beta(4,3)")
+lines(x, dbeta(x, 4, 3), lty = 2)
+
+```
+
+## Inverse Transform Method
+```{r, eval=FALSE, include=FALSE}
+lambda <- 2
+n <- 1000
+u <- runif(n) # Simulating uniform rvs
+
+Finverse <- function(u, lambda) {
+# Function for the inverse transform
+        stopifnot(u > 0 & u < 1)
+        return(-(1/lambda)*log(1-u))
+}
+x <- Finverse(u, lambda)
+ggplot(data = data.frame(x)) +
+        geom_histogram(aes(x = x, y = ..density..)) +
+        stat_function(mapping = aes(x = x), fun = dexp,args = list(rate = 2), color = "red") +
+        labs(title = "Inverse Transform Method to Simulate Exponentials")
+
+```
+
+## KNN
+```{r}
+KNN <- function(new_point,k=5,data=Weekly[,2:6],direction=Weekly$Direction){
+        
+        n <- nrow(data)
+        stopifnot(length(new_point)==5,length(direction)==n)
+        
+        # first calcualte the euclidean distance between new point and all other points
+        
+        new_point_matrix <- rep(new_point,each=n)
+        distance <- sqrt(rowSums((new_point_matrix - data)^2))
+
+        
+        #Create the set $\mathcal{N}_{new}$ containing the $K$ closest points (or, nearest neighbors) to the new point.
+        k_near <- direction[order(distance)[1:k]]
+        
+        #Determine the number of 'UPs' and 'DOWNs' in $\mathcal{N}_{new}$ and classify the new point according to the most frequent.
+        prediction <- names(which.max(table(k_near)))
+        
+        return(prediction)
+        
+}
+
+
+
+train <- Weekly[Weekly$Year<2009,]
+test <- Weekly[Weekly$Year>=2009,]
+
+prediction <- c()
+for(i in 1:nrow(test)){
+        new_point <- test[i,2:6]
+        prediction_this <- KNN(as.numeric(new_point),data = train[,2:6],direction = train$Direction)
+        prediction <- c(prediction,prediction_this)
+        
+}
+
+test.error <- mean(prediction!=test$Direction)
+test.error
+```
+
+
+# Homework one
+```{r}
+library(dplyr)
+
+housing%>%
+        select(assessed_value,boro_name)%>%
+        group_by(boro_name)%>%
+        summarize(median=median(assessed_value))
+
+splited <- split(housing,housing$boro_name)
+myfunction <- function(df){
+        return(median(df$assessed_value,na.rm = TRUE))
+}
+sapply(splited,FUN = myfunction)
+
+tapply(housing$assessed_value,INDEX = housing$boro_name,median,na.rm=TRUE)
+```
+

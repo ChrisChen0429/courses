@@ -1,0 +1,118 @@
+
+
+# This code was not run in class.  You can use the R function 
+#  below to estimate the true coverage probability of the 
+#  normal approximation-based CI formula, for any population 
+#  and sample size.
+
+rm(list=ls()); set.seed(20180918);
+
+y.pop <- rgamma(n=500, shape=2, rate=1)
+
+hist(y.pop)  # The population is right skewed
+
+ybar.U <- mean(y.pop);  S <- sd(y.pop); 
+
+ybar.U; S^2; # Population mean and variance
+
+
+
+
+# Consider taking SRS of size n for n=20, 50, 100
+
+ybar.20 <- rep(NA, 1000); ybar.50 <- ybar.20; ybar.100 <- ybar.50;
+
+for(i in 1:1000)
+{
+ ysamp <- sample(y.pop, 20)
+ ybar.20[i] <- mean(ysamp); rm(ysamp);
+ ysamp <- sample(y.pop, 50)
+ ybar.50[i] <- mean(ysamp); rm(ysamp);
+ ysamp <- sample(y.pop, 100)
+ ybar.100[i] <- mean(ysamp); rm(ysamp);
+}
+
+
+# True and simulated mean and variance for n=20 
+
+ybar.U; S^2/20 * (1 - 20/500);
+
+mean(ybar.20); var(ybar.20);
+
+
+# True and simulated mean and variance for n=50 
+
+ybar.U; S^2/50 * (1 - 50/500);
+
+mean(ybar.50); var(ybar.50);
+
+
+# True and simulated mean and variance for n=100
+
+ybar.U; S^2/100 * (1 - 100/500);
+
+mean(ybar.100); var(ybar.100);
+
+
+
+
+# Sampling dist of ybar approximately normal?
+
+hist(ybar.20, freq=F)
+
+curve(dnorm(x, ybar.U, S/sqrt(20)*sqrt(1-20/500)), add=T)
+
+
+
+
+# Sampling dist of ybar approximately normal?
+
+hist(ybar.50, freq=F)
+
+curve(dnorm(x, ybar.U, S/sqrt(50)*sqrt(1-50/500)), add=T)
+
+
+
+
+# Sampling dist of ybar approximately normal?
+
+hist(ybar.100, freq=F)
+
+curve(dnorm(x, ybar.U, S/sqrt(100)*sqrt(1-100/500)), add=T)
+
+
+
+
+# Actual coverage rates of nominal 95% confidence intervals
+
+rm(ybar.20); rm(ybar.50); rm(ybar.100);
+
+attained.covg <- function(y.pop, n, conf.level=.95, sim.size=1000)
+{
+ N <- length(y.pop)
+ ybar.U <- mean(y.pop)
+ alpha <- 1 - conf.level
+ z.star <- qnorm(1 - alpha/2)
+ cover <- rep(NA, sim.size)
+ for(i in 1:sim.size)
+ {
+  ysamp <- sample(y.pop, n)
+  ybar <- mean(ysamp); s <- sd(ysamp);
+  SE <- s / sqrt(n) * sqrt(1-n/N)
+  CI <- ybar + c(-1,1) * z.star * SE
+  cover[i] <- CI[1] < ybar.U & ybar.U < CI[2]
+ }
+ return(covg=mean(cover))
+}
+
+# Now try it for n=20, n=50, and n=100
+
+attained.covg(y.pop, n= 20)
+attained.covg(y.pop, n= 50)
+attained.covg(y.pop, n=100)
+
+# Try it for other sample sizes!
+
+# Try it for other populations!
+
+

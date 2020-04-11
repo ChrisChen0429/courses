@@ -1,0 +1,28 @@
+
+rm(list=ls())
+
+set.seed(4234)
+
+y.srs <- sample(100, 20)
+
+y.strat <- sample(20, 4)
+for(k in 1:4){ y.strat <- c(y.strat, sample((20*k+1):(20*(k+1)), 4)) }
+
+y.clust <- outer(sample(seq(1,96,5), 4), 0:4, "+")
+y.clust <- as.vector(y.clust)
+
+y.syst <- sample(5,1) + seq(0, 95, 5)
+
+op <- par(mfrow=c(4,1))
+
+plot(rep(1,20) ~ y.srs  , xlim=c(1,100), ylab="", xlab="Simple random sample")
+
+plot(rep(1,20) ~ y.strat, xlim=c(1,100), ylab="", xlab="Stratified sample")
+
+plot(rep(1,20) ~ y.clust, xlim=c(1,100), ylab="", xlab="Cluster sample")
+
+plot(rep(1,20) ~ y.syst , xlim=c(1,100), ylab="", xlab="Systematic sample")
+
+par(op)
+
+

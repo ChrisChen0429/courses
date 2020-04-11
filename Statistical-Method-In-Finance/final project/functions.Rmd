@@ -1,0 +1,134 @@
+---
+title: "prediction"
+author: "Yi Chen(yc3356)"
+date: "April 14, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## prediction
+```{r message=FALSE, warning=FALSE}
+# calculate the X
+library(readxl)
+BTC <- read_excel("BTC-USD(1).xlsx")
+BTC$Date <- as.Date(BTC$Date)
+BTC <- BTC[,c("Date","Close")]
+BTC <- BTC[(length(BTC$Date):1),]
+BTC <- BTC[BTC$Date>="2017-01-01",]
+BTC_price <- BTC$Close[length(BTC$Date):1]
+X <- diff(BTC_price)
+```
+
+
+```{r}
+# calcuate the T, d is 7
+change <- X
+change[change > 0] <- 1
+change[change < 0] <- -1
+
+T_0 <- c()
+T_pos_1 <- c()
+T_neg_1 <- c()
+
+for (i in 8:length(X)){
+        number_of_zero = 0
+        a <- i-7
+        b <- i-1
+        for (j in a:b){
+                if (change[j] == 0){
+                number_of_zero = number_of_zero + 1
+                }
+        }
+        T_0 <- c(T_0,number_of_zero)
+}
+
+for (i in 8:length(X)){
+        number_of_pos = 0
+        a <- i-7
+        b <- i-1
+        for (j in a:b){
+                if (change[j] == 1){
+                number_of_pos = number_of_pos + 1
+                }
+        }
+        T_pos_1 <- c(T_pos_1,number_of_pos)
+}
+
+for (i in 8:length(X)){
+        number_of_neg = 0
+        a <- i-7
+        b <- i-1
+        for (j in a:b){
+                if (change[j] == -1){
+                number_of_neg = number_of_neg + 1
+                }
+        }
+        T_neg_1 <- c(T_neg_1,number_of_neg)
+}
+
+
+table(T_0)
+table(T_neg_1)
+table(T_pos_1)
+table(change)
+```
+
+```{r}
+# calculate 
+C_0 <- c()
+C_neg <- c()
+C_pos <- c()
+
+for (i in 8:length(X)){
+        number_of_continues <- c()
+        a <- i - 8
+        b <- i - 1
+        potential <- change[a:b]
+        potential[potential == 1] = 0
+        index_of_zero <- which(potential == 0)
+        index_of_zero <- c(0,index_of_zero)
+        diff <- index_of_zero[2:length(index_of_zero)] - index_of_zero[1:(length(index_of_zero)-1)]
+        C_neg <- c(C_neg,max(diff))
+}
+
+for (i in 8:length(X)){
+        number_of_continues <- c()
+        a <- i - 8
+        b <- i - 1
+        potential <- change[a:b]
+        potential[potential == -1] = 0
+        index_of_zero <- which(potential == 0)
+        index_of_zero <- c(0,index_of_zero)
+        diff <- index_of_zero[2:length(index_of_zero)] - index_of_zero[1:(length(index_of_zero)-1)]
+        C_pos <- c(C_pos,max(diff))
+}
+
+C_neg <- replace(x = C_neg,list = is.na(C_neg),0)
+C_pos <- replace(x = C_pos,list = is.na(C_pos),0)
+C_0 <- 7 - C_neg - C_pos
+```
+
+
+```{r}
+result <- cbind(X,change,T_0,T_neg_1,T_pos_1,C_0,C_pos,C_neg)
+```
+
+```{r}
+result <- as.data.frame(result)
+Date <- BTC$Date[2:length(BTC$Date)]
+Date <- Date[length(Date):1]
+result <- cbind(Date,result)
+colnames(result) <- c("Date","price Change","Up or Down","Times of 0","Times of down","Times of up","Times of combinue 0","Times of continue up","Times of continue down")
+write.csv(result,file = "result3.csv")
+```
+```{r}
+write.csv(T_neg_1[978:(length(BTC$Date)-1)],file = "down.csv")
+length(BTC$Date) - 826
+write.csv(as.data.frame(change),"change.csv")
+T_neg_1
+```
+
+

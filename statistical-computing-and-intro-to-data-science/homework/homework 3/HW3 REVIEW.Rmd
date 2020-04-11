@@ -1,0 +1,162 @@
+---
+title: "HW3 review"
+author: "Yi Chen(yc3356)"
+date: "November 30, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# part one
+##i
+```{r}
+USA <- read.csv("wtid-report.csv",header = TRUE,col.names = c('country','year','p99','p99.5','p99.9'))
+
+USA <- USA[,-1]
+
+exponent.est.ratio <- function(p99,p99.9){
+        return(1- log(10)/log(p99/p99.9))
+}
+
+library(ggplot2)
+USA_ratio <- exponent.est.ratio(USA$p99,USA$p99.9)
+
+testing_value_1 <- (USA$p99.5/USA$p99.9)^(-USA_ratio+1)
+
+
+ggplot()+
+        geom_point(aes(y=testing_value_1,x=USA$year))+
+        labs(title="exponent estimator of ratio in USA",x='year',y='Ratio')+
+        geom_hline(yintercept = 5)
+```
+
+##ii
+```{r}
+testing_value_2 <- (USA$P99/USA$P99.5)^(-USA_ratio+1)
+ggplot()+
+        geom_point(aes(x=USA$Year,y=testing_value_2))+
+        geom_hline(yintercept = 2)
+
+```
+
+## iii
+```{r}
+percentile_ratio_discrepancies <- function(p99,p99.5,p99.9,a){
+        return(((p99/p99.9)^(-a+1)-10)^2+((p99.5/p99.9)^(-a+1)-5)^2+((p99/p99.5)^(-a+1)-2)^2)
+        
+}
+
+percentile_ratio_discrepancies(p99=1e6,p99.5 = 2e6,p99.9 = 1e7,a=2)
+
+```
+
+## iv
+```{r, message=FALSE, warning=FALSE}
+exponent.multl.ratios.est <- function(p99,p99.5,p99.9){
+        
+        a <- 1- log(10)/log(p99/p99.9)
+
+        return(nlm(percentile_ratio_discrepancies,a,p99,p99.5,p99.9)$estimate)
+}
+
+exponent.multl.ratios.est(p99 = 1e6,p99.5 = 2e6,p99.9 = 1e7)
+```
+
+## v
+```{r}
+a_estimator <- function(data){
+        a_reasult <- c()
+        
+        for(i in 1:(nrow(data))){
+                
+                a_this_year <-exponent.multi_ratios_est(data$p99[i],data$p99.5[i],data$p99.9[i])$estimate
+                a_reasult <- c(a_reasult,a_this_year)
+        }
+        return(a_reasult)
+}
+
+ratio <- a_estimator(data=USA)
+
+ggplot()+
+        geom_point(aes(x=USA$year,y=ratio))
+```
+
+# vi
+```{r}
+ggplot()+
+        geom_point(aes(x=USA$year,y=ratio),col='red')+
+        geom_point(aes(x=USA$year,y=USA_ratio),col='blue')
+
+ggplot()+
+        geom_point(aes(x=ratio,y=USA_ratio),col='blue')
+        
+```
+
+# part two
+```{r}
+world <- read.csv("wtid-homework.csv",header = TRUE,col.names = c('country','year','AverageIncome','p99','p99.5','p99.9'))
+world <- world[!is.na(world$p99.5),]
+world$ratio <- a_estimator(data=world)
+```
+
+#
+```{r}
+ggplot(world)+
+        geom_point(aes(x=year,y=ratio,col=country))
+
+ggplot(world)+
+        geom_point(aes(x=year,y=ratio))+
+        facet_wrap(~country,scales = 'free')
+```
+
+```{r}
+ggplot(world)+
+        geom_point(aes(x=year,y=AverageIncome,col=country))
+
+ggplot(world)+
+        geom_point(aes(x=year,y=AverageIncome))+
+        facet_wrap(~country,scales = 'free')
+```
+
+
+```{r}
+ggplot(world)+
+        geom_point(aes(y=ratio,x=AverageIncome,col=country))
+
+ggplot(world)+
+        geom_point(aes(y=ratio,x=AverageIncome))+
+        facet_wrap(~country,scales = 'free')
+```
+
+```{r}
+
+fit <- lm(ratio ~ AverageIncome + I(AverageIncome^2), data =world[world$country == "United States", ]
+)
+
+
+ggplot(data =world[world$country == "United States", ])+
+        geom_line(mapping = aes(x = AverageIncome, y = fitted(fit)))+
+        geom_point(aes(x=AverageIncome,y=ratio))
+```
+
+```{r}
+world$country <- as.factor(world$country)
+
+estimate <- matrix(nrow=3)
+for(i in unique(world$country)){
+        data <- world[world$country==i,]
+        est <- lm(data=data,ratio ~ AverageIncome + I(AverageIncome^2))$coefficients
+        est <- as.matrix(est,nrow=1)
+        
+        estimate <- cbind(estimate,est)
+}
+estimate <- as.data.frame(estimate)
+
+colnames(estimate) <- as.character(unique(world$country))
+
+estimate
+
+```
+

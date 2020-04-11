@@ -1,0 +1,234 @@
+---
+title: "homework one"
+author: "Yi Chen(yc3356)"
+date: "January 27, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Homework one
+## textbook questions
+#### problem one(p15.9)
+```{r}
+# page 15: 9
+set.seed(2012)
+n = 253
+par(mfrow=c(3,3))
+for (i in (1:9)){
+        logr = rnorm(n,0.05/253, 0.2/sqrt(253))
+        price = c(120,120*exp(cumsum(logr)))
+        plot(price,type = 'b')
+}
+
+```
+
+Since the log return in one day has the mean 0.0001976285 and the standard deviation 0.01257389.
+As we can see in the process of simulation. clearly, the log return in one year is assume to follow a normal distribution with the **mean 0.05** and **standard deviation 0.2**.
+
+
+### problem two(p15.11)
+this code simulate the log return in new year. 'c' means every new log return is combined to the list. 120 is the first price in this year. And the price after is calculated in this way:
+$$price_t = price_{t-1}(1-R_t)$$
+Thus, we can get:
+$$price_t = price_{t-k}(1+R_t(k))=price_{t-k}e^{\tilde{R_t}+...+\tilde{R}_{t-k+1}})$$
+'cumsum' is the function used to calculate the sum of all these log returns.
+
+### problem three(p15.12)
+```{r}
+setwd("C:/Users/cheny/Desktop/study/second term/Statistical Method In Finance/homework")
+data = read.csv('MCD_PriceDaily.csv')
+head(data)
+adjPrice = data[, 7]
+```
+```{r}
+logReturn = diff(log(adjPrice))
+n = length(adjPrice)
+return = adjPrice[-1]/adjPrice[-n] - 1
+plot(return,logReturn,ylab = "log return")
+abline(a = 0,b = 1,col = "red",lwd = 2)
+```
+We see that the return and log return for any day are almost equal. 
+
+### problem four(p16.exercise 1)
+(a)
+if the price after one trading day is less than 990.  
+$$\frac{p_t}{p_{t-1}}=1+R_t$$
+Thus if after five trading day is less than 990. we get:
+$$\tilde{R}_t \leq log(\frac{p_t}{p_{t-1}})= -0.01005034$$
+```{r}
+pnorm(log(990/1000),mean = 0.001,sd=0.015,lower.tail = TRUE)
+```
+Thus, the probability is 0.2910734
+(b)
+if the price after five trading day is less than 990.  
+        $$\frac{p_t}{p_{t-5}}=1+R_t(5)=exp(\tilde{R}_t+...+\tilde{R}_{t-4})$$
+Thus if after five trading day is less than 990. we get:
+        $$\tilde{R}_t+...+\tilde{R}_{t-4} \leq log(\frac{p_t}{p_{t-5}})= -0.01005034$$
+As we all know: log return are iid.
+        $$\tilde{R}_t+...+\tilde{R}_{t-4} \sim N(0.001*5,\sqrt{0.015^{2}*5})=N(0.005,0.03354102)$$
+```{r}
+pnorm(log(990/1000),mean = 0.005,sd=0.03354102,lower.tail = TRUE)
+```
+Thus, the probability is 0.3268189
+
+
+
+### problem five(p16.exercise 3)
+As we know:
+ $$\frac{p_t}{p_{t-2}}=1+R_t(2)=exp(\tilde{R}_t+\tilde{R}_{t-1})$$
+Thus, if the price in a year change to 90 or more, we get:
+        $$exp(\tilde{R}_t+\tilde{R}_{t-1}) \geq log(\frac{p_t}{p_{t-2}})= 0.117783$$
+As we all know: log return are iid.
+        $$\tilde{R}_t+\tilde{R}_{t-1} \sim N(0.08*2,\sqrt{0.15^{2}*2})=N(0.16,0.212132)$$
+
+```{r}
+pnorm(log(90/80),mean = 0.16,sd=0.212132,lower.tail = FALSE)
+```
+Thus, the probability is 0.5788736
+
+### problem six(p17.exercise 10)
+As we know:
+ $$\frac{p_t}{p_{t-20}}=1+R_t(20)=exp(\tilde{R}_t+...+\tilde{R}_{t-19})$$
+Thus, if the price in a year change to 90 or more, we get:
+        $$exp(\tilde{R}_t+...+\tilde{R}_{t-19}) \geq log(\frac{p_t}{p_{t-20}})= 0.03045921$$
+As we all know: log return are iid.
+        $$exp(\tilde{R}_t+...+\tilde{R}_{t-19}) \sim N(0.0002*20 \sqrt{0.03^{2}*20})=N(0.004,0.1341641)$$
+
+```{r}
+pnorm(log(100/97),mean = 0.004,sd=0.1341641,lower.tail = FALSE)
+```
+Thus, the probability is 0.4218295
+
+### problem seven(p40.exercise 1)
+(a)
+As we have already know that:
+        $$r(t)=0.028+0.00042t$$
+Thus, we can get:
+$$y_{20}=(20)^{-1}\int_{0}^{20}(0.028+0.00042t)dt=(20)^{-1}(0.028t+\frac{0.00042t^2}{2})|^{20}_{0}=0.0322$$ 
+
+(b)
+$$P(15)=PAR\times D(15)=1000\times D(15)$$
+$$D(15)=e^{-\int^{15}_{0}r(t)dt}=e^{-\int^{15}_{0}(0.028+0.00042t)dt}=e^{-0.46725}=0.6267234$$
+$$P(15)=1000\times D(15)=1000\times 0.6267234=626.7234$$
+
+
+### problem four(p40.exercise 3)
+(a)As we all know that that:
+$$cupond rate = \frac{C}{PAR}$$
+$$current rate = \frac{C}{selling \space price}$$
+Here, the current rate is lower that cupond rate. THis means that given the same payment, the PAR is smaller than the selling price.**The bond is selling above the par**
+
+(b)
+$$Price > PAR \rightarrow Cupond \space Rate > Current  \space Rate > Yield \space to \space maturity $$
+Thus, here **yield to maturity must be lower than 2.8%**
+
+
+### problem four(p41.exercise 8)
+(a)For constant continuously compounded forward rate r, we can calcualte in this way:
+$$r=\frac{1}{T}log \frac{PAR}{PV}=\frac{1}{5}log(\frac{1000}{828})=0.03774842$$
+
+(b)Since one year the forward rate is 0.03774842 or the rest of 4 years the forward rate is 0.042.And this is continuously ocmpounded, thus it can be solved in this way:
+$$P(5)=\frac{PAR}{e^{r_1+...+r_5}}=\frac{1000}{e^{0.042\times4}}=845.3538$$
+(c)
+$$Return=\frac{P_t-P_{t-1}}{P_{t-1}}=\frac{845.3538-828}{828}=0.020987$$
+
+### problem four(p41.exercise 11)
+This bond is componded continuously, and this is a 15 year zero-cupond bond. Thus, this can be solved in this way:
+$$P(T)=PAR \times D(T),D(T)=e^{-\int_{0}^{T}r(t)dt}$$
+$$P(15)=100\times e^{-0.033\times15-0.0006\times15^{2}}=53.25918$$
+
+### problem four(p42.exercise 12)
+$$Return=\frac{PV(7.5)}{PV(8)}-1=\frac{PAR\times D(7.5)}{PAR\times D(8)}-1=\frac{e^{-0.03\times7.5-0.00065\times7.5^2}}{e^{-0.04\times8-0.0005\times8^2}}-1=0.094653 $$
+
+### problem four(p42.exercise 16)
+(a)
+$$P(T)=PAR \times D(T)$$
+$$D(T)= e^{-T y_T} \rightarrow P(T)=PAR \times e^{-T y_T} \rightarrow P(10)=1000\times e^{10\times(-0.04-0.001\times 10)}=606.5307$$
+(b)
+$$Return= \frac{P(T-1)}{p(T)}-1=\frac{PAR \times e^{-(T-1) y_{T-1}}}{PAR \times e^{-T y_{T}}}-1=\frac{1000\times e^{9\times(-0.042-0.001\times 9)}}{1000\times e^{10\times(-0.04-0.001\times 10)}}-1=0.04185196$$
+
+### problem four(p43.exercise 22)
+(a)
+first, let calculate the yield besed on the forward rate:
+$$D(T)=e^{-\int_{0}^{T}r(t)dt}=e^{-0.022t-0.0025t^2+0.00133t^3-7.5e-05t^4}$$
+$$price = PAR\times D(T)=1000\times D(4)+\sum_{i=1/2}^{4} 21\times D(i)=940.0082+160.8614=1100.87$$
+(b)
+
+
+$$NPV_{i}=C_{i}exp(-T_{i}y_{T_{i}})$$
+$$w_{i}=\frac{NPV_{i}}{\sum_{j=1}^{N}NPV_{j}}$$
+$$Duriation= \sum_{i=1}^{N}w_{i}\times T_{i}=3.741419$$
+```{r}
+y <- function(t){
+    return((0.022+0.0025*t-0.004/3*t^2+0.0003/4*t^3))    
+}
+
+time <- c(0.5,1,1.5,2,2.5,3,3.5,4)
+
+npv1 <- 21*exp(-1*time*y(time))
+npv2 <- 1000*exp(-1*4*y(4))
+
+w1 <- npv1/(sum(npv1)+npv2)
+w2 <- npv2/(sum(npv1)+npv2)
+
+DUR <- sum(w1*time) + w2*4
+DUR
+```
+
+
+## other problems
+#### problem(1)
+X is a continuous random variable. Thus, $F(x) \in [0,1]$ for all $x \in R$, we must have $P(Y <0)=0=P(Y>1)$ 
+
+Besides, functin F is a strictly increasing. We know that:
+$$ P(Y \leq u) = P(F(X) \leq u)=P(X \leq F^{-1}(u))=F(F^{-1}(u))=u$$
+Thus, we can know that F follows a uniform distribution on 0 and 1.
+
+#### problem(2)
+(a) find the density of $f_Y$
+$$F_Y(y)=P(Y \leq y)=P(e^{x} \leq y) = P(x \leq log(y))=F_{x}log(y)=\phi(log(y))$$
+Thus, we can calculate the density of the lognormal distritbuion
+$$f_{Y}(y)=\frac{\partial F_Y(y)}{\partial y}=\frac{1}{y\sigma\sqrt{2\pi}} e^{-\frac{[log(y)-\mu]^2}{2\sigma^2}}$$
+(b) find the mean and variance of the Y
+In order to find the mean and variance of Y.We first consider to contribute the monment generation funciton of Y 
+We have already know that:
+$$M_X(x)=E(e^{tx})=e^{ut+\frac{1}{2}\sigma^2t^2}$$
+Thus, we can get:
+$$E(Y^{k})= E(e^{kx})=e^{uk+\frac{1}{2}\sigma^2k^2}$$
+So we can calculate the expection of y by just plug in k=1:
+$$E(Y)=e^{u+\frac{1}{2}\sigma^2}$$
+If we need to calculate the variance we need to know the second moment of y. Then we can get:
+$$Var(Y)=e^{(2u+2\sigma^2)} - e^{(2u+\sigma^2)}=(e^{\sigma^2}-1)e^{2u+\sigma^2} $$
+
+#### problem(3)
+(i) largest eigenvalue 
+$$A = \left[\begin{matrix} 1 & \rho \\ \rho & 1 \\\end{matrix}\right]$$. Thus, in order to calcualtae the largest eigenvalue, we know that:
+$$AX=\lambda X \rightarrow (A-\lambda E)X=0 \rightarrow [A-\lambda E]=0$$
+Thus we get: $\lambda_1=\rho+1$ or $\lambda_1=1-\rho$ Thus, if $\rho>0$ the largest eigenvalue is $\rho+1$. otherwise,the largest eigenvalue is $1-\rho$
+
+(ii)largest eigenvalue 
+$$A = \left[\begin{matrix} 1 & \rho & 0 \\ \rho & 1 & 0 \\ 0 & 0 & 1 \end{matrix}\right]$$. Thus, in order to calcualtae the largest eigenvalue, we know that:
+$$AX=\lambda X \rightarrow (A-\lambda E)X=0 \rightarrow [A-\lambda E]=0$$ 
+Thus we get: $\lambda_1=\rho+1$ or $\lambda_1=1-\rho$ or $\lambda_1=1$. Thus, if $\rho>0$ the largest eigenvalue is $\rho+1$.If $\rho<0$,the largest eigenvalue is $1-\rho$. Otherwise, largest eigenvalue is 1.
+
+#### problem(4)
+
+X and Y are follow the exponential distritbuion and we know that: 
+
+$p(X \geq t)=p(Y \geq t)=e^{-t}$. We know that, $X\thicksim exp(1),Y\thicksim exp(1)$
+Since X and Y are independent, thus we can get that $$ f_{X,Y}(x,y)=e^{-x}e^{-y}=e^{-x-y}$$
+And let define that $Z = X+Y$ and $W=X-Y$. We can calculate the joint distribution of Z and W
+$$f_{Z,W}(z,w)=f_{X,Y}(\frac{z+w}{2},\frac{z-w}{2})|J|^{-1}=\frac{1}{2}e^{-z}$$
+And we can easily get the distritbution of z and w are:
+$$f_{Z}(z)=ze^{-z}$$
+$$f_{W}(w)=\frac{1}{2}e^{-|w|}$$
+- First, clearly X+Y and X-Y are not independent, since:
+$$f_{Z,W}(z,w) \neq f_{Z}(z)f_{W}(w)$$
+- Second, we can get that $E(Z,W)=0$ and $E(W)=0$. 
+
+Thus, we know that $Cov(Z,W)=0$. This means that, Z and W are uncorrelated.
+
+

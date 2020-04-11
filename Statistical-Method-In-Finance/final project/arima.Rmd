@@ -1,0 +1,97 @@
+---
+title: "return_5261"
+author: "Yi Chen(yc3356)"
+date: "April 17, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+##
+```{r}
+library('ggplot2')
+library('forecast')
+library('tseries')
+```
+
+```{r warning=FALSE}
+library(readxl)
+bit <- read_xlsx("bitcoin price.xlsx")
+bit$Date <- as.Date(bit$Date)
+bit <- bit[,c("Date","Close")]
+bit <- bit[bit$Date >= "2017-01-01",][length(bit$Date):1,]
+
+bit_price_train <- bit$Close[1:(length(bit$Close)-100)]
+return <- (bit_price[2:length(bit_price)] - bit_price[1:length(bit_price)-1]) / bit_price[1:length(bit_price)-1]
+bit_price_test <- bit$Close[(length(bit$Close)-99):length(bit$Close)]
+return_train <- (bit_price_train[2:length(bit_price_train)] - bit_price_train[1:length(bit_price_train)-1]) / bit_price_train[1:length(bit_price_train)-1]
+
+return_test <- (bit_price_test[2:length(bit_price_test)] - bit_price_test[1:length(bit_price_test)-1]) / bit_price_test[1:length(bit_price_test)-1]
+
+return_train <- tsclean(ts(return_train))
+adf.test(return_train,alternative = "stationary")
+fit<-auto.arima(return_train, seasonal=FALSE)
+tsdisplay(residuals(fit), lag.max=30)
+fit
+```
+
+```{r}
+fit_no_holdout = arima(return_test, order=c(6,1,6))
+fcast <- forecast(fit,h=100)
+```
+
+
+```{r}
+return <- as.data.frame(return)
+return
+length(return$return)
+write.csv(return,"return.csv")
+```
+
+```{r}
+regression <- read.csv("result.csv")
+regression
+regression <- regression[,c("PC1","PC2","PC3","Bitcoin","return","popular.index")]
+regression <- scale(regression,center = TRUE,scale = TRUE)
+regression <- as.data.frame(regression)
+regression_train <- regression[1:(length(regression$PC1)-100),] 
+regression_test <- regression[((length(regression$PC1)-99):length(regression$PC1)),]
+tail(regression,100)
+
+fit <- lm(Bitcoin~., data = regression_train )
+summary(fit)
+predicted_y <- -0.10904+ 0.68052 * regression_test$PC1 + 0.33703 * regression_test$PC2 + 0.03954 * regression_test$PC3 + 0.02866 * regression_test$return + 0.11564 * regression_test$popular.index
+
+
+length(regression_test$Bitcoin)
+
+plot(predicted_y, regression_test$Bitcoin)
+abline(0,1)
+
+```
+
+```{r}
+1 - sum((predicted_y - regression_test$Bitcoin)^2)/sum((regression_test$Bitcoin - mean(regression_test$Bitcoin))^2)
+```
+
+## PCA
+```{r}
+PCA <- read.csv("USD2017.1.1-present.csv")
+PCA_scaled <- scale(PCA[,c("BTC.Close","ETH.Close","LTC.Close","DASH.Close","XRP.Close")],center = TRUE,scale = TRUE)
+PCA = prcomp(PCA_scaled, scale. = TRUE)
+PCA$rotation
+write.csv(PCA$x,"PCA.CSV")
+biplot(PCA)
+PCA
+```
+
+```{r}
+PCA$sdev[1]/sum(PCA$sdev)
+(PCA$sdev[1]+PCA$sdev[2])/sum(PCA$sdev)
+(PCA$sdev[1]+PCA$sdev[2]+PCA$sdev[3])/sum(PCA$sdev)
+```
+
+
+

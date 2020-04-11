@@ -1,0 +1,18 @@
+data {
+  int N;
+  vector[N] y;
+}
+parameters {
+  real theta;
+  real<lower=0> sigma;
+  real bias;
+}
+transformed parameters {
+  real theta_plus_bias;
+  theta_plus_bias = theta + bias;
+}
+model {
+  y ~ normal(theta + bias, sigma);
+  bias ~ normal(0, 10);
+}
+

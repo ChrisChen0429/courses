@@ -1,0 +1,125 @@
+---
+title: "Homework7"
+author: "Yi Chen"
+date: "3/20/2020"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Homework 7
+
+Read data and name it as trackwoman.
+
+```{r}
+trackwoman <- read.table("TrackWomen.dat",sep = "\t",header = T)
+head(trackwoman,5)
+```
+
+#### Question 1
+
+```{r}
+# correlation matrix
+R <- cor(trackwoman[,2:ncol(trackwoman)])
+round(R,2)
+
+# eigenvalues
+eigenvalue <- eigen(R)$values
+round(eigenvalue,3)
+
+# eigenvector
+eigenvector <- eigen(R)$vector
+rownames(eigenvector) = colnames(trackwoman[,2:ncol(trackwoman)])
+round(eigenvector,2)
+```
+
+#### Question 2
+
+```{r}
+# first two principal components
+(PC2 <- eigenvector[,1:2])
+
+# the cumulative percentage
+sum(eigen(R)$values[1:2])/sum(eigen(R)$values)
+```
+
+#### Question 3
+
+For the first principal component, the the level of coefficienct are similar for all variables. The variable that contributes most is X800m.
+
+For the second principal component, the variable has biggest postive effect is X3000m. Meanwhile the variable has the biggest negative effecgt is X400m.
+
+
+#### Question 4
+
+```{r}
+loading_1 <-as.matrix(trackwoman[,2:ncol(trackwoman)]) %*% as.matrix(PC2[,1])
+rownames(loading_1) <- trackwoman$Country
+rownames(loading_1)[order(loading_1[,1],decreasing = T)]
+```
+
+Broadly, the rank match the my intuitive notion of athletic excellence. For example the countries like GBR, CHN, GER, and USA are among the top. Countries like COK, PNG, SAM, and GUA are among the buttom.
+
+#### Question 5
+
+Convert the variable into the speed using KM.
+```{r}
+trackwoman$X100m <- 100/trackwoman$X100m
+trackwoman$X200m <- 200/trackwoman$X200m
+trackwoman$X400m <- 400/trackwoman$X400m
+trackwoman$X800m <- 800/(trackwoman$X800m*60)
+trackwoman$X1500m <- 1500/(trackwoman$X1500m*60)
+trackwoman$X3000m <- 3000/(trackwoman$X3000m*60)
+trackwoman$Marathon <- 42195/(trackwoman$Marathon*60)
+head(trackwoman)
+```
+
+
+#### Question 6
+
+```{r}
+R <- cov(trackwoman[,2:ncol(trackwoman)])
+round(R,2)
+
+# eigenvalues
+eigenvalue <- eigen(R)$values
+round(eigenvalue,3)
+
+# eigenvector
+eigenvector <- eigen(R)$vector
+rownames(eigenvector) = colnames(trackwoman[,2:ncol(trackwoman)])
+round(eigenvector,2)
+
+```
+
+#### Question 7
+
+```{r}
+# first two principal components
+(PC2 <- eigenvector[,1:2])
+
+# the cumulative percentage
+sum(eigen(R)$values[1:2])/sum(eigen(R)$values)
+```
+
+#### Question 8
+
+Compared with the first PCA analysis, the proportation of varianece that explained by the first two principal components is higher.
+
+For the first principal component,the differences among different variables' are similat. The biggest contribution comes from X3000m and marathon, which rely more one the long distance running sport.
+
+For the second principal component, the sports with short distance (smaler or equal to 400m) is nigative, the longer distane the positive effect is more clear. This component is defined based on the distance.
+
+
+#### Question 4
+
+```{r}
+loading_1 <-as.matrix(trackwoman[,2:ncol(trackwoman)]) %*% as.matrix(PC2[,1])
+rownames(loading_1) <- trackwoman$Country
+rownames(loading_1)[order(loading_1[,1],decreasing = T)]
+```
+
+ I need to note that the direction of the loading effect is different from the last PCA analysis. In this time the countries with better performance in running are at the bottom, while the countries with worse performance are t the top. In general, the result is similar.
+

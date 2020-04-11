@@ -1,0 +1,58 @@
+---
+title: "Homework1"
+author: "Yi Chen"
+date: "1/23/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## 1. Use the built-in dataset trees to do the following:
+### a) Obtain the density plot of the Height variable.
+```{r message=FALSE, warning=FALSE}
+data(trees)
+attach(trees)
+plot(density(trees$Height), main="Density plot of the hight")
+```
+
+### b) Obtain a scatterplot matrix of all 3 variables.
+```{r}
+pairs(trees[, 1:3])
+
+```
+
+### c) Obtain the mean vector, the variance-covariance matrix ($\textit{S}_n$), and the correlation matrix of all 3 variables.
+```{r}
+colMeans(trees)
+cov(trees)
+cor(trees)
+```
+## 2. Do exercise 3 on p. 38.
+
+```{r}
+x1 <- c(9,2,6,5,8)
+x2 <- c(12,8,6,4,10)
+x3 <- c(3,4,0,2,1)
+X <- cbind(x1,x2,x3)
+```
+The array of measure mean is
+```{r}
+apply(X,2,mean)
+
+```
+The variance-covariance matrix is
+```{r}
+cov(X)
+```
+Notice: the covariance in this function is based on n - 1 degrees of freedom instead of n. 
+
+
+The correlation matrix is
+```{r}
+cor(X)
+```
+
+
+

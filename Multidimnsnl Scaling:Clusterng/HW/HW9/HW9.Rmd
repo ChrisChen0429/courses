@@ -1,0 +1,88 @@
+---
+title: "Homework 9"
+author: "Yi Chen"
+date: "3/27/2020"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r message=FALSE, warning=FALSE}
+library(readr)
+CSNA_MLT <- read_csv("CSNA_MLT.csv")
+x <- CSNA_MLT[, 4:17]
+x <- as.matrix(x)
+```
+
+
+## question 1
+
+```{r}
+within.cluster.sum <- c()
+for (k in 1:9){
+  kmean_cluster <- kmeans(x = x,centers = k,iter.max = 100)
+  within.cluster.sum <- c(within.cluster.sum,sum(kmean_cluster$withinss))
+}
+plot(1:9,within.cluster.sum,type = 'l')
+```
+
+I pick the default inital cluster seed. A random set of (distinct) rows in x is chosen as the initial centres.
+
+## question 2
+
+Based on the plot above, we can see that:
+
+1. the sum of within cluster sum of square is always derease since it is a stepwise optimization and leads to a local minimum solution.
+
+2. as the number of cluster approaching to the number of objectives of the input data, the sum of within cluster sum decrease to zero. 
+
+3. based on the marginal decrease of sun of within cluster sun of square, I think number of cluster should be 3 since after 3 the marginal decreas is not as obvious as 3. 
+
+
+```{r}
+# rerun the solution
+kmean_cluster <- kmeans(x = x,centers = 3,iter.max = 100)
+(membership <- kmean_cluster$cluster)
+```
+
+## question 3
+
+#### part A
+
+```{r}
+# internal validity 
+cluster_mean <- matrix(NA, nrow = 14, ncol =3)
+cluster_sd <- matrix(NA, nrow = 14, ncol =3)
+for (k in 1:3){
+  for (d in 1:14){
+    cluster_mean[d,k] <- mean(x[which(membership==k),d])  
+    cluster_sd[d,k] <- sd(x[which(membership==k),d])  
+  }
+}
+colnames(cluster_mean) <- c("cluster 1","cluster 2","cluster 3")
+colnames(cluster_sd) <- c("cluster 1","cluster 2","cluster 3")
+cluster_mean
+cluster_sd
+```
+
+#### part b
+
+```{r}
+cluster_spec_mean <- c()
+cluster_spec_sd <- c()
+for (k in 1:3){
+  cluster_spec_mean <- c(cluster_spec_mean,mean(CSNA_MLT$spec[which(membership==k)]))
+  cluster_spec_sd <- c(cluster_spec_sd,sd(CSNA_MLT$spec[which(membership==k)]))
+}
+cluster_spec_mean
+cluster_spec_sd
+```
+
+
+## question 4
+
+Based on the evidence of question 3, we can see the cluster well seperate in variable 13, which all of the cluster have significantly different center and small standard deviation. Similarly, variable 12, 14, and 3 also provide more information in clustering.
+
+Variable `spec` als have certain level of explaination power in clustering. Cluster 1 and 2 have close cluster center and variability. But the cluster three have much higher value of center and more variability.

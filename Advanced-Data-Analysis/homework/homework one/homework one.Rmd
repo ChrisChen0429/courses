@@ -1,0 +1,57 @@
+---
+title: "homework"
+author: "Yi Chen(yc3356)"
+date: "January 28, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Homework One
+### problem two
+```{r}
+setwd("C:/Users/cheny/Desktop/study/second term/Advanced Data Analysis/homework/homework one")
+data <- read.csv('homework one.csv',header = TRUE, col.names = c("subject","pretest","posttest"))
+head(data,20)
+```
+```{r}
+difference = data$pretest - data$posttest
+t.test(difference,mu = 0,conf.level = 0.95)
+```
+```{r}
+hist(difference)
+```
+
+```{r}
+qqnorm(difference)
+qqline(difference)
+```
+```{r}
+library(BSDA)
+SIGN.test(difference,md=0,alternative = "two.sided")
+```
+
+### problem three
+```{r}
+Active_exercise <- c(9,9.5,9.75,10,13,9.5)
+No_active_exercise <- c(11.5,12,9,11.5,13.25,13)
+data2 <- data.frame(Active_exercise,No_active_exercise)
+data2
+```
+
+```{r}
+difference <- data2$Active_exercise - data2$No_active_exercise 
+
+hist(difference)
+```
+```{r}
+qqnorm(difference)
+qqline(difference)
+```
+
+```{r}
+SIGN.test(difference)
+```
+

@@ -1,0 +1,52 @@
+
+
+# Homework 6 problem 1
+
+rm(list=ls())
+
+N <- 100; M <- 8;
+
+n <- 5;
+
+t.i <- c(3,3,2,0,0)
+
+
+# Estimate population total
+
+t.hat <- (N/n) * sum(t.i)
+
+t.hat
+
+
+# Standard error
+
+s2.t <- var(t.i)
+
+V.hat <- N^2 * s2.t/n * (1 - n/N)
+
+sqrt(V.hat)
+
+
+
+
+# If this had been SRS of 40 ssu's?
+
+rm(list=ls())
+
+N <- 800; n <- 40;
+
+y.samp <- c(rep(1,8), rep(0,n-8))
+
+
+# Point estimate
+
+N * mean(y.samp)  # should be same
+
+# and standard error
+
+V.hat <- N^2 * var(y.samp)/n * (1 - n/N)
+
+sqrt(V.hat)
+
+
+

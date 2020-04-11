@@ -1,0 +1,96 @@
+---
+title: "ADA week One"
+author: "Yi Chen(yc3356)"
+date: "January 21, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Advanced Data Analysis
+### Sign Test for a population **median**
+
+#### Example One
+```{r message=FALSE, warning=FALSE}
+library(BSDA)
+
+Income = c(7,1110,7.1,5.2,8,12,0,5,2.1,2,46,7.5)
+```
+
+```{r}
+par(mfrow=c(1,3))
+hist(Income)
+boxplot(Income)
+qqnorm(Income)
+qqline(Income,col='red')
+```
+
+- As we can see from the plot, the distribution of the data is very has a outlier which is very big.
+```{r}
+summary(Income)
+```
+
+```{r}
+t.test(Income,mu=1)
+```
+- As we can see the intervavl here is [-101,303] which is extremly big and unreliable.Because this data has a very big outlier. Median is a better repesentation for the location of the data
+
+```{r}
+SIGN.test(Income,md=1,alternative = 'two.sided')
+```
+- Here as we can see the intercal is [2.4,11.6] which is very reasonable for the estimation for the sample median
+
+
+### Example Two
+```{r}
+age = c(54,42,51,54,49,56,33,58,54,64,49)
+sort(age)
+```
+
+```{r}
+summary(age)
+```
+```{r}
+library(ggplot2)
+ggplot()+
+        geom_histogram(aes(age,..density..),bins=7)+
+        geom_line(aes(age,..density..),stat = 'density')
+```
+```{r}
+boxplot(age)
+```
+
+```{r}
+qqnorm(age)
+qqline(age)
+```
+
+- mild deviation from normality in the left tail.
+
+```{r}
+t.test(age, mu = 50);
+SIGN.test(age,md=50)
+```
+- similar result and both have good performace
+
+## Wilcoxon Signed Rank Test
+### For one case
+```{r}
+x = c(20,18,23,5,14,8,18,22)
+wilcox.test(x,mu=10,conf.int = TRUE,correct = FALSE)
+```
+
+### for paired data
+```{r}
+a = c(0.7,-1.6,-0.2,-1.2,0.1,3.4,3.7,0.8,0.0,2.0)
+b = c(1.9,0.8,1.1,0.1,-0.1,4.4,5.5,1.6,4.6,3.0)
+
+d = a - b
+sleep = data.frame(a,b,d)
+shapiro.test(sleep$d)
+
+wilcox.test(d,mu=0,conf.int = TRUE)
+```
+

@@ -1,0 +1,232 @@
+---
+title: "HomeWork five"
+author: "Yi Chen(yc3356)"
+date: "December 2, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## HomeWork Five
+### part one
+#### problem 1
+```{r}
+setwd("C:/Users/cheny/Desktop/study/statistical computing and intro to data science/homework/homework 5")
+
+nodes <- read.csv('ckm_nodes.csv',header = TRUE)
+dim(nodes)
+```
+
+##### (a) How many doctors \textbf{began} prescribing tetracycline in each month of the study?
+```{r, message=FALSE}
+library(dplyr)
+
+nodes %>% 
+        select(adoption_date) %>%
+        filter(adoption_date != Inf) %>%
+        group_by(adoption_date) %>%
+        summarize(number = n())
+```
+
+
+
+##### (b) How many never prescribed it during the study?
+```{r}
+# solution one
+nodes %>% 
+        select(adoption_date) %>%
+        filter(adoption_date == Inf) %>%
+        summarize(number = n())
+
+# solution two
+
+sum(nodes$adoption_date==Inf,na.rm = TRUE)
+```
+
+
+
+##### (c) How many are NAs?
+```{r}
+# solution one
+nodes %>% 
+        select(adoption_date) %>%
+        filter(is.na(adoption_date) == TRUE) %>%
+        summarize(number = n())
+
+# solution two
+sum(is.na(nodes$adoption_date) == TRUE)
+```
+
+** note ** this three problem can also be solve together
+
+```{r}
+nodes %>% 
+        select(adoption_date) %>%
+        group_by(adoption_date) %>%
+        summarize(number = n())
+```
+
+#### problem 2
+```{r}
+# solution one
+
+nodes <- nodes %>% mutate(index_number=(is.na(adoption_date))) %>%
+                   filter(index_number == FALSE)
+dim(nodes)
+
+# solution two
+
+# nodes$index_number = is.na(nodes$adoption_date))
+# nodes = nodes[nodes$index_number == FALSE,]
+```
+
+#### problem 3
+```{r, message=FALSE}
+library(ggplot2)
+
+# copy from the problem one (a)
+plot_data1 <- nodes %>% 
+        select(adoption_date) %>%
+        filter(adoption_date != Inf) %>%
+        group_by(adoption_date) %>%
+        summarize(number = n())
+
+ggplot(data=plot_data1)+
+        geom_line(aes(x=adoption_date,y=number),lwd=1,col='steelblue')+
+        labs(title='number of doctors versus time',subtitle='doctors who began prescribing tetracycline each month',x='month',y='number of doctors')
+```
+
+```{r}
+plot_data1 = plot_data1 %>%
+             mutate(cumsum = cumsum(number))
+
+ggplot(data=plot_data1)+
+        geom_line(aes(x=adoption_date,y=cumsum),lwd=1,col='steelblue')+
+        labs(title='number of doctors versus time',subtitle='total doctors prescribing tetracycline each month',x='month',y='total number of doctors')
+```
+
+#### problem 4
+```{r}
+# begun by 2
+begun_by_2 <- nodes$adoption_date <= 2
+begun_by_2 <- which(begun_by_2)
+length(begun_by_2)
+head(begun_by_2)
+
+# after 14
+begun_after_14 <- nodes$adoption_date > 14
+begun_after_14 <- which(begun_after_14)
+length(begun_after_14)
+head(begun_after_14)
+```
+
+#### problem 5
+```{r}
+adopters <- function(month,not.yet=FALSE){
+        if(not.yet==FALSE){
+                return(sum(nodes$adoption_date == month))
+        }
+        
+        if(not.yet==TRUE){
+                return(sum(nodes$adoption_date > month))
+        }
+}
+
+adopters(2)
+adopters(14,not.yet = TRUE)
+```
+
+### part two
+#### problem 6
+```{r}
+network <- as.matrix(read.table('ckm_network.txt',header = FALSE))
+
+dim(network)
+
+nodes_old <- read.csv('ckm_nodes.csv',header = TRUE)
+index_number=(is.na(nodes_old$adoption_date)==FALSE)
+
+network <- network[index_number,index_number]
+dim(network)
+colnames(network) <- 1:125
+row.names(network) <- 1:125
+```
+
+#### problem 7
+```{r}
+number_of_connect <- colSums(network)
+number_of_connect[41]
+```
+
+#### problem 8
+```{r}
+logical_vector <- (network[,37]==1 & nodes$adoption_date <= 5 )
+sum(logical_vector)
+
+
+sum(logical_vector)/number_of_connect[37]
+```
+
+#### problem 9
+```{r}
+count_peer_pressure <- function(doctor,month){
+        return(sum(network[,doctor]==1 & nodes$adoption_date <= month))
+}
+
+count_peer_pressure(doctor = 37,month = 5)
+```
+
+#### problem 10
+```{r}
+prop_peer_pressure <- function(doctor,month){
+        ifelse(sum(network[,doctor]==1)==0,NaN,count_peer_pressure(doctor = doctor, month = month)/number_of_connect[doctor])
+}
+
+prop_peer_pressure(doctor = 37,month = 5)
+prop_peer_pressure(doctor = 102,month = 4)
+```
+
+#### problem 11
+```{r}
+average <- function(month){
+        vector <- vector(length = 2)
+        
+        # find out the doctor index of each subproblem
+        begun_in_month <- which(nodes$adoption_date == month)
+        begun_after_never <- which(nodes$adoption_date >= month)
+        
+        # calculate the first element in the vector
+        
+        average_in_month <- mean(sapply(begun_in_month,FUN = prop_peer_pressure,month=month),na.rm = TRUE)
+        
+        average_after_month <- mean(sapply(begun_after_never,FUN = prop_peer_pressure,month=month),na.rm = TRUE)
+        
+                        
+        vector <- c(average_in_month,average_after_month)
+        
+        return(vector)
+}
+
+
+```
+
+#### problem 12
+```{r}
+average_in_month <- sapply(1:17,FUN = average)[1,]
+average_after_month <- sapply(1:17,FUN = average)[2,]
+
+in_month <- data.frame(average=average_in_month,in_month=rep('in this month',17),month=1:17)
+after_never <- data.frame(average=average_after_month,in_month=rep('after or never',17),month=1:17)
+plot_data2 <- rbind(in_month,after_never)
+
+ggplot(data=plot_data2)+
+        geom_line(aes(x=month,y=average,col=in_month),lwd=1)+
+        geom_line(aes(x=month,y=average,col=in_month),lwd=1)+
+        labs(y='average in propotation',x='month',title='innovation spread from one person to the next')
+
+
+        
+```
+

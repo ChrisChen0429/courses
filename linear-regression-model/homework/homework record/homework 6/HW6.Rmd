@@ -1,0 +1,403 @@
+---
+title: "homework six"
+author: "Yi (Chris) Chen"
+date: "November 10, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Homework six
+
+### problem one: 3.14
+####(a) the F test of lack of fit
+```{r, warning=FALSE}
+# read the data
+setwd("C:/Users/cheny/Desktop/study/linear regression model/homework/homework record/homework six")
+data1 <- read.table('1.22.txt',header = FALSE,col.names = c('hardness','time'))
+
+reg1 <- lm(data1$hardness ~ data1$time)
+        
+        
+library(alr3)
+pureErrorAnova(reg1)
+qf(0.99,2,12)
+```
+
+**the answer of (a)**
+
+$h_0: E(Y) = \beta_0 + \beta_1 * X$
+$h_a: E(Y) \neq \beta_0 + \beta_1 * X$
+
+Obviously, the F value for lack of fit is 0.8237, P value is 0.4622. The value of F_star is 6.926608. Thus, F value is samller than F_star value. Based on this, I can conclude that H0 is acceptable.  
+
+####(b) 
+
+**the answer of (b)**   
+
+1. advantage: if we have equal number of replications at each of x levels. In this way, the precision of regression model can be inproved. Suppose that if we have a great number of replications when x level is low while very little number of replications when x level is high. The result of the whole regression line would heavily depend on the data when x is low. If we have the same number of replication for each x level, the importance(weight) of data for each x level is equal.   
+
+2. I think this would not have any disadvantage. For example the lack of fit test would no change. Because, we only care about the average value of replications for each x level in the reduced model.
+
+#### (c) 
+
+**the answer of (c)**
+
+According to lack of fit test, if the data is suitable for linear regression. For each x level, we would expect that the mean of replications should be one the regression line. Since we have assumed that the residuals follow the normal distribution with fixed variance and mean is zero. 
+
+If the we conclude that the regression function is not linear. We can not simply tell what regression function is better just based on F value. But we can see the difference between SSLF and SSPE at different x level to determine which part of data is linear which is not. 
+
+
+
+### problem one: 7.7
+####(a) 
+```{r}
+data_2 <- read.table('6.18.txt',header = FALSE, col.names = c('Y','X1','X2','X3','X4'))
+```
+
+
+####(b)
+1. Model one:  $Y = \beta_0 + \beta_4 * X_4$
+```{r}
+reg_2_1 <- lm(data = data_2,Y~X4)
+Anova(reg_2_1)
+```
+
+Obviously $SSR(X_4) = 67.775$ and $SSE(X_4) = 168.782$
+
+2. Model two:$ Y = \beta_0 + \beta_4 * X_4 + \beta_1 * X_1$
+
+```{r}
+reg_2_2 <- lm(data = data_2,Y~X4+X1)
+Anova(reg_2_2)
+```
+
+Obviously $SSR(X_1|X_4) = SSE(X_4) - SSE(X_1,X_4) = |126.508 - 168.782|=42.274$ 
+
+3. Model three:$ Y = \beta_0 + \beta_4 * X_4 + \beta_1 * X_1+\beta_2*X_2$
+
+```{r}
+reg_2_3 <- reg_2 <- lm(data = data_2,Y~X4+X1+X2)
+Anova(reg_2_3)
+```
+
+Obviously $SSR(X_2|X_4,X_1) = SSE(X_1,X_2,X_4) - SSE(X_1,X_4) = |126.508 - 98.650|=27.858$ 
+
+
+4. Model four:$ Y = \beta_0 + \beta_4 * X_4 + \beta_1 * X_1+\beta_2*X_2+\beta_3*X_3$
+
+```{r}
+reg_2_4 <- lm(data = data_2,Y~.)
+Anova(reg_2_4)
+```
+
+Obviously $SSR(X_3|X_1,X_2,X_4) = SSE(X_1,X_2,X_3,X_4) - SSE(X_1,X_2,X_4) = |98.650 - 98.231|=0.419$ 
+
+**To sum up**
+```{r}
+
+SSRX_4 = 67.775
+SRRX_1.X_4=42.274
+SSRX_2.X_4.X_1=27.858
+SSRX_3.X_1.X_2.X_4=0.419
+error <- 98.231
+SSTO <- 168.782 + 67.775
+regression <- SSTO-error
+SS <- c(regression,SSRX_4,SRRX_1.X_4,SSRX_2.X_4.X_1,SSRX_3.X_1.X_2.X_4,error,SSTO)
+df <- c(4,1,1,1,1,nrow(data_2)-5,nrow(data_2)-1)
+MS <- SS/df
+
+result <- data.frame(SS,df,MS,row.names = c("regression","X4","X1|X4","X2|X1,X4","X3|X1,X2,X4",'ERROR','TOTAL'))
+
+result
+```
+
+
+This problem can also be solved in this easy way. Since we include the new variables one by one. Thus, we can just use one anova to calculate all the information.
+
+```{r}
+reg_2_5 <- lm(data=data_2,Y~X4+X1+X2+X3)
+Anova(reg_2_5)
+```
+
+
+
+####(b)
+1. let's make a t test first to determine whether we should keep X3 in the regression model.
+```{r}
+reg_3 <- reg_2 <- lm(data = data_2,Y~.)
+summary(reg_3)
+```
+
+clearly, as we can see for the t test for X3, the t-value is 0.570, and the p value is 0.57. Thus, we can conclude that we should not keep the X3 in the model.
+
+2. Let's do the partial F test again to determine whether we should keep X3 in the regression.
+```{r}
+SSRX_3.X_1.X_2.X_4=0.419
+df.X_3 <- 1
+SSE.X_1.X_2.X_4 <- 98.650
+df.X_1.X_2.X_4 <- nrow(data_2)-5
+
+F_star <- (SSRX_3.X_1.X_2.X_4/df.X_3)/(SSE.X_1.X_2.X_4/df.X_1.X_2.X_4)
+F_star
+F_key <- pf(0.95,df.X_3,df.X_1.X_2.X_4)
+
+F_star > F_key
+```
+
+clearly here we have $H0: \beta_3 = 0$ and $Ha:\beta3 \neq 0$ 
+And F_star > F_key, so we conclude that $\beta_3 = 0$
+By the way, F_star is square value of t value in this test. 
+
+
+### problem three: 7.10
+ 
+```{r}
+data_3 <- read.table('6.18.txt',header = FALSE, col.names = c('Y','X1','X2','X3','X4'))
+```
+**analysis:** the model we have now is: 
+
+Full model:$Y=\beta_0+\beta_1X1+\beta_2X_2+\beta_3X_3+\beta_4X_4$
+
+Since in this F test:
+
+$H0:\beta_1=-0.1 , \beta_2=0.4$ and $Ha:\beta_1\neq-0.1 , \beta_2\neq0.4$ 
+
+We rewrite the model as:
+
+$Y=\beta_0+(-0.1)*X1+(0.4)X_2+\beta_3X_3+\beta_4X_4$
+
+Reduced Model:$Y+0.1*X_1-0.4*X_2=\beta_0+\beta_3X_3+\beta_4X_4$
+
+```{r}
+# revalue the data
+data_3$Y_NEW <- data_3$Y+0.1*data_3$X1-0.4*data_3$X2
+#full model
+reg_3_1 <- lm(data=data_3,Y~.-Y_NEW)
+Anova(reg_3_1)
+```
+$SSE_F=98.231$ and $df_F=76$
+
+
+```{r}
+reg_3_2 <- lm(data = data_3,Y_NEW~X3+X4)
+Anova(reg_3_2)
+qf(0.99,2,76)
+```
+$SSE_R=110.141$ and $df_R=78$
+
+
+**analysis:**
+
+$F^{*}=\frac{SSE_R-SSE_F}{df_R-df_F}\div\frac{SSE_F}{df_f}$
+
+
+$F^{*}=\frac{110.141-98.231}{78-76}\div\frac{98.231}{76}=4.607$
+
+$F(0.99,2,76)=4.89584$
+
+$F^{*}\leq F(0.99,2,76)$ thus, we conclude the H0
+
+### problem four: 7.16
+####(a)
+```{r}
+#read the data
+data_4 <- read.table('6.5.txt',header = FALSE,col.names = c('Y','X1','X2'))
+
+# standardize the data
+data_4 <- as.data.frame(scale(data_4, center=T,scale=T))
+```
+**analysis**
+
+Here I just use the quick function in R to standardize the data. More details of how standardize the data are wroted as follow:
+
+$Y_i^{*}=\frac{1}{\sqrt{n-1}}*(\frac{Y_i-\overline{Y}}{S_Y})$
+
+$X_{ik}^{*}=\frac{1}{\sqrt{n-1}}*(\frac{Y_{ik}-\overline{X_{k}}}{S_k})$
+
+```{r}
+#  regress the model
+reg_4 <- lm(data=data_4,Y~X1+X2-1)
+summary(reg_4)
+```
+**analysis**
+
+the result of the model: $\widehat{Y}^{*}=0.89239*X_1^{*}+0.39458*X_2^{*}$
+
+#### (b)
+
+As we can see from the model: when X2 is fixed, on average,the increase of one standard deviation of X1 would led to the increase of  0.89239 standard deviation in Y. 
+
+Similarly, when X1 is fixed, on average,the increase of one standard deviation of X2 would led to the increase of  0.39458 standard deviation in Y
+
+#### (c)
+the method of transform can be described as follow:
+
+$b_k=(\frac{S_Y}{S_k}b_k^{*})$
+
+$b_0=\overline{Y}-b_1\overline{X_1}-b_2\overline{X_2}$
+
+```{r}
+b1_star <- 0.89239
+b2_star <- 0.39458
+
+data_4 <- read.table('6.5.txt',header = FALSE,col.names = c('Y','X1','X2'))
+
+Sy <- sd(data_4$Y)
+Sx1 <- sd(data_4$X1)
+Sx2 <- sd(data_4$X2)
+
+b1_expect <- (Sy/Sx1)*b1_star
+b2_expect <- (Sy/Sx2)*b2_star
+b0_expect <- mean(data_4$Y)-b1_expect*mean(data_4$X1)-b2_expect*mean(data_4$X2)
+expect_value <- c(b0_expect,b1_expect,b2_expect)
+names(expect_value) <- c('b0_expect','b1_expect','b2_expect')
+reg_4_2 <- lm(data = data_4,Y~.)
+expect_value;reg_4_2
+```
+As we can see they are the same
+
+### problem five: 7.24
+####(a)
+```{r}
+# read the data
+data_5 <- read.table('6.5.txt',header = FALSE,col.names = c('Y','X1','X2'))
+# regress the simple model
+reg_5_1 <- lm(data=data_5,Y~X1)
+summary(reg_5_1)
+```
+**analysis**
+
+the model we get:
+$Y_i=50.775+4.425X_i+\varepsilon_i$
+
+####(b)
+```{r}
+#regress the model 
+reg_5_2 <- lm(data=data_5,Y~.)
+summary(reg_5_2)
+```
+
+the model we get:
+$Y_i=37.6500+4.425X_{1i}+4.3750X_{2i}+\varepsilon_i$
+
+as we can see the estimate value of $\beta_1$ is same in both model
+
+
+####(c)
+
+```{r}
+anova(reg_5_2);
+anova(reg_5_1)
+```
+$SSR(X_1)=SSR(X_1|X_2)=1566.45$
+
+####(D)
+```{r}
+cor(data_5$X1,data_5$X2)
+```
+as we can see the correlation between X1 and X2 is 0. This is also way the SSR(X_1)SSR(X_1|X_2) and we can see the estimate value of $\beta_1$ is same in both model. 
+
+### problem six: 7.37
+```{r}
+# read the data
+data_6 <- read.table('c.2.txt',header = FALSE)
+data_6 <- cbind(data_6$V8,data_6$V5,data_6$V16,data_6$V4,data_6$V7,data_6$V9,data_6$V10)
+colnames(data_6) <- c('Y','X1','X2','X3','X4','X5','X6')
+# regression between X1 and X2
+data_6 <- as.data.frame(data_6)
+reg_6_1 <- lm(data=data_6,Y~X1+X2)
+
+```
+####(a)
+```{r}
+# regression about X3
+reg_6_2 <- lm(data=data_6,Y~X1+X2+X3)
+Anova(reg_6_1);Anova(reg_6_2)
+```
+$R^{2}_{Y3|12}=\frac{SSR(X_3|X1,,X2)}{SSE(X1,X2)}==\frac{SSE(X_1,X_2)-SSE(X_1,X_2,X_3)}{SSE(X_1,X_2)}=1-\frac{SSE(X_1,X_2,X_3)}{SSE(X_1,X_2)}$
+
+So:
+
+$R^{2}_{Y3|12}=1-136903711/140967081=0.02882496$
+
+```{r}
+# regression about X4
+reg_6_3 <- lm(data=data_6,Y~X1+X2+X4)
+Anova(reg_6_1);Anova(reg_6_3)
+```
+
+$R^{2}_{Y4|12}=\frac{SSR(X_4|X1,,X2)}{SSE(X1,X2)}==\frac{SSE(X_1,X_2)-SSE(X_1,X_2,X_4)}{SSE(X_1,X_2)}=1-\frac{SSE(X_1,X_2,X_4)}{SSE(X_1,X_2)}$
+
+So:
+
+$R^{2}_{Y4|12}=1-140425434/140967081=0.003842365$
+
+```{r}
+# regression about X5
+reg_6_4 <- lm(data=data_6,Y~X1+X2+X5)
+Anova(reg_6_1);Anova(reg_6_4)
+```
+$R^{2}_{Y5|12}=\frac{SSR(X_5|X1,,X2)}{SSE(X1,X2)}==\frac{SSE(X_1,X_2)-SSE(X_1,X_2,X_5)}{SSE(X_1,X_2)}=1-\frac{SSE(X_1,X_2,X_5)}{SSE(X_1,X_2)}$
+
+So:
+
+$R^{2}_{Y5|12}=1-62896949/140967081=0.5538182$
+
+```{r}
+# regression about X6
+reg_6_5 <- lm(data=data_6,Y~X1+X2+X6)
+Anova(reg_6_1);Anova(reg_6_5)
+```
+
+$R^{2}_{Y5|12}=\frac{SSR(X_5|X1,,X2)}{SSE(X1,X2)}==\frac{SSE(X_1,X_2)-SSE(X_1,X_2,X_5)}{SSE(X_1,X_2)}=1-\frac{SSE(X_1,X_2,X_5)}{SSE(X_1,X_2)}$
+
+So:
+
+$R^{2}_{Y5|12}=1-139934722 /140967081=0.007323405$
+
+**To sum up**
+```{r}
+value <- c(0.02882496,0.003842365,0.5538182,0.007323405)
+value <- as.data.frame(value)
+attributes(value)$row.names <- c('R_2_Y3.12','R_2_Y4.12','R_2_Y5.12','R_2_Y6.12')
+value
+```
+
+####(b)
+
+as we can see from the result in (a), X5 is much better than other variables.
+```{r}
+value$sum_of_square <- c(4063370,541647,78070132,1032359)
+value
+```
+
+And, yes obviously, X5 has much higher sum of square.
+
+####(c)
+```{r}
+# full model
+reg_6_6 <- lm(data=data_6,Y~X1+X2+X5)
+Anova(reg_6_6)
+# reduced model
+reg_6_7 <- lm(data=data_6,Y~X1+X2)
+Anova(reg_6_7)
+
+```
+
+**analysis**
+$H0:\beta_5 = 0$ and $Ha:\beta_5 \neq 0$
+
+$F^{*}=\frac{SSE_R-SSE_F}{df_R-df_F}\div\frac{SSE_F}{df_f}$
+
+Here:
+
+$F^{*}=\frac{140967081-62896949}{437-436}\div\frac{62896949}{436}=\frac{78070132}{144259.1}=541.1799$
+```{r}
+qf(0.99,1,137)
+```
+
+obviously $F^{*}>6.823547$
+conclude:Ha

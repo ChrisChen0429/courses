@@ -1,0 +1,147 @@
+---
+title: "Homework6"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# homework 6
+
+**Name: Yi Chen, UNI: YC3356**
+
+## Problem 1
+### (a) one-stage cluster sampling with equal cluster size.
+
+```{r}
+N = 100 # number of clusters
+n = 5 # number of cluster to sample
+M = 8 # number of item in ith cluster and same as m in one stage cluster
+M0 = sum(rep(M,N))
+yi_bar = rep(c(3,2,0),c(2,1,2)) / M
+ti_hat = M * yi_bar
+tunb_hat = (N/n) * sum(ti_hat)
+s_t = sqrt((1/(n-1)) * sum((ti_hat - tunb_hat/N) ^ 2))
+se_t = N * s_t / sqrt(n) * sqrt(1 - n/N)
+tunb_hat ; se_t 
+```
+
+### (b) simple random sampling
+```{r}
+N = 800
+n = 40
+y = rep(c(1,0),c(8,n-8))
+ys_bar =  sum(y) / n
+t_hat = N * ys_bar
+ss_2 = (1/n) * sum((y - ys_bar)^2)
+se_t = sqrt(N^2 *(ss_2/n) * (1-n/N))
+t_hat; se_t
+```
+
+## Problem 2
+### (a) two stage cluster sampling with different cluster size
+#### i. unbiased estimation
+```{r}
+N = 20 # number of cluseter
+n = 4  # number of cluseter be sampled
+M0 = 940 # total population size
+Mi = c(17,56,23,64) # cluster size
+mi = c(10,25,12,30) # sample size in step two
+yi_bar = c(32.7,36.1,30.3,33.4)  # cluster sample mean
+si_2 = c(26.3,21.4,23.6,29.1)    # cluster sample variance
+ti_hat = Mi * yi_bar
+
+tunb_hat = (N/n) * sum(ti_hat)
+
+yunb_hat = tunb_hat / M0
+
+st_2 = (1/(n-1)) * sum((ti_hat - tunb_hat/N)^2)
+
+se_tunb_hat = sqrt(N^2*(st_2/n)*(1-n/N)+sum(((si_2*Mi^2)/mi)*(1 - mi/Mi)))
+
+se_yunb_hat = se_tunb_hat / M0
+
+yunb_hat;se_yunb_hat
+```
+
+#### ii. ratio estimation 
+```{r}
+yr_bar_hat = ((N/n) * sum(ti_hat))/((N/n) * sum(Mi))
+
+sr_2 = (1/(n-1)) * sum(Mi^2 * (yi_bar - yr_bar_hat)^2)
+
+se_yr_bar_hat = sqrt((sr_2/(n * mean(Mi)^2)) * (1 - n/N) + (1/(n*N*mean(Mi)^2)) * sum(si_2*(Mi^2/mi) *(1-mi/Mi)))
+yr_bar_hat;se_yr_bar_hat
+```
+
+Even the ration estimation while biased gives a small standard error.
+
+## Problem 3
+
+Unequal probability sampling one-stage cluster sampling
+
+### (a) 
+```{r}
+Mi = c(110,265,360,1265)
+Sales = c(44,82,112,362)
+M0 = sum(Mi)
+phi = Mi / M0
+N = 4
+n = 2
+# every draw is independent
+E_tphi_hat = 0 
+for ( i in 1:N){
+  for ( j in 1:N){
+    tphi_hat = (1/n) * sum((Sales[i]/phi[i]),(Sales[j]/phi[j]))
+     E_tphi_hat = E_tphi_hat + phi[i] * phi[j] * tphi_hat
+  }
+}
+E_tphi2_hat = 0
+for ( i in 1:N){
+  for ( j in 1:N){
+    tphi2_hat = ((1/n) * sum((Sales[i]/phi[i]),(Sales[j]/phi[j])))^2
+     E_tphi2_hat = E_tphi2_hat + phi[i] * phi[j] * tphi2_hat
+  }
+}
+v_tphi_hat = E_tphi2_hat - E_tphi_hat^2
+E_tphi_hat;v_tphi_hat
+```
+
+### (b)
+
+The srs is unbiased estimation. Thus the mean is still 600.
+
+```{r}
+N=4
+n=2
+t_hats = c()
+y.i<-c(44,82,112,362) 
+t_hats_2 = c()
+for (i in 1:3){
+  for (j in (i+1):4){
+    y1 = y.i[i]
+    y2 = y.i[j]
+    y_bar = mean(c(y1,y2))
+    t_hat = N * y_bar
+    t_hats = c(t_hats,t_hat)
+    t_hats_2 = c(t_hats_2,t_hat^2)
+  }
+}
+E_t_hat = mean(t_hats)
+v_t_hat = mean(t_hats_2) - E_t_hat^2
+E_t_hat;v_t_hat
+
+# Or use the function
+S.2<-var(y.i) 
+t.srs.var<-N^2*(1-n/N)*S.2/n 
+t.srs.var
+```
+```{r}
+p = 0
+for (i in 0:59){
+  p = p + choose(100,i) * 0.5^100
+}
+p 
+```
+

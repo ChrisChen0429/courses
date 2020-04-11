@@ -1,0 +1,103 @@
+
+
+# Example 4.9 on page 139:  Regression estimation!
+
+rm(list=ls())
+
+N <- 100; xbar.U <- 11.3;  # population values
+
+# Now the sample data
+
+n <- 25
+
+x <- c(10,12, 7,13,13, 6,17,16,15,10,14,12,10)
+
+y <- c(15,14, 9,14, 8, 5,18,15,13,15,11,15,12)
+
+x <- c( x, 5,12,10,10, 9, 6,11, 7, 9,11,10,10)
+
+y <- c( y, 8,13, 9,11,12, 9,12,13,11,10, 9, 8)
+
+plot(x,y)
+
+
+
+# Summary statistics
+
+xbar <- mean(x); ybar <- mean(y); s.y <- sd(y);
+
+xbar;    ybar;    s.y^2;
+
+lsfit(x,y)$coefficients
+
+B1.hat <- cor(x,y) * sd(y) / sd(x); B1.hat;
+
+abline(ybar-B1.hat*xbar, B1.hat)
+
+
+
+# Regression estimate
+
+ybar.hat.reg <- ybar + B1.hat * (xbar.U - xbar)
+
+ybar.hat.reg
+
+
+
+# Standard error
+
+B0.hat <- ybar - B1.hat * xbar
+
+e <- y - B0.hat - B1.hat * x
+
+var(e);  var(y) * (1 - cor(x,y)^2); # same right?
+
+SE.ybar.reg <- sd(e) / sqrt(n) * sqrt(1 - n/N)
+
+SE.ybar.reg
+
+
+
+# Estimate and standard error for population total
+
+N * ybar.hat.reg;  N * SE.ybar.reg;
+
+# Approximate 95% confidence interval
+
+N * (ybar.hat.reg + c(-1,1) * 1.96 * SE.ybar.reg)
+
+
+
+# The ordinary estimator would be 
+
+N * ybar
+
+# with standard error 
+
+SE.ybar <- s.y / sqrt(n) * sqrt(1 - n/N)
+
+N * SE.ybar
+
+# So the regression method got our standard error from 
+#  52 trees down to 41 trees
+
+
+
+# How would ratio estimation have performed here?
+
+B.hat <- ybar / xbar; B.hat;
+
+abline(0, B.hat, lty=2)
+
+ybar.hat.ratio <- B.hat * xbar.U; ybar.hat.ratio;
+
+e <- y - B.hat * x  # Not the same e as defined above!
+
+SE.B.hat <- 1/xbar * sd(e)/sqrt(n) * sqrt(1 - n/N)
+
+SE.ratio <- xbar.U * SE.B.hat
+
+N * SE.ratio  # Barely an improvement over sample mean
+
+
+

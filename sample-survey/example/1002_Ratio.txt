@@ -1,0 +1,42 @@
+
+
+# Example 4.2 and 4.3 -- total farmland in 1992
+
+library(SDaA)
+
+dim(agsrs); names(agsrs);
+
+N <- 3078; n <- 300;
+
+y <- agsrs$acres92 / 1e6; ybar <- mean(y);
+
+x <- agsrs$acres87 / 1e6; xbar <- mean(x);
+
+t_y.hat <- N * ybar; t_y.hat;
+
+SE.t_y <- N * sqrt(var(y)/n * (1 - n/N)); SE.t_y;
+
+# Estimate 916.9 million acres, std error is 58.2 million
+
+# Try ratio estimation using 1987 acres as auxiliary variable
+
+t_x <- 964.470625  # This is known
+
+B.hat <- ybar / xbar
+
+t_yr.hat <- B.hat * t_x; t_yr.hat;
+
+e <- y - B.hat * x
+
+SE.B <- 1/xbar * sqrt(var(e)/n * (1 - n/N))
+
+SE.t_yr <- t_x * SE.B;  SE.t_yr;
+
+# Estimate 951.5 million acres, std error is 5.5 million
+
+# Std error for ratio estimator less than 1/10 that of N*ybar!
+
+
+
+
+

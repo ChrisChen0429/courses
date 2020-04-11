@@ -1,0 +1,217 @@
+---
+title: "lecture_1"
+author: "Yi (Chris) Chen"
+date: "September 10, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+## editing the markdown document
+### write a equation 
+$$E=mc^{2} $$ 
+
+### insert R code
+1. press **lt+ctrl+i**
+2. press **insert** buttom
+
+### creat 1000 random variables and draw the histgram
+```{r}
+x <- rnorm(100)
+hist(x)
+```
+
+##basic R operation
+### assign the value 
+```{r}
+x <-24^2
+x
+```
+
+###R is a calculator 
+```{r}
+2*pi
+```
+```{r}
+7+runif(1)#runif means creat a random variable which follow unifrom devision.
+```
+```{r}
+sqrt(4^4)
+```
+```{r}
+log(10)
+```
+```{r}
+5e9 * 1e3
+```
+### combine two different kind of variables
+```{r}
+x <- 24^2
+X <- 'Hello R'
+print(c(x,X)) 
+##1. c(,) means combine two elements into one vector
+##2. in a vector all the elements should be the same type. so the R would change the type of some elements. string > number > logic
+```
+
+```{r}
+## creat a sequence as vector
+x<- 1:50
+y<- seq(1,50,5)
+print(x)
+print(y)
+```
+
+## object class in R
+### 5 main classes
+1. numberic (3.7,1023)
+2. interger(24**L**)
+3. complex(1+2**i**)
+4. character(**'** columber **'**)
+5. logical(TRUE,T,FALSE,F.1,0)
+
+### check the type
+```{r}
+x<-2
+class(x)
+class(2L)
+attributes(x)
+```
+
+### change the classes
+```{r}
+y <- TRUE
+class(y)
+y <- as.character(y)
+class(y)
+```
+```{r}
+y <- as.integer(y)
+class(y)
+```
+```{r}
+y <- as.numeric(y)
+class(y)
+```
+```{r}
+y <- as.complex(y)
+class(y)
+```
+
+##### when combine two different type of variable in a vector, R would change the variable into the same type **automatically**.
+```{r}
+x <- c(0.5,TRUE)
+class(x)
+x <- c(3:12,'R')
+class(x)
+x <- c(1+3i,TRUE)
+class(x)
+```
+
+```{r}
+x <- 0:4
+class(x)
+as.numeric(x)
+as.character(x)
+as.logical(x)
+x <- c("a", "b", "c")
+as.numeric(x)
+
+```
+
+
+##matrices
+* matrices are vectors with a *dimension* attribute;
+* like vector, matrices must must contain objects of the same class;
+* matrices are constructed column-wise.
+
+```{r}
+#create a matrices
+mat <- matrix(1:6, ncol = 3, nrow = 2, byrow = TRUE)  # byrow=FALSE is default
+mat
+attributes(mat) # view the main attribute of the variable
+dim(mat)
+
+rep(5,3)
+rep(c(1,5),3)
+rep(c(1,5),each=3)
+```
+```{r}
+#another way to creat a matrices
+x <- 1:10 # x right now is still a vector
+dim(x) <- c(2,5)
+x #after set the attribute of dim, the vector become matric
+```
+```{r}
+x <- rep(5,3) # repeat 5 three time and creat a vector
+y <- 11:13
+mat <- cbind(x,y) #combind the x and y in col
+mat
+mat <- rbind(x,y)
+#combind the x and y in row
+mat
+class(mat) #after combine two vectors the matric formed
+```
+```{r}
+## creat and change the names of matrices
+mat
+dimnames(mat) <- list(c('a','b'),c('c','d','e'))
+mat
+colnames(mat) <-c('Alpha','Beta','Gamma')
+mat
+rownames(mat) <- c('red','green')
+mat
+```
+
+## list
+* list is a special type of *vector* that can contain elements of **different** type;
+```{r}
+x <- list(1,'a',TRUE,1+4i)
+x
+```
+* we can give the name to the vector and list
+```{r}
+vec1 <- c('welcome','to','columbia') #this is a vector of characters
+
+names(vec1)
+names(vec1) <- c('w1','w2','w3')
+names(vec2) <- c('w1','w2','w3','w4')
+vec1
+vec2 <- c(1,'equals to',1+1i,'is not',TRUE)
+vec2
+names(vec2)
+```
+* names can also be given in a different way
+```{r}
+mylist <- list(stuff=3,mat=matrix(1:4,nrow=2),morestuff=c('china','japan'),list(5,'bear'))
+mylist
+names(mylist)
+```
+
+## dataframe
+* unlike the matrices and vectors, data frames can stroe **different** classes of objects in each **column**
+* each element of the data frame is a column and the length of each element is the number of rows.
+```{r}
+x <- data.frame(foo=1:4,bar=c(T,T,F,F))
+x
+attributes(x)
+nrow(x)
+ncol(x)
+names(x) <- c('cindy','rush')
+row.names(x) <- c('00','01','10','11')
+x
+```
+## quick note about naming
+
+|   object   |  set column names  |  set row names  |
+|------------|--------------------|-----------------|
+|  dataframe |       names()      |    row.names()  |
+|   matrix   |      colnames()    |     rownames()  |
+
+
+

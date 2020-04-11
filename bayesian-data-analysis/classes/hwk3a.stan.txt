@@ -1,0 +1,13 @@
+data {
+  int N;
+  vector[N] y;
+  vector[N] x;
+}
+parameters {
+  real<lower=0> a;
+  real<lower=0> b;
+  real<lower=0> sigma;
+}
+model {
+  y ~ normal(1 ./ (a+b*x), sigma);
+}

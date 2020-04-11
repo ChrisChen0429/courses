@@ -1,0 +1,87 @@
+---
+title: 'R-lab: Return'
+author: "Yi Chen"
+date: "1/22/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R-lab: Returns
+### Monte Carlo Simulation
+```{r}
+# The daily log-returns are independent normally distributed with mean 0.05/253 and standard deviation 0.23/√253 (253 trading daysin a year)
+
+# Estimate the probability that the stock will go below $950,000 in the first 45 days.
+
+## generate 45 daily log-returns
+r = rnorm(45,0.05/253,0.23/sqrt(253))
+
+# the daily log-price are given by
+logprice = log(1e6) + cumsum(r)
+
+# minimun log-price over these 45 days
+minlogprice = min(logprice)
+
+# calculate whether the price is below the 950000, which is the amont of money he borrow
+as.numeric(minlogprice < log(950000))
+```
+
+```{r}
+set.seed(2018)
+niter = 1e5  # number of replications
+below = rep(0,niter)
+for (i in 1:niter){
+  r = rnorm(45,0.05/253,0.23/sqrt(253))
+  logprice = log(1e6) + cumsum(r)
+  minlogprice = min(logprice)
+  
+  below[i] = as.numeric(minlogprice < log(950000))
+}
+
+mean(below)
+```
+
+Suppose the hedge fund will sell the stock if the value of the stock rises to at least 1100000 or falls below 950000 at the end of one of the first 100 trading days.  
+Otherwise, it will sell after 100 trading days if the value has stayed in between.
+
+```{r message=FALSE, warning=FALSE}
+set.seed(2018)
+niter = 1e3
+selltime = rep(0,niter)
+profit = rep(0,niter)
+
+for (i in 1:niter){
+  r = rnorm(100,0.05/253,0.23/sqrt(253))
+  logprice = log(1e6) + cumsum(r)
+  
+  # find out on which days the stock was sold
+  # note that the minimum of the null set is taken to inf in R
+  
+  sellforlosstime = min((1:100)[(logprice < log(950000))])
+  sellforprofittime = min((1:100)[(logprice > log(1100000))])
+  selltime[i] = min(sellforlosstime,sellforprofittime,100)
+  
+  profit[i] = exp(logprice[selltime[i]]) - 1000000
+}
+```
+What is the probability that the hedge fund will make a profit of at least $100,000?
+```{r}
+mean(profit >= 100000)
+```
+What is the probability the hedge fund will suffer a loss?
+```{r}
+mean(profit < 0)
+```
+What is the expected profit from this trading strategy?
+```{r}
+mean(profit)
+```
+
+What is the expected return?  Note that only $50,000 was invested
+```{r}
+mean(profit/(50000*selltime))
+```
+

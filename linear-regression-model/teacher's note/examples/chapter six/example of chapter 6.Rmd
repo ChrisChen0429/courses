@@ -1,0 +1,57 @@
+---
+title: "chapter six example"
+author: "Yi Chen(yc3356)"
+date: "November 22, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Chapter Six Example
+```{r}
+setwd("C:/Users/cheny/Desktop/study/linear regression model/note/example of chapter six")
+
+Dwaine <- read.table('exaple of chapter 6.txt',header = FALSE,col.names = c('x1','x2','Y'))
+summary(Dwaine)
+```
+
+```{r}
+REG <- lm(data=Dwaine,Y~.)
+summary(REG)
+```
+
+```{r}
+anova(REG)
+```
+
+```{r}
+# X matrix
+x <- matrix(ncol=3,nrow = nrow(Dwaine))
+x[,2:3] <- as.matrix(Dwaine[,1:2])
+x[,1] <- 1
+
+# Y matrix
+Y <- as.matrix(Dwaine$Y)
+
+library(rgl)
+plot3d(x[,2],x[,3],Y,col="red")
+```
+
+```{r}
+t(x)%*%x
+solve(t(x)%*%x)
+
+b <- solve(t(x)%*%x)%*%t(x)%*%Y
+b
+
+y_hat <- x%*%b
+y_hat
+
+
+library(scatterplot3d)
+s3d <- scatterplot3d(Y,x[,2],x[,3],type ='h',pch=16)
+s3d$plane3d(REG)
+```
+

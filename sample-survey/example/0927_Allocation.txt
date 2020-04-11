@@ -1,0 +1,132 @@
+
+
+# Construct a population for which stratified sampling will 
+#  obviously be beneficial
+
+rm(list=ls()); set.seed(20180927);
+
+y1 <- rnorm(50, 40, 5)
+
+y2 <- rnorm(50, 50, 10)
+
+y3 <- rnorm(50, 60, 15)
+
+y <- c(y1, y2, y3)
+
+N <- 150; N_h <- c(50, 50, 50);
+
+ybar_U <- mean(y); S <- sd(y);
+
+ybar_hU <- c(mean(y1), mean(y2), mean(y3))
+
+S_h <- c(sd(y1), sd(y2), sd(y3))
+
+
+ybar_hU  # should be close to 40, 50, 60
+
+S_h      # should be close to  5, 10, 15
+
+ybar_U   # should be about 50
+
+S        # should be ?????
+
+
+# Consider SRS versus stratified sampling with proportional 
+#  allocation
+
+n <- 30; n_h <- c(10, 10, 10);  # n_h equal since N_h equal
+
+V.SRS <- S^2 / n * (1 - n/N)
+
+ybar <- rep(NA, 1000)
+
+for(i in 1:1000){ ybar[i] <- mean(sample(y, n)) }
+
+mean(ybar);  ybar_U;  # should be similar
+
+var(ybar) ;  V.SRS ;  # should be similar
+
+
+
+V.strat <- sum( (N_h/N)^2 * S_h^2 / n_h * (1 - n_h/N_h) )
+
+V.strat  # should be less than V.SRS
+
+ybar.strat <- rep(NA, 1000)
+
+for(i in 1:1000)
+{
+ ysamp <- c(sample(y1,10), sample(y2,10), sample(y3,10))
+ ybar.strat[i] <- mean(ysamp)
+}
+
+mean(ybar.strat);  ybar_U ;  # should be about the same
+
+var(ybar.strat) ;  V.strat;  # should be about the same 
+
+# Relative efficiency of stratified (proportional allocation) 
+
+V.SRS / V.strat 
+
+# Relative to simple random sampling
+
+
+# Optimal allocation in this case (assuming equal cost for 
+#  sampling within each stratum) will give 
+
+n_h <- c(5, 10, 15)
+
+# Re-do stratified sampling calculations for optimal allocation
+
+V.strat.opt <- sum( (N_h/N)^2 * S_h^2 / n_h * (1 - n_h/N_h) )
+
+V.strat.opt  # should be even less than V.strat
+
+ybar.opt <- rep(NA, 1000)
+
+for(i in 1:1000)
+{
+ ybar_1 <- mean(sample(y1,  5))
+ ybar_2 <- mean(sample(y2, 10))
+ ybar_3 <- mean(sample(y3, 15))
+ ybar.opt[i] <- mean(c(ybar_1, ybar_2, ybar_3))
+}
+
+mean(ybar.opt);  ybar_U     ;  # should be about the same
+
+var(ybar.opt) ;  V.strat.opt;  # should be about the same
+
+# Relative efficiency of optimal allocation versus SRS
+
+V.SRS / V.strat.opt
+
+
+
+# Stratification will often reduce variance, even if done 
+#  arbitrarily
+
+plot(y)
+lines(x=c(  1, 50), y=c(40,40))
+lines(x=c( 51,100), y=c(50,50))
+lines(x=c(101,150), y=c(60,60))
+
+# This plot shows why stratification works well in this problem
+
+# What if we didn't know a good way to stratify, but did it anyway?
+
+y <- sample(y)
+
+plot(y)
+
+y1 <- y[1:50]; y2 <- y[51:100]; y3 <- y[101:150];
+
+ybar_hU <- c(mean(y1), mean(y2), mean(y3))
+
+S_hU <- c(sd(y1), sd(y2), sd(y3))
+
+n_h <- c(10, 10, 10)  # go back to proportional allocation
+
+sum( (N_h/N)^2 * S_h^2 / n_h * (1 - n_h/N_h) )  # var of ybar.strat
+
+V.SRS  # variance of ybar.SRS
+

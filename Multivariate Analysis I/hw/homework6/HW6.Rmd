@@ -1,0 +1,183 @@
+---
+title: "Home Work 6"
+author: "Yi Chen"
+date: "3/6/2020"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+data <- read.csv(file = 'mvregex.dat',header = F)
+colnames(data) = c("locus", "self", "motiv", "read", "write", "science", "prog", "prog1", "prog2", "prog3")
+data$prog = as.factor(data$prog)
+```
+
+### a) Regression of `locus` on `read` and `write`.
+
+#### a) hard-code solution
+```{r}
+n <- nrow(data)
+Z <- cbind(rep(1,n),data$read,data$write)
+colnames(Z) <- c("intercept","read","write")
+y <- as.matrix(data$locus)
+colnames(y) <- c("beta.hat")
+(b.hat <- solve(t(Z) %*% Z) %*% t(Z) %*% y)
+```
+
+
+#### b) package solution
+```{r}
+reg = lm (locus ~ read + write, data = data)
+reg$coefficients
+```
+
+### b) Regression of `locus` on `read`, `write`, and `science`.
+
+#### hard-code solution
+```{r}
+Z <- cbind(rep(1,n),data$read,data$write,data$science)
+r <- ncol(Z) - 1
+colnames(Z) <- c("intercept","read","write","science")
+y <- as.matrix(data$locus)
+colnames(y) <- c("beta.hat")
+b.hat <- solve(t(Z) %*% Z) %*% t(Z) %*% y
+t(y - Z %*% b.hat) %*% (y - Z %*% b.hat)/(n-r-1)
+```
+
+
+#### package solution
+```{r}
+reg = lm (locus ~ read + write + science, data = data)
+(t(as.matrix(reg$residuals)) %*% as.matrix(reg$residuals)) / (n - r - 1)
+```
+
+
+### c) F test for overall regression of `self` on `read`, `write`, and `science`.
+
+##### hard code way
+```{r}
+n <- nrow(data)
+reg <- lm(self~read+ write+ science, data = data)
+SSE <- sum((reg$residuals)^2 )
+SST <- sum((data$self  -mean(data$self))^2)
+(F_test <- ((SST-SSE)/3) / (SSE/(n-3-1)))
+pf(q = F_test,df1 = 3,df2 = n-3-1,lower.tail = F)
+```
+
+##### Using existing package for check
+```{r}
+reg <- lm(self~read+ write+ science, data = data)
+summary(reg)
+```
+
+
+
+### d) Regression of `locus` and `self` on `read`, `write`, and `science`.
+
+
+##### hard code way
+```{r}
+n <-  nrow(data)
+r <- 3 ## two independent variable
+m <- 2 ## three dependent variables
+x <- as.matrix(cbind(rep(1,n),data$read,data$write,data$science))
+colnames(x) <- c("intercept","read","write","science")
+
+y <- as.matrix(data[,c("locus","self")])
+(b.hat <- solve(t(x) %*% x) %*% t(x) %*% y)
+```
+
+##### Using existing package for check
+```{r}
+reg = lm (cbind(locus, self) ~ read + write + science, data = data)
+reg$coefficients
+```
+
+
+
+### e) Regression of `locus`, `self`, and `motiv` on `read`, `write`, and `science`.
+
+
+##### hard code way
+```{r}
+n <-  nrow(data)
+p <- 3 ## three independent variable
+q <- 3 ## three dependent variables
+x <- as.matrix(cbind(rep(1,n),data$read,data$write,data$science))
+colnames(x) <- c("intercept","slope_read","slope_write","slope_sciences")
+
+y <- as.matrix(data[,c("locus","self","motiv")])
+b.hat <- solve(t(x) %*% x) %*% t(x) %*% y
+(SS.res <- t(y - x %*% b.hat) %*% (y - x %*% b.hat))
+```
+
+##### Using existing package for check
+```{r}
+reg =  lm (cbind(locus, self,motiv) ~ read + write + science, data = data)
+t(residuals(reg)) %*% residuals(reg)
+```
+
+
+### f) Regression of `locus`, `self`, and `motiv` on `prog`.
+```{r}
+r <- 1
+m <- 3
+q <- 0
+## using likelihood ratio test
+### proposed model
+x <- as.matrix(cbind(rep(1,n),data$prog))
+colnames(x) <- c("intercept","slope_prog")
+y <- as.matrix(data[,c("locus","self","motiv")])
+b.hat <- solve(t(x) %*% x) %*% t(x) %*% y
+E <- t(y - x %*% b.hat) %*% (y - x %*% b.hat)
+### compared model
+x1 <- rep(1,n)
+b.hat1 <- solve(t(x1) %*% x1) %*% t(x1) %*% y
+H <- t(y - x1 %*% b.hat1) %*% (y - x1 %*% b.hat1)
+
+
+# Chi-sq approx
+-(n-r-1-(m-r+q+1)/2)*log(det(E)/det(H))
+
+# p-value
+1-pchisq(-(n-r-1-(m-r+q+1)/2)*log(det(E)/det(H)), m*(r-q))
+```
+
+The overall performance of the proposed model is significantly different from the reduced model by rejecting the null hyphothesis. This means that the overall model fit good.
+
+
+### g) 
+```{r}
+n <-  nrow(data)
+p <- 2 
+q <- 3 
+m <- 0
+## using likelihood ratio test
+### proposed model
+x <- as.matrix(cbind(rep(1,n),data$prog1,data$prog2))
+colnames(x) <- c("intercept","slope_prog1","slope_prog2")
+y <- as.matrix(data[,c("locus","self","motiv")])
+b.hat <- solve(t(x) %*% x) %*% t(x) %*% y
+E <- t(y - x %*% b.hat) %*% (y - x %*% b.hat)
+### compared model
+x1 <- rep(1,n)
+b.hat1 <- solve(t(x1) %*% x1) %*% t(x1) %*% y
+H <- t(y - x1 %*% b.hat1) %*% (y - x1 %*% b.hat1)
+
+# Chi-sq approx
+- (n - p - 1 - (q - p + m + 1)/2)*log(det(E)/det(H))
+# p-value
+1-pchisq(- (n - p - 1 - (q - p + m + 1)/2)*log(det(E)/det(H)), q*(p-m))
+```
+
+When we add the dependent variable after dummy coding, the p-vale of likelihood ratio test become bigger. This indicates that it may be risky to take the ordinal variable as contunious in hyphothesis testing. However, in this case, we make the same conclusion that the overall model fit is good since it rejects the null hyphothesis that there is no significant difference between proposed model and reduceded model.
+
+Further, with manova test we can see each prog variables are significant itself.
+```{r}
+reg <- lm(cbind(cbind(locus,self,motiv)) ~ prog1 + prog2,data )
+summary(manova(reg), test="Wilks")
+```
+

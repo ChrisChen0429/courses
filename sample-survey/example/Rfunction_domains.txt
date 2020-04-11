@@ -1,0 +1,44 @@
+
+
+# R function to estimate domain mean
+
+# Inputs: y.samp = sampled y-values
+#         domain.samp = domain membership indices
+#         d = domain of interest
+#         N = population size
+
+# Output: point estimate, and its standard error, for 
+#  domain d population mean
+
+domain.mean <- function(y.samp, domain.samp, d, N)
+{
+ n <- length(y.samp); n.d <- sum(domain.samp==d);
+ y.samp.d <- y.samp[domain.samp==d]
+ ybar.d <- mean(y.samp.d); s2.yd <- var(y.samp.d);
+ V.hat <- n*(n.d-1)/(n.d*(n-1)) * s2.yd/n * (1 - n/N)
+ SE <- sqrt(V.hat)
+ answer <- c(point.est=ybar.d, std.error=SE)
+ return(answer)
+}
+
+
+
+# Estimating domain total where domain size is unknown
+
+# Inputs: same as above
+
+# Output: point estimate, and its standard error, for 
+#  domain d population total
+
+domain.total <- function(y.samp, domain.samp, d, N)
+{
+ n <- length(y.samp)
+ x <- (domain.samp==d); y <- y.samp; u <- x*y;
+ u.bar <- mean(u); s2.u <- var(u);
+ t.yd.hat <- N * u.bar
+ V.hat <- N^2 * s2.u/n * (1 - n/N)
+ SE <- sqrt(V.hat)
+ answer <- c(point.est=t.yd.hat, std.error=SE)
+ return(answer)
+}
+

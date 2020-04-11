@@ -1,0 +1,227 @@
+---
+title: "Homework Four"
+author: "Yi Chen(yc3356)"
+date: "November 19, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Homework Four
+**Goals:** Practice with simulating distributions via the Inverse Transform Method. Summarizing data using distributions and estimating parameters.
+
+### Part 1
+#### i.
+```{r}
+library(ggplot2)
+# define fuction f
+f <- function(x,a=2.654,x_min=407760){
+        stopifnot(x >= x_min)
+        return(((a-1)/x_min)*((x/x_min)^(-a)))
+}
+
+
+ggplot(data.frame(x=c(407760,1000000)))+
+        stat_function(mapping = aes(x=x),fun=f,col='steelblue')+
+        labs(title='upper end of income for 2015 (Pareto distribution)',x='upper end income',y='probability')
+
+```
+#### ii
+
+$F(x)=1-(\frac{x}{x_{min}})^{-a+1}$
+
+Thus, we can calcuate the inverse function is:
+
+$F^{-1}(u)=x_{min}(1-u)^{\frac{1}{-a+1}}$
+```{r}
+# define the function
+upper.income <- function(u,a=2.654,x_min=407760){
+        stopifnot(u>=0 & u<=1)
+        return(x_min*(1-u)^(1/(-a+1)))
+}
+
+# test
+upper.income(0.5)
+```
+
+#### iii
+```{r}
+# inverse transfrom method
+n <- 1000 # number of draws
+u <- runif(n)
+y <- upper.income(u)
+
+ggplot(data = data.frame(y))+
+        geom_histogram(mapping = aes(x=y,y=..density..),bins=50)+
+        stat_function(mapping = aes(x=y),fun = f, args = list(a=2.654,x_min=407760),col='steelblue',lwd=1)+
+        labs(title='upper end of income for 2015 (Pareto distribution)',x='upper end income',y='probability',subtitle="real number v.s. theoretical distritbuion")
+```
+
+The picture above is hard to compare, we rerange the value of upper end income.
+```{r}
+ggplot(data = data.frame(y))+
+        geom_histogram(mapping = aes(x=y,y=..density..),bins=50)+
+        stat_function(mapping = aes(x=y),fun = f, args = list(a=2.654,x_min=407760),col='steelblue',lwd=1)+
+        labs(title='upper end of income for 2015 (Pareto distribution)',x='upper end income',y='probability',subtitle="real number v.s. theoretical distritbuion")+
+        xlim(407760.5, 2e06)
+
+```
+
+
+#### iv
+$Pr(X>w)=(\frac{w}{407760})^{-a+1}$
+
+Thus we can calculate that
+
+$\frac{1}{2}=(\frac{w}{x_{min}})^{-a+1}$
+
+Thus, we get:
+
+$w=x_{min}(\frac{1}{2})^{\frac{1}{-a+1}}$
+```{r}
+# the actual median of pareto distribution
+
+w1 <- 407760*(1/2)^(1/(-2.654+1))
+        
+# median income of simuated set
+w2 <- median(y)
+
+cat("The actual median is:",w1,'\n','The median of simuated set is:',w2,'\n',"Thus, they are close to each other.")
+```
+
+### Part 2
+```{r}
+genres <- read.csv('moretti.csv',header = TRUE)
+```
+
+#### i
+```{r}
+# define poisloglik fuction
+poisLoglik <- function(data,lambda){
+        return(sum(log(((lambda^data)*(exp(-lambda)))/(factorial(data)))))
+}
+
+poisLoglik(data=c(1,0,0,1,1),lambda = 1)
+```
+
+#### ii
+```{r}
+# define the function
+count_new_genres <- function(year){
+        return(sum(genres$Begin==year))
+}
+
+# calculate the value of 1803 and 1850
+count_new_genres(1803);
+count_new_genres(1850)
+
+```
+
+#### iii
+```{r}
+# creat the vector
+new_genres <- rep(NA,length(1740:1900))
+for(i in 1740:1900){
+        new_genres_this_year <- count_new_genres(i)
+        new_genres[i-1739] <- new_genres_this_year
+}
+
+names(new_genres) <- 1740:1900
+
+index_1803 <- which(names(new_genres)==1803)
+index_1850 <- which(names(new_genres)==1850)
+
+new_genres[index_1803] == count_new_genres(1803)
+new_genres[index_1850] == count_new_genres(1850)
+```
+1803 and 1850 is 64th and 111st data in the vector.
+The value for 1803 should be 0 and the value for 1850 should be 3. 
+The result is same in both way.
+
+
+#### iv
+```{r}
+y <- c()
+for(i in seq(0,3,0.01)){
+        y_this <- poisLoglik(data=new_genres,lambda = i)
+        y <- c(y,y_this)
+}
+
+ggplot()+
+        geom_point(mapping = aes(x=seq(0,3,0.01),y=y),col='steelblue')+
+        geom_vline(xintercept=0.273,lwd=1,col='pink')+
+        labs(title='log maximum likelihood function',x='lambda',y='loglikelihood')+
+        scale_x_continuous(breaks=seq(0 , 3, 0.2))
+```
+
+#### v
+```{r, warning=FALSE}
+poisLoglik_new <- function(lambda){
+        return(-sum(log(((lambda^new_genres)*(exp(-lambda)))/(factorial(new_genres))))) 
+        # add a negative so that we can calculate the maximum
+}
+
+nlm(poisLoglik_new,0.5)
+```
+
+#### vi
+```{r}
+intervals <- diff(genres$Begin)
+
+mean <- mean(intervals)
+
+stantdard_deviation <- sd(intervals)
+
+coefficient_of_variation <- stantdard_deviation/mean
+
+cat('mean is:',mean,'\n',
+    'standard deviation is:',stantdard_deviation,'\n',
+    'coefficient of variation:',coefficient_of_variation)
+```
+
+#### vii
+##### a.
+```{r}
+random_draws <- rpois(161,0.273)
+head(random_draws)
+```
+
+##### b.
+```{r}
+interval_function <- function(data){
+        calculate <- c()
+        for(i in 1:length(data)){
+                calculate <- c(calculate,rep(i,data[i]))
+        }
+        diff(calculate)
+}
+
+all(interval_function(data=new_genres) == intervals)
+```
+
+##### c.
+```{r}
+simulation <- function(num.years,mean.genres){
+        simulated_number <- rpois(num.years,lambda = mean.genres)
+        inter_appearance <- interval_function(simulated_number)
+        coefficient_of_variation <- sd(inter_appearance )/mean(inter_appearance )
+        return(list("inter_appearance"=inter_appearance,"coefficient_of_variation"=coefficient_of_variation))
+        
+}
+
+simulation(num.years = 161,mean.genres = 0.273)
+```
+
+#### viii
+```{r}
+cof <- c()
+for(i in 1:10000){
+        this_value <- simulation(num.year = 161,mean.genres = 0.273)[[2]]
+        cof <- c(cof,this_value)
+}
+
+mean(cof>coefficient_of_variation)
+```
+

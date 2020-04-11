@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+   <head>
+       <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        /* Create two equal columns that floats next to each other */
+        .column {
+            float: left;
+            width: 50%;
+            padding: 10px;
+            height: 500px; /* Should be removed. Only for demonstration */
+        }
+
+        /* Clear floats after the columns */
+        .row:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+        </style>
+
+        <title>HW3: The Spelling Correction Suggester!</title>
+
+        <script>
+            function myFunction() {
+            var x = document.getElementById("told_you_so");
+            if (x.style.display === "none") {
+                x.style.display = "block";
+            }
+            else {
+                x.style.display = "none";
+            }
+        }
+        </script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+        <script src="checkctl.js"></script>
+
+    </head>
+
+    <body>
+        <div ng-app="myApp" ng-controller="myCtrl" class="row">
+            <div class="column" style="background-color:#aaa;">
+                <h1>HW3</h1>
+                <h2>The Spelling Correction Suggester</h2>
+                <h3>Brought to you by <i>The Grammar Police</i></h3>
+                <h3>Our Motto is, "To correct and serve!"</h3>
+                <p>
+                <img src="/images/badge.jpg" width="25%">
+                </p>
+            </div>
+            <div class="column" style="background-color:#bbb;">
+                <h1>So you think you can spell?</h1>
+                <h2 style="color: red;">Game On!</h2>
+                <br>
+                Enter a word: <input style="width: 250px;" type="text" ng-model="input_word" name="word"><br>
+                <button ng-show="haveInput()" ng-click="check()">Check Spelling</button>
+                <br><br><br>
+                <div ng-show="word_correct">
+                    The word is correctly spelled.
+                    <button ng-click="reset_submission()">OK (Reset)</button>
+                </div>
+                <div ng-show="haveAnswers&&!show_correction_rsp()">
+                    {{ correct_prompt }}
+                    <br>
+                    <div ng-show="!show_correction_rsp()">
+                        <ul>
+                            <li ng-repeat="w in corrected_words" ng-click="chose_word(w)">{{w}}</li>
+                        </ul>
+                        Enter your own correction: <input style="width: 250px;" type="text" ng-model="correct_word" name="word"><br>
+                        <button ng-click="submit_correction()">Send Choice</button>
+                        <br><br>
+                    </div>
+                </div>
+                <div ng-show="show_correction_rsp()&&(!haveInput())">
+                    {{correction_response}}
+                </div>
+
+                <p></p>
+                <button onclick="myFunction()">What does this button do?</button>
+                <div id="told_you_so" style="display:none;">
+                    <p>
+                    <span style="color:red;font-size: 32px;">
+                        Told you web apps are in the textbook.
+                    </span>
+                </div>
+            </div>
+        </div>
+   </body>
+</html>

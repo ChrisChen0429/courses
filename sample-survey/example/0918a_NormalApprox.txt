@@ -1,0 +1,141 @@
+
+
+# Simulate a population of N=500, for illustration
+
+rm(list=ls()); set.seed(5234);
+
+y.popn <- rgamma(500, 2, 1);  hist(y.popn);
+
+N <- length(y.popn); ybar_U <- mean(y.popn); S <- sd(y.popn);
+
+N; ybar_U; S;
+
+
+
+
+# Draw a random sample of size n=30
+
+y.samp <- sample(y.popn, 30);  hist(y.samp);
+
+n <- length(y.samp); ybar <- mean(y.samp); s <- sd(y.samp);
+
+n ; ybar; s;
+
+SE <- s/sqrt(n) * sqrt(1 - n/N); SE;
+
+
+
+
+# Compute the 95% confidence interval based on normal approx
+
+ybar + c(-1,1)* 1.96 * SE  # approx 95% CI
+
+ybar_U
+
+# This interval did not cover the true population mean
+
+# But is the method valid?
+
+# Is the sampling distribution of ybar approx Normal?
+
+
+
+
+# Study the sampling distribution of ybar
+
+choose(500, 30)  # There are this many possible samples
+
+ybar_S <- rep(NA, 1000)
+
+# We'll just look at 1000 of those (a random sample from the
+#  set of possible samples)
+
+for(j in 1:1000)
+{
+ ybar_S[j] <- mean(sample(y.popn, 30))
+}
+
+hist(ybar_S)  # Look fairly normal?
+
+
+
+
+# Overlay a normal density for comparison
+
+hist(ybar_S, freq=F)
+
+curve(dnorm(x, mean=ybar_U, sd=S/sqrt(n)*sqrt(1-n/N)), add=T)
+
+# This suggests that, although the interval we computed 
+#  missed the true mean by kind of lot, the methodology 
+#  underlying it was basically valid
+
+
+
+
+# Is there a tool that allows us to assess the validity of the
+#  normal approximation to the sampling distribution of ybar, 
+#  based only on the sample?
+
+# The Bootstrap!
+
+# Take repeated random samples WITH REPLACEMENT from the sample
+
+ybar.boot <- rep(NA, 1000)
+
+for(j in 1:1000)
+{
+ resamp <- sample(n, replace=T)
+ ybar.boot[j] <- mean(y.samp[resamp])
+}
+
+hist(ybar.boot)
+
+# Close to a normal curve?
+
+
+
+
+# Overlay a normal density to better assess.
+
+hist(ybar.boot, freq=F, breaks=20)
+
+curve(dnorm(x,mean=mean(ybar.boot), sd = sd(ybar.boot)), add=T)
+
+
+
+
+# Can also use normal probability plot (QQ plot)
+
+# If the data are a random sample from a normal population this 
+#  plot should closely resemble a straight line
+
+qqnorm(ybar.boot); qqline(ybar.boot);
+
+# Even though our 95% CI missed the mark considerably, we have 
+   reason to believe the methodology was sound.
+
+
+
+# Since we are pretending the population is known, we can estimate 
+#  the true coverage probability of the nominally 95% interval
+
+cover <- rep(NA,1000)
+
+for(j in 1:1000)
+{
+ samp <- sample(500, 30)
+ m <- mean(y.popn[samp]); 
+ se <- sd(y.popn[samp])/sqrt(n) * sqrt(1 - n/N)
+ CI <- m + c(-1,1) * 1.96 * se
+ cover[j] <- (CI[1] < ybar_U && ybar_U < CI[2])
+}
+
+cover
+
+mean(cover)
+
+# Not really 95%, but not too bad
+
+
+

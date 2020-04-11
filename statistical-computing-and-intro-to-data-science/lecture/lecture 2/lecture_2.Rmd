@@ -1,0 +1,372 @@
+---
+title: "lecture 2"
+author: "Yi (Chris) Chen"
+date: "September 15, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## lecture two
+### vector
+```{r}
+vec <- c(1,5,7,8)
+vec
+vec[c(2,3)]
+vec[c(T,F,F,T)]  
+```
+
+&npsp;
+
+###matrix (elements should always keep the same)
+```{r}
+mat <- matrix(1:20, ncol = 4)
+mat
+# pick up a single element
+mat[5,2]
+# pick up a col
+mat[,3]
+#pick up a row
+mat[2,]
+#pick up several rows
+mat[2:4,]
+# reassign the value
+mat[4,] <- rep(100,4)
+mat
+# name the col name
+colnames(mat) <- c('one','two','three','four')
+mat
+mat[,'four']
+# name the row name
+rownames(mat) <- c('a','b','c','d','e')
+mat
+
+# tick out some elements
+mat[,c(-1,-2)]
+```
+
+&npsp;
+
+### list (elements can be in different classes)
+```{r}
+mylist <- list(stuff = 3, mat = matrix(1:4,nrow = 2), morestuff = c('china','japan'),list(5,'bear'))
+mylist
+
+class(mylist)
+# three way to pick the component in the list
+mylist[['stuff']]
+mylist$stuff
+mylist[1]
+mylist[2:4]
+# two way to pick the element in some component
+mylist$stuff[1] == mylist[[1]]
+```
+
+
+&npsp;
+
+## vectors operation
+```{r}
+a <- 1:15
+b <- 16:30
+a
+b
+a+b
+a*b
+a^b
+# recycling -- offen this is not what we want
+a+4
+a+ c(1,2,5) 
+```
+
+&npsp;
+
+### AN EXTENDED EXAMPLE: handle the picture
+```{r}
+library(pixmap)
+#set the working directory
+setwd("C:/Users/cheny/Desktop/study/statistical computing and intro to data science/lecture/lecture 2")
+# show the files in the work directory
+list.files()
+# read the image data
+casablanca <- read.pnm('casablanca.pgm')
+## get the basic information about the data
+casablanca
+## show the picture
+plot(casablanca)
+dim(casablanca@grey)
+# change the grey value for specific space
+casablanca@grey[15:70,220:265] <- 0.5 
+plot(casablanca)
+```
+
+&npsp;
+
+```{r}
+## access select pixel value
+casablanca@grey[100,60]
+casablanca@grey[10,160]
+## add stars where we lookded at pixel value
+## note the difference (0,0) reference points
+plot(casablanca)
+points(100,60,pch='*',col='red')
+points(10,160,pch='*',col='red')
+```
+
+&npsp;
+
+```{r}
+## use locator() function to find the rows and columns corresponding to Female main character's face
+plot(casablanca)
+#locator(n=360*460,type = 'n')
+casablanca@grey[dim(casablanca@grey)[1]-134.1141:231.5919,
+37.18421:158.43705] <- 0 
+## locator and grey has different coordinates system
+##Thus if locator function returns (x1,y1) and (x2,y2), you shoud input
+##(dim(casablanca_pic@grey)[1]-y1:y2,x1:x2)
+plot(casablanca)
+
+```
+
+&npsp;
+
+## understanding and testing
+```{r}
+z <- matrix(1:9,nrow = 3)
+z
+colnames(z) <- c('first','second','third')
+z
+z[2:3,'third']
+c(z[,-(2:3)],'abc')
+rbind(z[1,], 1:3)
+```
+
+&npsp;
+
+## handing the missing value
+### NA is different from NULL
+```{r}
+length(c(-1,0,NA,5))
+length(c(-1,0,NULL,5))
+```
+
+&npsp;
+
+### remove the NA 
+```{r}
+t <- c(-1,0,NA,5) 
+mean(t)
+mean(t,na.rm = TRUE)
+## null is just do not exist
+s <- c(-1,0,NULL,5) 
+mean(s)
+## to judge whether it is na
+is.na(t)
+## inf and not a nuber(nan)
+c(3/0,0/0)
+is.na(c(3/0,0/0))
+
+## define an empty vector
+x = NULL
+x[1] = 'blue'
+x[2] = 'red'
+x[4] = 'green'
+x
+
+mylist <- list(a=7,b=5)
+mylist$a <- NULL
+mylist
+```
+
+&npsp;
+
+## factor
+```{r}
+### creates a chararcter vector
+data <- rep(c('control','treatment'),c(3,4))
+data
+class(data)
+group <- as.factor(data)
+group
+class(group)
+table(group)
+str(group)
+```
+
+&npsp;
+
+##split the data according to the factor
+```{r}
+ages <- c(20,30,40,35,35,35,35)
+sex  <- c('M','M','F','M','F','F','F')
+split(ages,sex)
+
+## use split() to list ages in each group + sex pair
+list(group,sex)
+split(ages,list(group,sex))
+# split() has coerced sex into a factor variable]
+table(sex,group)
+table(group)
+
+# most matrix operations work on tables as well
+new_table <- table(sex, group)
+new_table
+new_table[, "control"]
+round(new_table/length(group), 3) 
+# Gives proportions
+```
+
+&npsp;
+
+##DataFrame(each col can have different classes)
+```{r}
+# stringAsFactors = TRUE, automatically change all the string into factor
+name <- c('john','jill','jacob','jenny')
+year <- c(1,1,2,4)
+grade <- c('B','A+','B-','A')
+student_data <- data.frame(name,year,grade,stringsAsFactors = FALSE)
+student_data
+dim(student_data)
+str(student_data)
+student_data[3:4,]
+student_data$name
+student_data$school <- 'columbia'
+student_data
+student_data[,"school"] # Can also use rownames
+
+# Adding a new row
+new_stu <- c("Bobby", 3, "A",'MIT')
+student_data <- rbind(student_data, new_stu,deparse.level=3)
+student_data
+
+student_data[3:4,]
+student_data$grade
+```
+
+
+### data frame: another example
+```{r}
+library(datasets)
+states <- data.frame(state.x77,Region=state.region,Abbr=state.abb)
+head(states,2)
+states['New York',]
+```
+
+
+## read the files
+* read the csv: ** read.csv() **
+* read the table: ** read.table(data,heat=FALSE, as.is = TRUE) **
+* scan()
+
+## text data in R
+```{r}
+list.files()
+HC <- scan('HonorCode.txt',what='')
+length(HC)
+head(HC,15)
+str(HC)
+
+HC <- factor(HC, levels = unique(HC))
+HC
+
+findwords <- function(text_vec){
+words <- split(1:length(text_vec), text_vec)
+return(words)
+}
+
+wordlist <- findwords(HC)
+wordlist
+wordlist$students
+
+alphabetized_list <- function(wordlist) {
+        nms <- names(wordlist) # The names are the words
+        sorted <- sort(nms)
+        # The words, but now in ABC order
+        return(wordlist[sorted]) # Returns the sorted version
+}
+alphabetized_list(wordlist)
+
+wl <- findwords(HC)
+wl[1:3]
+alpha_list <- alphabetized_list(wl)
+alpha_list[1:3]
+
+```
+
+&npsp;
+
+## idea of function
+```{r}
+# creat a function
+square_it <- function(x){
+        out <- x^2
+        return(out)
+}
+square_it(4)
+```
+
+&npsp;
+```{r}
+## logical and realtional operators
+1>3
+1 == 3
+1 != 3
+(1>3) & (4*5 == 20)
+(1>3) | (4*5 == 20)
+
+c(0,1,4) <3
+which(c(0,1,4) <3 )
+which(c(TRUE,TRUE,FALSE))
+
+
+c('Cat','Dog') == 'Dog'
+```
+
+&npsp;
+
+
+## extracting elements from a vector
+```{r}
+w <- c(-3,20,9,2)
+w[w>3]
+w>3
+w[c(FALSE,TRUE,TRUE,FALSE)]
+
+w[w*w >= 3 & w*w <= 10]
+w*w >= 3 
+w*w <= 10
+w*w >= 3 & w*w <= 10
+
+
+v <- c(0,17,10,1) 
+w[w>v]
+w>v
+w[c(FALSE,TRUE,FALSE,TRUE)] ==w[w>v]
+```
+
+&npsp;
+
+
+```{r}
+## filter elements of a matrix
+m <- matrix(c(rep(4,5),5:8),ncol = 3,nrow = 3)
+m
+m>5
+m[,3]<8
+m[m[,3]<8,]
+m[m>5] <- 0
+m
+```
+
+```{r}
+z <- matrix(c(1:3,TRUE,FALSE,TRUE,9,16,25),nrow =3)
+colnames(z) <- c('first','second','third')
+print(z)
+z[z[, "second"], ]
+z[,1] != 1
+z[(z[, 1] != 1), 3]
+z[c(1,0,1),]
+z[c(1,1),]
+```

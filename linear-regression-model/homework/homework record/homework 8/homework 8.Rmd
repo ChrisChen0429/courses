@@ -1,0 +1,184 @@
+---
+title: "Homework 8"
+author: "Yi Chen(yc3356)"
+date: "December 4, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Homework 8
+###Problem 9.9
+```{r}
+## read the data
+setwd("C:/Users/cheny/Desktop/study/linear regression model/homework/homework record/homework 8")
+satisfaction <- read.table("6.15.txt",header = FALSE, col.names = c('y','x1','x2','x3'))
+```
+
+#### a
+```{r, message=FALSE}
+# first use the AIC and the method of stepwise regression to find the best subset of the variables.
+
+reg3 <- lm(data = satisfaction,y ~ x1)
+reg1 <- lm(data = satisfaction,y ~ x2)
+reg2 <- lm(data = satisfaction,y ~ x3)
+reg5 <- lm(data = satisfaction,y ~ x1 + x2)
+reg6 <- lm(data = satisfaction,y ~ x1 + x3)
+reg4 <- lm(data = satisfaction,y ~ x2 + x3)
+reg7 <- lm(data = satisfaction,y ~ x1 + x2 + x3)
+
+## AIC
+AIC <- AIC(reg1,reg2,reg3,reg4,reg5,reg6,reg7)
+AIC
+
+# actually a quicker way is
+library(MASS)
+stepAIC(reg7,direction = 'both')
+```
+
+As we can see the best subset is x1 and x3 which has the smallest AIC
+
+Now plot the picture
+```{r}
+library(ggplot2)
+ggplot()+
+        geom_line(aes(x=1:7,y=AIC$AIC),col='steelblue',lwd=1)+
+        labs(title='AIC at different regression',x='regression',y='AIC')
+```
+
+As we can see the regression 6 has the smallest AIC which tell us the best subset is x1 and x3
+
+
+```{r}
+## BIC
+BIC <- BIC(reg1,reg2,reg3,reg4,reg5,reg6,reg7)
+BIC
+
+library(ggplot2)
+ggplot()+
+        geom_line(aes(x=1:7,y=BIC$BIC),col='steelblue',lwd=1)+
+        labs(title='BIC at different regression',x='regression',y='BIC')
+```
+
+As we can see the regression 6 has the smallest AIC which tell us the best subset is x1 and x3
+The result is same with AIC
+
+```{r}
+## Adjusted R square
+R1 <- summary(reg1)$r.squared
+R2 <- summary(reg2)$r.squared
+R3 <- summary(reg3)$r.squared
+R4 <- summary(reg4)$r.squared
+R5 <- summary(reg5)$r.squared
+R6 <- summary(reg6)$r.squared
+R7 <- summary(reg7)$r.squared
+adjusted_R <- c(R1,R2,R3,R4,R5,R6,R7)
+DF <- c(3,3,3,4,4,4,5)
+adjusted_R_summary <- data.frame(regnumber <- 1:7, adjusted_R <- adjusted_R,df=DF)
+
+ggplot(data=adjusted_R_summary)+
+        geom_line(aes(x=regnumber,y=adjusted_R),col='steelblue',lwd=1)+
+        labs(title='Adjusted R square at different regression',x='number of regression',y='Adjusted R square')
+
+library(leaps)
+leaps <- regsubsets(data=satisfaction,y~x1+x2+x3, nbest = 4)
+plot(leaps,scale = 'adjr2')
+
+
+```
+
+Based on the Adjusted R square, the last regression is best which shows that x1,x2,x3 is the best subset of the variables
+
+```{r}
+library(car)
+subsets(leaps,statistic="cp",main="Cp Plot for All Subsets Regression",legend = FALSE)
+abline(1,1,lty=2,col="red")
+```
+
+As we can see from the plot the best subset is also x1-x3
+
+#### b 
+
+ As we can see apart from the Adjusted R square the AIC,BIC and CP all have the same best subset. Actually AIC,BIC anc CP will Usually have the same result. Because all these statistics focus both on in sample and out of sample performance. Particularlly, AIC and BIC only have differen penalty term.
+But it is not alway they will have the same results. Because the penalty term for them is different, thus they would perfer differen value. For example, usually the AIC would have a bigger  P value which lead AIC have less probability of under selection. 
+
+#### C
+
+Here clearly backward delection would be more efficient. Because it only need to have relative less time of regression to find the best subset. 
+
+
+###Problem 9.15
+#### problem b
+```{r}
+## read the data
+kidney <- read.table('9.15.txt',header = FALSE, col.names = c('y','x1','x2','x3'))
+
+
+scatterplotMatrix(kidney,spread=FALSE,main="Scatter Plot Matrix")
+
+x <- kidney[,2:4]
+cor(x)
+```
+
+As we can see from the plot that: y have a obvious linear relation with x1, x2 and x3. And for y against x1 and x2 , the relations are negative but for y against x3 the relation is positive.
+
+And as we can see from the correlation matrix, x1 and x2 have a relatively high correlation. Other variables tends to have pretty smally correlation. Which indecate that there do exist some kind of multicollinearity problem but the problem is not serious.
+
+#### problem c
+```{r}
+reg_1 <- lm(data=kidney,y~.)
+summary(reg_1)
+vif(reg_1)
+```
+
+As we can see: first, from the summary of the regression we know all the variables pass the t test and the adjusted r square is over 0.8. Which means that the model is good. 
+
+By the way, the vif statisics shows that all the varibales have relative small vif which are near 1. So the multicollinearity problem is not serious and there is no need to delete any variables.
+
+### proble 9.16
+```{r}
+# first analysis the first order
+## base on the adjusted R square
+y <- kidney[,1]
+x <- scale(kidney[2:4],scale = TRUE)
+x1_2 <- scale(kidney[,2],scale = FALSE)^2
+x2_2 <- scale(kidney[,3],scale = FALSE)^2
+x3_2 <- scale(kidney[,4],scale = FALSE)^2
+x1_x2 <- scale(kidney[,2],scale = FALSE) * scale(kidney[,3],scale = FALSE)
+x1_x3 <- scale(kidney[,2],scale = FALSE) * scale(kidney[,4],scale = FALSE)
+x2_x3 <- scale(kidney[,3],scale = FALSE) * scale(kidney[,4],scale = FALSE)
+
+x_total <- cbind(x,x1_2,x2_2,x3_2,x1_x2,x1_x3,x2_x3)
+colnames(x_total) <- c('x1','x2','x3','x1_2','x2_2','x3_2','x1_x2','x1_x3','x2_x3')
+
+result <- leaps::leaps(x = x_total , y=y ,method = "adjr2")
+order_index <- order(result$adjr2,decreasing = TRUE)
+result$which[order_index[1:3],]
+result$adjr2[order_index[1:3]]
+
+## base on the adjusted R square
+result2 <- leaps::leaps(x = x_total , y=y ,method = "Cp")
+order_index <- order(result2$Cp,decreasing = FALSE)
+result2$which[order_index[1:3],]
+result2$Cp[order_index[1:3]]
+```     
+
+```{r}
+kidney[2:4,] <- scale(kidney[2,4],scale = FALSE)
+fit <- lm(y~1,data = kidney)
+step(fit,direction = "forward",scope = ~x1+x2+x3+I(x1^2)+I(x2^2)+I(x3^2)+x1:x2+x1:x3+x2:x3)
+```
+
+As we can see the best subset of variables are x3, x1_2 ,x2_2, x3_2, x1, x2, x3_x2
+
+#### b
+```{r}
+# record the result in the last problem
+result$which[60,]
+result$which[30,]
+result$adjr2[30]
+result$adjr2[60]
+```
+

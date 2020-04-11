@@ -1,0 +1,110 @@
+---
+title: "homework five"
+author: "Yi (Chris) Chen"
+date: "October 28, 2017"
+output:
+  word_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Home work five
+### problem one: 6.5
+```{r}
+# read the data
+setwd("C:/Users/cheny/Desktop/study/linear regression model/homework/homework record/homework five")
+data_6.5 <- read.table('6.5.txt',header = FALSE, col.names = c('brand liking','moisture content','sweetness'))
+```
+(a) obtain scatter plot matrix and correlation matrix
+```{r}
+# scatter plot matrix
+pairs(~brand.liking+moisture.content+sweetness,data = data_6.5,main='scatter plot')
+cor(data_6.5)
+```
+(b) fit regression model to the data
+```{r}
+reg_6.5 <- lm(data = data_6.5, brand.liking ~ moisture.content + sweetness)
+reg_6.5
+```
+(c) obtain the residual and draw the box plot
+```{r}
+residual_6.5 <- reg_6.5$residuals
+boxplot(residual_6.5,main='the box plot of the residuals')
+
+# futher test
+qqnorm(residual_6.5)
+qqline(residual_6.5)
+```
+(f) f test for lack of fit
+```{r}
+anova(lm(data = data_6.5, brand.liking ~ moisture.content + sweetness), lm(data = data_6.5, brand.liking ~ factor(moisture.content)*factor(sweetness)))
+
+library(alr3)
+pureErrorAnova(reg_6.5)
+qf(0.99,5,8)
+```
+
+### problem two:6.7
+(a) calculate the multipule determination R^2
+```{r}
+summary(reg_6.5)
+```
+(b) calculate the single determination R^2 between Yi and Yi_hat
+```{r}
+Yi_hat <- reg_6.5$coefficients[1] + reg_6.5$coefficients[2] * data_6.5$moisture.content + reg_6.5$coefficients[3] * data_6.5$sweetness
+summary(lm(data_6.5$brand.liking~Yi_hat))
+```
+
+### problem three:6.8
+(a) estimate E(Yh) and iterpet interval estimation
+```{r}
+X <- matrix(c(rep(1,16),data_6.5$moisture.content,data_6.5$sweetness),ncol = 3)
+
+Y <- matrix(data_6.5$brand.liking,ncol = 1)
+
+
+Xh <- matrix(c(1,5,4),ncol = 1)
+beta <- matrix(c(reg_6.5$coefficients[1],reg_6.5$coefficients[2],reg_6.5$coefficients[3]),ncol = 1)
+E_Yh <- t(Xh) %*% beta
+cat('the expection of Yh is:',E_Yh)
+
+```
+```{r}
+SSE <- t(Y) %*% Y - t(beta) %*% t(X) %*% Y 
+
+MSE <- SSE/(nrow(data_6.5) - 3)
+
+S_2_b <- solve(t(X)%*%X)*as.numeric(MSE)
+
+
+s_2_Yh <- t(Xh)%*%S_2_b%*%Xh
+s_Yh <- sqrt(s_2_Yh)
+
+t_value <- qt((1-0.01/2),(nrow(data_6.5)-3))
+
+upper_value <- E_Yh + t_value * s_Yh   
+lower_value <- E_Yh - t_value * s_Yh
+
+cat('the interval is:[',lower_value,',',upper_value,']')
+```
+
+
+
+(b) estimate new observation Yh(new) and predict interval
+```{r}
+cat('the predict value of Yh(new) is:',E_Yh);
+```
+
+```{r}
+s_2_pred <- MSE + s_2_Yh
+s_pred <- sqrt(s_2_pred)
+
+upper_value <- E_Yh + t_value * s_pred 
+lower_value <- E_Yh - t_value * s_pred
+
+cat('the interval is:[',lower_value,',',upper_value,']');
+```
+

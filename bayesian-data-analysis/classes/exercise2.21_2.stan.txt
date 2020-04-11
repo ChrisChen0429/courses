@@ -1,0 +1,18 @@
+data {
+  int J;
+  int n[J];
+  int y[J];
+}
+parameters {
+  vector[J] theta;
+  real mu_theta;
+  real<lower=0> sigma_theta;
+}
+transformed parameters {
+  vector[J] p;
+  p = inv_logit(theta);
+}
+model {
+  y ~ binomial(n, p);
+  theta ~ normal(mu_theta, sigma_theta);
+}
