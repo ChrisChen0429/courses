@@ -49,3 +49,6 @@ modvec=as.vector(ultra_sport)
 cor(datvec,modvec)
 ```
 
+The correlation increase with additive tree. The result of additive tree and ultrametric tree are also different. In ultrametric football and baseball are differnt from other sports. In the additive tree, football, baseball and other sports require speific enviornment (e.g., swiming pool) are categorized together.
+
+#### I cannot install the GTREE in the mac system. 

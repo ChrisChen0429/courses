@@ -1,0 +1,378 @@
+
+extree analysis (EXTREE version 1.5):
+ROSCH/SMITH SPORTS DATA: SIMILARITY RATINGS CONV. to DISSIM'S  format=(19F6.1)
+
+
+
+
+(   0.00  needed for positivity of distances )
+ -118.00  added to exactly satisfy triangle inequality
+
+
+warning: threshold must be >= 0.0 (resetting it)
+
+ node     length    children    label
+
+   1      64.89                   FOOTBALL            
+   2      61.11                   BASEBALL            
+   3      71.59                   BASKETBALL          
+   4      32.14                   TENNIS              
+   5      74.13                   CANOEING            
+   6      22.64                   SWIMMING            
+   7      77.83                   BOXING              
+   8      76.46                   VOLLEYBALL          
+   9      86.97                   SKIING              
+  10      51.54                   SURFING             
+  11      78.17                   FENCING             
+  12      44.36                   SKINDIVING          
+  13      93.18                   ARCHERY             
+  14      59.86                   PINGPONG            
+  15      94.90                   HORSEBACK           
+  16      29.14                   HIKING              
+  17     102.19                   BILLIARD            
+  18      40.86                   CAMPING             
+  19     117.81                   CHECKERS            
+  20     131.43                   JUMPROPE            
+  21       8.41      1   2
+  22      48.84      4  14
+  23      18.46      6  12
+  24      44.37     16  18
+  25      19.40     21   3
+  26       9.48      5  24
+  27      35.55     23  10
+  28      30.82      7  11
+  29      24.91     17  19
+  30      28.28     25   8
+  31      21.67     26  15
+  32      19.39      9  27
+  33      20.14     22  29
+  34      39.90     32  31
+  35       9.97     28  13
+  36       9.77     30  33
+  37       4.75     35  20
+  38       0.00     34  37
+  39       0.00     36  38
+
+
+
+
+                        ------------------------   1  FOOTBALL  
+                    ----|
+             -------|   -----------------------   2  BASEBALL  
+   ----------|      |
+   |         |      ----------------------------   3  BASKETBALL
+   |         |
+   |         -----------------------------   8  VOLLEYBALL
+---|
+|  |                        -------------   4  TENNIS    
+|  |      ------------------|
+|  |      |                 -----------------------  14  PINGPONG  
+|  -------|
+|         |         --------------------------------------  17  BILLIARD  
+|         ----------|
+|                   -------------------------------------------  19  CHECKERS  
+|
+|                    ---------------------------------   9  SKIING    
+|                    |
+|                    |                   ---------   6  SWIMMING  
+|             -------|            -------|
+|             |      -------------|      -----------------  12  SKINDIVING
+|             |                   |
+|             |                   --------------------  10  SURFING   
+|-------------|
+|             |          ----------------------------   5  CANOEING  
+|             |          |
+|             |       ---|                -----------  16  HIKING    
+|             --------|  -----------------|
+|                     |                   ----------------  18  CAMPING   
+|                     |
+|                     ------------------------------------  15  HORSEBACK 
+|
+|               ------------------------------   7  BOXING    
+|    -----------|
+|----|          ------------------------------  11  FENCING   
+-|   |
+ |   -----------------------------------  13  ARCHERY   
+ |
+ -------------------------------------------------  20  JUMPROPE  
+
+
+stress formula 1 = 0.0687
+stress formula 2 = 0.3717
+r(monotonic) squared=0.8619
+r-squared (p.v.a.f.)=0.8172
+
+
+
+
+
+
+extree analysis:
+
+  10 marked features will be tried
+features smaller than    0.00 will be eliminated
+
+
+  i  j     estimate     [ set(i) ]   [ set(j) ]
+  -  -     --------     -----------------------
+ 14 29       56.94       [ 14 ]       [ 17 19 ]
+ 11 13       49.94       [ 11 ]       [ 13 ]
+  1  7       48.12       [  1 ]       [  7 ]
+  7 20       47.73       [  7 ]       [ 20 ]
+  5 27       37.62       [  5 ]       [  6 10 12 ]
+ 10  9       31.92       [ 10 ]       [  9 ]
+ 18 13       36.03       [ 18 ]       [ 13 ]
+ 31 13       31.38       [  5 15 16 18 ]       [ 13 ]
+  8 22       31.25       [  8 ]       [  4 14 ]
+ 14 19       30.89       [ 14 ]       [ 19 ]
+ 28 20       30.63       [  7 11 ]       [ 20 ]
+  5 23       29.17       [  5 ]       [  6 12 ]
+ 21  7       28.73       [  1  2 ]       [  7 ]
+  5 32       27.45       [  5 ]       [  6  9 10 12 ]
+ 24 15       26.69       [ 16 18 ]       [ 15 ]
+  6  5       27.13       [  6 ]       [  5 ]
+ 16  9       26.25       [ 16 ]       [  9 ]
+ 19 20       25.77       [ 19 ]       [ 20 ]
+  7 25       25.17       [  7 ]       [  1  2  3 ]
+  4  8       25.14       [  4 ]       [  8 ]
+ 24 13       24.64       [ 16 18 ]       [ 13 ]
+ 14  8       24.55       [ 14 ]       [  8 ]
+ 14 17       24.32       [ 14 ]       [ 17 ]
+ 26 13       24.00       [  5 16 18 ]       [ 13 ]
+  1 28       23.69       [  1 ]       [  7 11 ]
+ 15 13       23.19       [ 15 ]       [ 13 ]
+  5 10       23.02       [  5 ]       [ 10 ]
+  4 30       21.27       [  4 ]       [  1  2  3  8 ]
+ 14 20       20.05       [ 14 ]       [ 20 ]
+ 22 30       20.88       [  4 14 ]       [  1  2  3  8 ]
+  4  6       19.76       [  4 ]       [  6 ]
+ 12  5       19.67       [ 12 ]       [  5 ]
+ 11 17       18.73       [ 11 ]       [ 17 ]
+  3  8       18.69       [  3 ]       [  8 ]
+ 18 19       17.66       [ 18 ]       [ 19 ]
+ 26 32       17.58       [  5 16 18 ]       [  6  9 10 12 ]
+ 23 26       17.49       [  6 12 ]       [  5 16 18 ]
+ 16 20       17.22       [ 16 ]       [ 20 ]
+  7 30       17.18       [  7 ]       [  1  2  3  8 ]
+  6 26       15.61       [  6 ]       [  5 16 18 ]
+ 13 34       15.30       [ 13 ]       [  5  6  9 10 12 15 16 18 ]
+  8 33       14.89       [  8 ]       [  4 14 17 19 ]
+ 11 33       15.19       [ 11 ]       [  4 14 17 19 ]
+ 16 15       14.53       [ 16 ]       [ 15 ]
+ 24  9       13.81       [ 16 18 ]       [  9 ]
+ 17 35       13.29       [ 17 ]       [  7 11 13 ]
+ 17 22       12.88       [ 17 ]       [  4 14 ]
+ 11 29       12.52       [ 11 ]       [ 17 19 ]
+ 15 35       11.70       [ 15 ]       [  7 11 13 ]
+  1 35       11.47       [  1 ]       [  7 11 13 ]
+  4 23       11.36       [  4 ]       [  6 12 ]
+ 18 15       11.35       [ 18 ]       [ 15 ]
+ 26 27       11.07       [  5 16 18 ]       [  6 10 12 ]
+ 18 29       10.83       [ 18 ]       [ 17 19 ]
+ 21 28       10.81       [  1  2 ]       [  7 11 ]
+  4  3       10.79       [  4 ]       [  3 ]
+ 17 13       10.75       [ 17 ]       [ 13 ]
+  1 16       10.67       [  1 ]       [ 16 ]
+ 15 29       10.62       [ 15 ]       [ 17 19 ]
+ 19 31       10.58       [ 19 ]       [  5 15 16 18 ]
+
+
+checking for cliques & redundant patterns of marked features
+
+
+feature C
+  14   ( 14 )
+  29   ( 17 19 )
+feature D
+  11   ( 11 )
+  13   ( 13 )
+feature E
+   1   (  1 )
+   7   (  7 )
+feature H
+   7   (  7 )
+  20   ( 20 )
+feature I
+   5   (  5 )
+  27   (  6 10 12 )
+feature N
+  10   ( 10 )
+   9   (  9 )
+feature O
+  18   ( 18 )
+  13   ( 13 )
+feature U
+  31   (  5 15 16 18 )
+  13   ( 13 )
+feature X
+   8   (  8 )
+  22   (  4 14 )
+feature Z
+  28   (  7 11 )
+  20   ( 20 )
+
+
+
+
+iteration:   1
+
+spillover of marked features on arcs:   29  33  37
+features smaller than threshold: 
+maximum leaf spillover=    9.66
+
+
+
+
+iteration:   2
+
+spillover of marked features on arcs: 
+features smaller than threshold:   49
+maximum leaf spillover=    9.40
+
+
+
+
+iteration:   3
+
+spillover of marked features on arcs: 
+features smaller than threshold: 
+maximum leaf spillover=    4.80
+
+
+
+ node     length    children    label
+
+   1      72.21                   FOOTBALL            
+   2      63.39                   BASEBALL            
+   3      75.05                   BASKETBALL          
+   4      31.32                   TENNIS              
+   5      84.83                   CANOEING            
+   6      27.44                   SWIMMING            
+   7      84.85                   BOXING              
+   8      84.49                   VOLLEYBALL          
+   9     100.14                   SKIING              
+  10      58.22                   SURFING             
+  11      80.75                   FENCING             
+  12      49.16                   SKINDIVING          
+  13     124.94                   ARCHERY             
+  14      70.29                   PINGPONG            
+  15      97.06                   HORSEBACK           
+  16      32.97                   HIKING              
+  17     103.61                   BILLIARD            
+  18      46.64                   CAMPING             
+  19     119.22                   CHECKERS            
+  20     142.60                   JUMPROPE            
+  21       9.75      1   2
+  22      74.90      4  14
+  23      16.58      6  12
+  24      38.47     16  18
+  25      15.73     21   3
+  26      14.08      5  24
+  27      49.08     23  10
+  28      48.82      7  11
+  29      50.60     17  19
+  30      35.18     25   8
+  31      29.63     26  15
+  32      11.95      9  27
+  33       0.00     22  29
+  34      35.20     32  31
+  35       1.23     28  13
+  36       2.64     30  33
+  37       0.00     35  20
+  38       0.00     34  37
+  39       0.00     36  38
+  40      50.60     14  29      "C"
+  41      44.95     11  13      "D"
+  42      45.40      1   7      "E"
+  43      39.45      7  20      "H"
+  44      36.32      5  27      "I"
+  45      31.92     10   9      "N"
+  46      17.51     18  13      "O"
+  47      25.28     31  13      "U"
+  48      33.38      8  22      "X"
+  49       0.00     28  20      "Z"
+
+
+
+
+                                                                 marked feature
+                                                                 pattern matrix
+                                                                 --------------
+
+               EEEEEEEEEEEE-------   1  FOOTBALL              . . E . . . . . .
+             --|                                              . . . . . . . . .
+         ----| -----------------   2  BASEBALL                . . . . . . . . .
+---------|   |                                                . . . . . . . . .
+|        |   --------------------   3  BASKETBALL             . . . . . . . . .
+|        |                                                    . . . . . . . . .
+|        XXXXXXXXX-------------   8  VOLLEYBALL               . . . . . . . . X
+|                                                             . . . . . . . . .
+|                  ---------   4  TENNIS                      . . . . . . . . X
+|XXXXXXXX----------|                                          . . . . . . . . .
+|                  CCCCCCCCCCCCC-----  14  PINGPONG           C . . . . . . . X
+|                                                             . . . . . . . . .
+|            ---------------------------  17  BILLIARD        C . . . . . . . .
+|CCCCCCCCCCCC|                                                . . . . . . . . .
+|            ------------------------------  19  CHECKERS     C . . . . . . . .
+|                                                             . . . . . . . . .
+|          NNNNNNNN------------------   9  SKIING             . . . . . N . . .
+|          |                                                  . . . . . . . . .
+|          |                -------   6  SWIMMING             . . . . I . . . .
+|       ---|           -----|                                 . . . . . . . . .
+|       |  IIIIIIIIII--|    -------------  12  SKINDIVING     . . . . I . . . .
+|       |              |                                      . . . . . . . . .
+|       |              NNNNNNNN--------  10  SURFING          . . . . I N . . .
+|-------|                                                     . . . . . . . . .
+|       |          IIIIIIIIII------------   5  CANOEING       . . . . I . . U .
+|       |          |                                          . . . . . . . . .
+|       |       ---|         ---------  16  HIKING            . . . . . . . U .
+|       UUUUUUU-|  ----------|                                . . . . . . . . .
+|               |            OOOOO-------  18  CAMPING        . . . . . . O U .
+|               |                                             . . . . . . . . .
+|               -------------------------  15  HORSEBACK      . . . . . . . U .
+|                                                             . . . . . . . . .
+|           EEEEEEEEEEEEHHHHHHHHHH   7  BOXING                . . E H . . . . .
+|-----------|                                                 . . . . . . . . .
+|           DDDDDDDDDDDD---------  11  FENCING                . D . . . . . . .
+|                                                             . . . . . . . . .
+|DDDDDDDDDDDOOOOOUUUUUUU--------  13  ARCHERY                 . D . . . . O U .
+|                                                             . . . . . . . . .
+HHHHHHHHHH--------------------------  20  JUMPROPE            . . . H . . . . .
+
+
+stress formula 1 = 0.0428
+stress formula 2 = 0.2256
+r(monotonic) squared=0.9491
+r-squared (p.v.a.f.)=0.9306
+
+
+
+
+
+
+final set of marked features:
+
+feature  objects sharing feature
+-------  -----------------------
+
+   C     [ PINGPONG, BILLIARD, CHECKERS, ]
+
+   D     [ FENCING, ARCHERY, ]
+
+   E     [ FOOTBALL, BOXING, ]
+
+   H     [ BOXING, JUMPROPE, ]
+
+   I     [ CANOEING, SWIMMING, SURFING, SKINDIVING, ]
+
+   N     [ SURFING, SKIING, ]
+
+   O     [ CAMPING, ARCHERY, ]
+
+   U     [ CANOEING, HORSEBACK, HIKING, CAMPING, ARCHERY, ]
+
+   X     [ VOLLEYBALL, TENNIS, PINGPONG, ]
+
+
+
+

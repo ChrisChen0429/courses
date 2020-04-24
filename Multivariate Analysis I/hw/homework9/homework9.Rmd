@@ -1,0 +1,78 @@
+---
+title: "Homework9"
+author: "Yi Chen"
+date: "4/17/2020"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Homework 9
+
+```{r}
+data <- read.table("T11-4.DAT")
+colnames(data) <- c("v1","v2","v3","v4","population")
+```
+
+
+#### question 1
+```{r}
+library(MASS)
+library(klaR)
+data.lda = lda(population~v1+v3, data= data)
+data.lda
+
+data$population <- as.factor(data$population)
+partimat(population~v1+v3, data= data,method="lda") 
+```
+
+
+#### question 2
+```{r}
+data.lda.values = predict(data.lda)
+table(Predicted= data.lda.values$class, Actual= data$population)
+mean(data$population==data.lda.values$class)
+```
+
+
+
+#### question 3
+```{r}
+data_copy <- data[c(-16,-34),]
+data.lda = lda(population~v1+v3, data= data_copy)
+data.lda
+data_copy$population <- as.factor(data_copy$population)
+partimat(population~v1+v3, data= data_copy,method="lda") 
+```
+
+
+
+#### question 4
+```{r}
+data.lda.values = predict(data.lda)
+table(Predicted= data.lda.values$class, Actual= data_copy$population)
+mean(data_copy$population==data.lda.values$class)
+```
+
+
+#### question 5
+```{r}
+data.qda = qda(population~v1+v3, data= data)
+data.qda
+data.qda.values = predict(data.qda)
+table(Predicted= data.qda.values$class, Actual= data$population)
+mean(data$population==data.qda.values$class)
+```
+
+
+#### question 6
+
+Conclusions:
+
+1. Removing the outlier (influential points) help to improve the classifcation accuracy.
+
+2. Removing the equal variance assumption (using qudratic discrimination analysis) improve the classifcation accuracy.
+
+3. The overall accuracy for all models are acceptable.

@@ -1,0 +1,53 @@
+---
+title: "Homework12"
+author: "Yi Chen"
+date: "4/19/2020"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## homework 12
+
+#### F test
+
+$$F_{obs}=\frac{\Delta R^2/(PA-PC)}{(1-R^2_A)/(N-PA)}$$
+
+
+Using the F test to compare the extended tree model over the additive tree model.
+According to the output of sport data, $N=170$ (number of pair of proximities), $PC=37$, $PA=10$, $R^2_A=0.9306$, and $R^2_B=0.8172$.
+Consequently,
+$$F_{obs}=\frac{(0.9306-0.8172)/(37-9)}{(1-0.9306)/(170-37)}=7.76$$
+```{r}
+1- pf(q = 7.76,df1 = 37-9,df2 = 170-37)
+```
+
+The P-value is almost 0, which indicates that the model has a significant imporve over the addtive tree.
+
+
+
+#### Interpretation
+
+The additive tree summary 10 subset in clustering solution. Based on the characteristic of each subset, we can interprete it as:
+
+C: table sports
+
+D: sports with slow movemen
+
+E: high body contact and fighting
+
+H: sports related to quick and consistant jumping. 
+
+I: water sports
+
+N: slide on a surface
+
+O: related to hunting
+
+U: outdoor sports
+
+X: ball sports
+
+By looking at the tree, we find that some of the sports have multiple marked features, like surfing (I/N), canoeing (I/U), camping (O/U), boxing (E/H) and archery (DOU). Those sports share two or more common points with other sports. For example, canoeing is a water sports (like sports in I) and also an outdoor sport (like sports in U).
