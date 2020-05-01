@@ -1,0 +1,87 @@
+---
+title: "homework10"
+author: "Yi Chen"
+date: "4/30/2020"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Homework 10
+```{r}
+## read the data
+trackwomen <- read.table("TrackWomen.dat", header = TRUE,sep = "\t")
+
+# convert the data into the same scale
+trackwomen$X100m <- 100/trackwomen$X100m
+trackwomen$X200m <- 200/trackwomen$X200m
+trackwomen$X400m <- 400/trackwomen$X400m
+trackwomen$X800m <- 800/(trackwomen$X800m*60)
+trackwomen$X1500m <- 1500/(trackwomen$X1500m*60)
+trackwomen$X3000m <- 3000/(trackwomen$X3000m*60)
+trackwomen$Marathon <- 42195/(trackwomen$Marathon*60)
+head(trackwomen)
+```
+
+#### question 1
+```{r}
+library(MASS)
+trackwomen_distance <- dist(trackwomen[,2:8])
+av.clust = hclust(trackwomen_distance, method = "average")
+plot(av.clust, labels = trackwomen$Country)
+
+```
+
+I will pick two clusters.
+
+#### question 2
+```{r}
+cen.clust = hclust(trackwomen_distance, method = "centroid")
+plot(cen.clust, labels = trackwomen$Country)
+cluster_indicator <- cutree(cen.clust,2)
+
+sqrt(sum((apply((trackwomen[which(cluster_indicator==1),2:8]), 2,mean)- apply((trackwomen[which(cluster_indicator==2),2:8]), 2,mean))^2))
+```
+
+distance between the centroids of the two-cluster solution is 2.556.
+
+
+
+#### question 3
+```{r}
+cluster_indicator <- cutree(av.clust,2)
+trackwomen$class <-cluster_indicator
+lda_data <- trackwomen[,2:9]
+ldamod <- lda(class ~ ., data= lda_data)
+ldamod
+```
+
+It has big positive value in x400m and x1500m and big negative value in x200m and marathon. I did not see clear interpreation of this result.
+
+```{r}
+k2 <- kmeans(trackwomen[,2:8],centers = 2)
+cluster_indicator <- k2$cluster
+
+trackwomen$class <-cluster_indicator
+lda_data <- trackwomen[,2:9]
+ldamod <- lda(class ~ ., data= lda_data)
+ldamod
+
+```
+
+The pattern of the result is similar but not the same. This time, x400m and x1500m are still the most contributing sports for determing the function. But the effects from marathon and x200m is small.
+
+```{r}
+trackwomen <- read.table("TrackWomen.dat", header = TRUE,sep = "\t")
+k2 <- kmeans(trackwomen[,2:8],centers = 2)
+cluster_indicator <- k2$cluster
+
+trackwomen$class <-cluster_indicator
+lda_data <- trackwomen[,2:9]
+ldamod <- lda(class ~ ., data= lda_data)
+ldamod
+
+```
+The patter is similar to the previous one, but not the same. This time the function depend more on x1500m and x300m than any other sports.
