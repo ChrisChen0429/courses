@@ -1,0 +1,1269 @@
+Mplus VERSION 8.4
+MUTHEN & MUTHEN
+05/08/2020   8:25 AM
+
+INPUT INSTRUCTIONS
+
+  Title: LCA Model for Early Childhood Education
+  Data: File = C:\Users\ATS-Workshop\Desktop\data.dat ;
+  Variable: NAMES = dcloa dcost drely dlern dchil dhrop dnbgrp drtweb
+                      drecfam drelor rcnow ncnow cpnnowx DISB hhtotalxx
+                      useintrnt ttlhhinc csex cwhite
+                      dpcolor dpletter dpcount dpname ;
+            MISSING = ALL(999) ;
+            USEVARIABLES = dcloa dcost drely dlern dchil dhrop
+                           dnbgrp drtweb drecfam drelor ;
+            CATEGORICAL = dcloa dcost drely dlern dchil dhrop
+                           dnbgrp drtweb drecfam drelor ;
+            CLASS = c(6) ;
+            !AUXILIARY = (R3STEP) DISB hhtotalxx
+                      ! useintrnt  ttlhhinc csex cwhite;
+              ! Command Syntax for step 2
+            !AUXILIARY = dpcolor (BCH) dpletter (BCH)
+            !           dpcount (BCH) dpname (BCH) ;
+              ! Command Syntax for step 3
+  Analysis: TYPE = MIXTURE;
+            MITERATION = 10000 ;
+            STARTS = 2500 250;
+            STITERATIONS = 200;
+            LRTBOOTSTRAP = 200;
+            !PROCESSORS = 8 ;
+  Output: tech11 tech14 ;
+  !Plot: TYPE=PLOT3;
+  Savedata: FORMAT=FREE;
+
+
+
+
+
+
+
+*** WARNING
+  Data set contains cases with missing on all variables.
+  These cases were not included in the analysis.
+  Number of cases with missing on all variables:  1973
+   1 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+
+
+
+LCA Model for Early Childhood Education
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                        3871
+
+Number of dependent variables                                   10
+Number of independent variables                                  0
+Number of continuous latent variables                            0
+Number of categorical latent variables                           1
+
+Observed dependent variables
+
+  Binary and ordered categorical (ordinal)
+   DCLOA       DCOST       DRELY       DLERN       DCHIL       DHROP
+   DNBGRP      DRTWEB      DRECFAM     DRELOR
+
+Categorical latent variables
+   C
+
+
+Estimator                                                      MLR
+Information matrix                                        OBSERVED
+Optimization Specifications for the Quasi-Newton Algorithm for
+Continuous Outcomes
+  Maximum number of iterations                                 100
+  Convergence criterion                                  0.100D-05
+Optimization Specifications for the EM Algorithm
+  Maximum number of iterations                               10000
+  Convergence criteria
+    Loglikelihood change                                 0.100D-06
+    Relative loglikelihood change                        0.100D-06
+    Derivative                                           0.100D-05
+Optimization Specifications for the M step of the EM Algorithm for
+Categorical Latent variables
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-05
+  Basis for M step termination                           ITERATION
+Optimization Specifications for the M step of the EM Algorithm for
+Censored, Binary or Ordered Categorical (Ordinal), Unordered
+Categorical (Nominal) and Count Outcomes
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-05
+  Basis for M step termination                           ITERATION
+  Maximum value for logit thresholds                            15
+  Minimum value for logit thresholds                           -15
+  Minimum expected cell size for chi-square              0.100D-01
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Optimization algorithm                                         EMA
+Random Starts Specifications
+  Number of initial stage random starts                       2500
+  Number of final stage optimizations                          250
+  Number of initial stage iterations                           200
+  Initial stage convergence criterion                    0.100D+01
+  Random starts scale                                    0.500D+01
+  Random seed for generating random starts                       0
+Link                                                         LOGIT
+
+Input data file(s)
+  C:\Users\ATS-Workshop\Desktop\data.dat
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of missing data patterns             1
+     Number of y missing data patterns           0
+     Number of u missing data patterns           1
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+UNIVARIATE PROPORTIONS AND COUNTS FOR CATEGORICAL VARIABLES
+
+    DCLOA
+      Category 1    0.137          529.000
+      Category 2    0.863         3342.000
+    DCOST
+      Category 1    0.190          735.000
+      Category 2    0.810         3136.000
+    DRELY
+      Category 1    0.035          137.000
+      Category 2    0.965         3734.000
+    DLERN
+      Category 1    0.042          161.000
+      Category 2    0.958         3710.000
+    DCHIL
+      Category 1    0.090          347.000
+      Category 2    0.910         3524.000
+    DHROP
+      Category 1    0.093          361.000
+      Category 2    0.907         3510.000
+    DNBGRP
+      Category 1    0.219          848.000
+      Category 2    0.781         3023.000
+    DRTWEB
+      Category 1    0.429         1662.000
+      Category 2    0.571         2209.000
+    DRECFAM
+      Category 1    0.208          805.000
+      Category 2    0.792         3066.000
+    DRELOR
+      Category 1    0.658         2549.000
+      Category 2    0.342         1322.000
+
+
+RANDOM STARTS RESULTS RANKED FROM THE BEST TO THE WORST LOGLIKELIHOOD VALUES
+
+Final stage loglikelihood values at local maxima, seeds, and initial stage start numbers:
+
+          -14945.070  643910           1957
+          -14945.070  277373           1374
+          -14945.070  137863           1030
+          -14945.070  533738           11
+          -14945.070  690608           1800
+          -14945.070  606078           1296
+          -14945.070  794804           1211
+          -14945.070  21132            351
+          -14945.070  184418           2200
+          -14945.070  610066           1438
+          -14945.070  529496           343
+          -14945.070  845580           805
+          -14945.070  271886           2268
+          -14945.070  319575           499
+          -14945.070  780726           1270
+          -14945.070  990548           1276
+          -14945.070  74838            1367
+          -14945.070  209986           1939
+          -14945.070  681992           2466
+          -14945.070  758926           1682
+          -14945.070  213704           2165
+          -14945.070  508482           446
+          -14945.070  258142           2049
+          -14945.070  743895           1198
+          -14945.070  397522           1311
+          -14945.070  897272           1239
+          -14945.070  144139           1272
+          -14945.070  213532           503
+          -14945.070  263877           1659
+          -14945.070  602328           2117
+          -14945.070  581196           921
+          -14945.070  836066           372
+          -14945.070  800454           751
+          -14945.070  65562            1395
+          -14945.070  708128           1722
+          -14945.070  622290           880
+          -14945.070  462821           745
+          -14945.070  940258           1242
+          -14945.070  76736            1142
+          -14945.070  788599           1180
+          -14945.070  379464           1483
+          -14945.070  700270           855
+          -14945.070  832104           2228
+          -14945.070  303959           1063
+          -14945.070  392602           2487
+          -14945.070  925186           1332
+          -14945.070  942848           852
+          -14945.070  172913           557
+          -14945.070  718876           1104
+          -14945.070  551340           766
+          -14945.070  468731           1451
+          -14945.070  789564           2275
+          -14945.070  685268           596
+          -14945.070  925004           1583
+          -14945.070  645976           2302
+          -14945.070  83263            2251
+          -14945.070  290366           1715
+          -14945.070  730868           977
+          -14945.070  163519           2441
+          -14945.070  610340           2272
+          -14945.070  672942           1098
+          -14945.070  170194           1653
+          -14945.070  476338           1418
+          -14945.070  263394           1741
+          -14945.070  813779           92
+          -14945.070  738069           1830
+          -14945.070  877722           1053
+          -14945.070  118958           994
+          -14945.070  290210           1620
+          -14945.070  592184           2155
+          -14945.070  997845           2386
+          -14945.070  695486           1500
+          -14945.070  691544           2183
+          -14945.070  113138           585
+          -14945.070  603842           61
+          -14945.070  159216           1423
+          -14945.070  964201           2175
+          -14945.070  14253            1252
+          -14945.070  320494           465
+          -14945.070  788796           145
+          -14945.070  263221           447
+          -14945.308  778292           1164
+          -14945.308  565631           1209
+          -14945.308  432513           803
+          -14945.308  548245           818
+          -14945.348  389538           2052
+          -14945.348  155749           960
+          -14945.348  367213           2313
+          -14945.348  132524           2316
+          -14945.348  586870           1538
+          -14945.348  170768           1464
+          -14945.348  987174           1689
+          -14945.348  36714            201
+          -14945.348  349263           263
+          -14945.357  685140           1450
+          -14945.364  346141           1533
+          -14945.364  850840           232
+          -14945.364  261601           1163
+          -14945.394  376411           473
+          -14945.394  107446           12
+          -14945.580  576726           280
+          -14945.580  44340            1189
+          -14945.580  188340           1343
+          -14945.580  783102           433
+          -14945.580  408713           450
+          -14945.580  175952           2075
+          -14945.580  513448           2016
+          -14945.580  471438           252
+          -14945.580  391949           295
+          -14945.580  289148           1092
+          -14945.580  960582           1691
+          -14945.580  631413           439
+          -14945.580  732971           1447
+          -14945.580  331689           1872
+          -14945.580  931874           141
+          -14945.580  87586            871
+          -14945.580  358688           1573
+          -14945.580  132336           362
+          -14945.580  335485           496
+          -14945.580  886821           2291
+          -14945.580  149046           1755
+          -14945.580  628143           854
+          -14945.580  178475           231
+          -14945.580  417002           1499
+          -14945.580  752292           1750
+          -14945.580  493368           2483
+          -14945.580  392260           1526
+          -14945.580  715561           125
+          -14945.580  441118           1091
+          -14945.580  275864           2426
+          -14945.580  123102           1302
+          -14945.580  84233            2134
+          -14945.580  824956           607
+          -14945.580  778338           1401
+          -14945.580  81954            1823
+          -14945.580  195407           1278
+          -14945.580  65952            933
+          -14945.580  622896           1385
+          -14945.580  931192           2323
+          -14945.580  955828           2491
+          -14945.580  657994           788
+          -14945.580  86698            893
+          -14945.580  296924           1702
+          -14945.580  329944           1506
+          -14945.580  600082           1008
+          -14945.869  491970           563
+          -14945.965  286735           175
+          -14945.965  627151           1601
+          -14945.965  169882           2005
+          -14945.965  521770           945
+          -14945.965  372176           23
+          -14945.965  57148            1561
+          -14945.965  85734            411
+          -14945.965  762690           1732
+          -14945.965  573976           1217
+          -14945.965  868112           1484
+          -14945.965  147878           2322
+          -14945.965  366706           29
+          -14945.965  861335           2170
+          -14945.965  201311           1995
+          -14945.965  851200           1479
+          -14945.965  795831           1968
+          -14945.965  185064           1449
+          -14945.965  548493           1201
+          -14945.965  768687           1953
+          -14945.965  871851           257
+          -14945.965  232559           136
+          -14945.965  228459           947
+          -14945.965  255016           1731
+          -14945.965  585607           1537
+          -14945.965  530291           2488
+          -14945.965  289928           1529
+          -14945.965  240994           1598
+          -14945.965  193042           316
+          -14945.965  830292           527
+          -14945.965  420298           1222
+          -14945.969  970728           1371
+          -14945.969  293428           2473
+          -14945.969  568534           961
+          -14945.969  298997           1315
+          -14945.969  321390           133
+          -14945.969  899876           1808
+          -14945.969  572637           989
+          -14945.969  595619           779
+          -14946.019  965639           463
+          -14946.165  105748           2129
+          -14946.165  746966           1656
+          -14946.165  366739           1283
+          -14946.165  665858           1238
+          -14946.165  703313           1415
+          -14946.165  61127            2044
+          -14946.400  20976            1336
+          -14946.559  534256           1410
+          -14946.559  675765           1323
+          -14946.559  642909           251
+          -14946.559  286505           2416
+          -14946.559  210139           991
+          -14946.559  922596           456
+          -14946.559  475419           987
+          -14946.559  849670           347
+          -14946.840  135605           1786
+          -14946.850  480649           1900
+          -14946.858  716616           1159
+          -14946.858  802644           874
+          -14946.957  662718           460
+          -14946.998  435112           2339
+          -14947.352  761633           50
+          -14947.392  422856           1676
+          -14947.392  115218           1382
+          -14947.392  173440           328
+          -14947.392  668003           647
+          -14947.392  143337           2029
+          -14947.392  266425           2000
+          -14947.392  702670           1151
+          -14947.392  404870           2452
+          -14947.394  476498           179
+          -14947.394  356194           1393
+          -14947.394  322790           636
+          -14947.394  443917           60
+          -14947.394  962080           2480
+          -14947.394  559798           2250
+          -14947.593  971693           470
+          -14947.593  2850             1110
+          -14947.593  947659           2351
+          -14947.593  979988           2164
+          -14947.593  887676           22
+          -14947.593  721392           768
+          -14947.918  599729           658
+          -14947.918  44196            2379
+          -14947.918  202063           2385
+          -14947.918  462167           1986
+          -14947.918  392418           28
+          -14948.208  70157            1858
+          -14948.338  595190           1554
+          -14948.518  718336           2280
+          -14948.520  876943           650
+          -14948.985  246261           38
+          -14949.130  110911           1234
+          -14949.629  708047           1519
+          -14949.733  7886             804
+          -14949.768  140849           515
+
+9 perturbed starting value run(s) did not converge or were rejected in the third stage.
+
+
+
+THE BEST LOGLIKELIHOOD VALUE HAS BEEN REPLICATED.  RERUN WITH AT LEAST TWICE THE
+RANDOM STARTS TO CHECK THAT THE BEST LOGLIKELIHOOD IS STILL OBTAINED AND REPLICATED.
+
+     IN THE OPTIMIZATION, ONE OR MORE LOGIT THRESHOLDS APPROACHED EXTREME VALUES
+     OF -15.000 AND 15.000 AND WERE FIXED TO STABILIZE MODEL ESTIMATION.  THESE
+     VALUES IMPLY PROBABILITIES OF 0 AND 1.  IN THE MODEL RESULTS SECTION, THESE
+     PARAMETERS HAVE 0 STANDARD ERRORS AND 999 IN THE Z-SCORE AND P-VALUE COLUMNS.
+
+
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       65
+
+Loglikelihood
+
+          H0 Value                      -14945.070
+          H0 Scaling Correction Factor      1.0726
+            for MLR
+
+Information Criteria
+
+          Akaike (AIC)                   30020.140
+          Bayesian (BIC)                 30427.122
+          Sample-Size Adjusted BIC       30220.582
+            (n* = (n + 2) / 24)
+
+Chi-Square Test of Model Fit for the Binary and Ordered Categorical
+(Ordinal) Outcomes**
+
+          Pearson Chi-Square
+
+          Value                           1072.454
+          Degrees of Freedom                   957
+          P-Value                           0.0053
+
+          Likelihood Ratio Chi-Square
+
+          Value                            656.762
+          Degrees of Freedom                   957
+          P-Value                           1.0000
+
+** Of the 1024 cells in the latent class indicator table, 1
+   were deleted in the calculation of chi-square due to extreme values.
+
+
+
+FINAL CLASS COUNTS AND PROPORTIONS FOR THE LATENT CLASSES
+BASED ON THE ESTIMATED MODEL
+
+    Latent
+   Classes
+
+       1        881.46855          0.22771
+       2        257.19405          0.06644
+       3        443.06773          0.11446
+       4        927.10996          0.23950
+       5         56.91979          0.01470
+       6       1305.23993          0.33718
+
+
+FINAL CLASS COUNTS AND PROPORTIONS FOR THE LATENT CLASSES
+BASED ON ESTIMATED POSTERIOR PROBABILITIES
+
+    Latent
+   Classes
+
+       1        881.46855          0.22771
+       2        257.19405          0.06644
+       3        443.06773          0.11446
+       4        927.10996          0.23950
+       5         56.91979          0.01470
+       6       1305.23993          0.33718
+
+
+FINAL CLASS COUNTS AND PROPORTIONS FOR THE LATENT CLASSES
+BASED ON THEIR MOST LIKELY LATENT CLASS MEMBERSHIP
+
+Class Counts and Proportions
+
+    Latent
+   Classes
+
+       1              824          0.21286
+       2              268          0.06923
+       3              306          0.07905
+       4             1004          0.25936
+       5               55          0.01421
+       6             1414          0.36528
+
+
+CLASSIFICATION QUALITY
+
+     Entropy                         0.727
+
+
+Classification Probabilities for the Most Likely Latent Class Membership (Column)
+by Latent Class (Row)
+
+           1        2        3        4        5        6
+
+    1   0.678    0.036    0.048    0.052    0.003    0.182
+    2   0.097    0.842    0.006    0.015    0.008    0.032
+    3   0.159    0.010    0.527    0.126    0.005    0.174
+    4   0.014    0.002    0.015    0.969    0.000    0.000
+    5   0.065    0.044    0.046    0.000    0.845    0.000
+    6   0.088    0.008    0.009    0.000    0.000    0.895
+
+
+Logits for the Classification Probabilities for the Most Likely Latent Class Membership (Column)
+by Latent Class (Row)
+
+              1        2        3        4        5        6
+
+    1      1.314   -1.611   -1.324   -1.248   -4.116    0.000
+    2      1.116    3.282   -1.637   -0.718   -1.384    0.000
+    3     -0.086   -2.890    1.109   -0.324   -3.529    0.000
+    4      9.536    7.704    9.613   13.784    0.000    0.000
+    5      6.812    6.433    6.470   -1.590    9.380    0.000
+    6     -2.322   -4.718   -4.589  -13.705  -13.273    0.000
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Latent Class 1
+
+ Thresholds
+    DCLOA$1           -1.737      0.234     -7.420      0.000
+    DCOST$1           -1.232      0.167     -7.357      0.000
+    DRELY$1           -3.907      0.423     -9.226      0.000
+    DLERN$1           -3.507      0.435     -8.071      0.000
+    DCHIL$1           -3.143      0.915     -3.434      0.001
+    DHROP$1           -1.680      0.161    -10.403      0.000
+    DNBGRP$1          -0.442      0.126     -3.494      0.000
+    DRTWEB$1           1.722      0.399      4.312      0.000
+    DRECFAM$1          0.045      0.199      0.228      0.819
+    DRELOR$1           1.478      0.145     10.164      0.000
+
+Latent Class 2
+
+ Thresholds
+    DCLOA$1           -2.231      0.381     -5.859      0.000
+    DCOST$1           -1.903      0.269     -7.077      0.000
+    DRELY$1           -3.848      0.836     -4.604      0.000
+    DLERN$1           -0.727      0.247     -2.947      0.003
+    DCHIL$1            1.936      0.916      2.114      0.035
+    DHROP$1           -2.750      0.407     -6.760      0.000
+    DNBGRP$1           1.064      0.299      3.561      0.000
+    DRTWEB$1           1.108      0.199      5.557      0.000
+    DRECFAM$1         -0.112      0.175     -0.638      0.524
+    DRELOR$1           1.387      0.193      7.171      0.000
+
+Latent Class 3
+
+ Thresholds
+    DCLOA$1            0.086      0.255      0.337      0.736
+    DCOST$1            0.496      0.302      1.644      0.100
+    DRELY$1           -1.779      0.252     -7.075      0.000
+    DLERN$1           -3.604      0.466     -7.732      0.000
+    DCHIL$1           -3.854      0.830     -4.640      0.000
+    DHROP$1           -1.082      0.192     -5.631      0.000
+    DNBGRP$1          -1.278      0.248     -5.146      0.000
+    DRTWEB$1          -0.348      0.249     -1.397      0.162
+    DRECFAM$1         -2.686      0.724     -3.709      0.000
+    DRELOR$1           0.449      0.207      2.171      0.030
+
+Latent Class 4
+
+ Thresholds
+    DCLOA$1           -3.314      0.292    -11.347      0.000
+    DCOST$1           -2.605      0.213    -12.230      0.000
+    DRELY$1           -5.491      0.728     -7.542      0.000
+    DLERN$1           -6.171      1.194     -5.169      0.000
+    DCHIL$1           -3.848      0.275    -13.977      0.000
+    DHROP$1           -3.536      0.297    -11.899      0.000
+    DNBGRP$1          -3.699      0.340    -10.878      0.000
+    DRTWEB$1          -1.452      0.114    -12.781      0.000
+    DRECFAM$1         -3.695      0.326    -11.326      0.000
+    DRELOR$1         -15.000      0.000    999.000    999.000
+
+Latent Class 5
+
+ Thresholds
+    DCLOA$1            2.021      0.841      2.404      0.016
+    DCOST$1            1.174      0.495      2.370      0.018
+    DRELY$1            1.035      0.487      2.124      0.034
+    DLERN$1            0.205      0.421      0.488      0.626
+    DCHIL$1            0.305      0.405      0.753      0.451
+    DHROP$1            1.179      0.527      2.236      0.025
+    DNBGRP$1           1.821      0.568      3.205      0.001
+    DRTWEB$1           2.791      0.703      3.967      0.000
+    DRECFAM$1          1.368      0.485      2.820      0.005
+    DRELOR$1           1.948      0.509      3.826      0.000
+
+Latent Class 6
+
+ Thresholds
+    DCLOA$1           -3.064      0.260    -11.775      0.000
+    DCOST$1           -2.291      0.176    -13.001      0.000
+    DRELY$1           -5.669      1.013     -5.595      0.000
+    DLERN$1           -5.294      0.580     -9.135      0.000
+    DCHIL$1           -3.959      0.355    -11.148      0.000
+    DHROP$1           -3.932      0.485     -8.112      0.000
+    DNBGRP$1          -2.089      0.151    -13.854      0.000
+    DRTWEB$1          -1.175      0.141     -8.317      0.000
+    DRECFAM$1         -2.145      0.185    -11.614      0.000
+    DRELOR$1          15.000      0.000    999.000    999.000
+
+Categorical Latent Variables
+
+ Means
+    C#1               -0.393      0.222     -1.766      0.077
+    C#2               -1.624      0.195     -8.310      0.000
+    C#3               -1.080      0.233     -4.639      0.000
+    C#4               -0.342      0.069     -4.986      0.000
+    C#5               -3.132      0.238    -13.136      0.000
+
+
+RESULTS IN PROBABILITY SCALE
+
+Latent Class 1
+
+ DCLOA
+    Category 1         0.150      0.030      5.025      0.000
+    Category 2         0.850      0.030     28.534      0.000
+ DCOST
+    Category 1         0.226      0.029      7.714      0.000
+    Category 2         0.774      0.029     26.444      0.000
+ DRELY
+    Category 1         0.020      0.008      2.409      0.016
+    Category 2         0.980      0.008    119.850      0.000
+ DLERN
+    Category 1         0.029      0.012      2.370      0.018
+    Category 2         0.971      0.012     79.073      0.000
+ DCHIL
+    Category 1         0.041      0.036      1.140      0.254
+    Category 2         0.959      0.036     26.407      0.000
+ DHROP
+    Category 1         0.157      0.021      7.348      0.000
+    Category 2         0.843      0.021     39.414      0.000
+ DNBGRP
+    Category 1         0.391      0.030     12.996      0.000
+    Category 2         0.609      0.030     20.214      0.000
+ DRTWEB
+    Category 1         0.848      0.051     16.515      0.000
+    Category 2         0.152      0.051      2.952      0.003
+ DRECFAM
+    Category 1         0.511      0.050     10.290      0.000
+    Category 2         0.489      0.050      9.833      0.000
+ DRELOR
+    Category 1         0.814      0.022     37.023      0.000
+    Category 2         0.186      0.022      8.449      0.000
+
+Latent Class 2
+
+ DCLOA
+    Category 1         0.097      0.033      2.908      0.004
+    Category 2         0.903      0.033     27.075      0.000
+ DCOST
+    Category 1         0.130      0.030      4.272      0.000
+    Category 2         0.870      0.030     28.662      0.000
+ DRELY
+    Category 1         0.021      0.017      1.222      0.222
+    Category 2         0.979      0.017     57.317      0.000
+ DLERN
+    Category 1         0.326      0.054      6.009      0.000
+    Category 2         0.674      0.054     12.436      0.000
+ DCHIL
+    Category 1         0.874      0.101      8.661      0.000
+    Category 2         0.126      0.101      1.249      0.212
+ DHROP
+    Category 1         0.060      0.023      2.615      0.009
+    Category 2         0.940      0.023     40.913      0.000
+ DNBGRP
+    Category 1         0.744      0.057     13.045      0.000
+    Category 2         0.256      0.057      4.500      0.000
+ DRTWEB
+    Category 1         0.752      0.037     20.203      0.000
+    Category 2         0.248      0.037      6.673      0.000
+ DRECFAM
+    Category 1         0.472      0.044     10.818      0.000
+    Category 2         0.528      0.044     12.096      0.000
+ DRELOR
+    Category 1         0.800      0.031     25.863      0.000
+    Category 2         0.200      0.031      6.464      0.000
+
+Latent Class 3
+
+ DCLOA
+    Category 1         0.521      0.064      8.191      0.000
+    Category 2         0.479      0.064      7.517      0.000
+ DCOST
+    Category 1         0.622      0.071      8.751      0.000
+    Category 2         0.378      0.071      5.327      0.000
+ DRELY
+    Category 1         0.144      0.031      4.647      0.000
+    Category 2         0.856      0.031     27.538      0.000
+ DLERN
+    Category 1         0.026      0.012      2.204      0.028
+    Category 2         0.974      0.012     81.000      0.000
+ DCHIL
+    Category 1         0.021      0.017      1.230      0.219
+    Category 2         0.979      0.017     57.991      0.000
+ DHROP
+    Category 1         0.253      0.036      6.970      0.000
+    Category 2         0.747      0.036     20.560      0.000
+ DNBGRP
+    Category 1         0.218      0.042      5.150      0.000
+    Category 2         0.782      0.042     18.478      0.000
+ DRTWEB
+    Category 1         0.414      0.060      6.856      0.000
+    Category 2         0.586      0.060      9.707      0.000
+ DRECFAM
+    Category 1         0.064      0.043      1.475      0.140
+    Category 2         0.936      0.043     21.644      0.000
+ DRELOR
+    Category 1         0.610      0.049     12.405      0.000
+    Category 2         0.390      0.049      7.915      0.000
+
+Latent Class 4
+
+ DCLOA
+    Category 1         0.035      0.010      3.549      0.000
+    Category 2         0.965      0.010     97.573      0.000
+ DCOST
+    Category 1         0.069      0.014      5.042      0.000
+    Category 2         0.931      0.014     68.221      0.000
+ DRELY
+    Category 1         0.004      0.003      1.379      0.168
+    Category 2         0.996      0.003    334.359      0.000
+ DLERN
+    Category 1         0.002      0.002      0.839      0.401
+    Category 2         0.998      0.002    401.664      0.000
+ DCHIL
+    Category 1         0.021      0.006      3.710      0.000
+    Category 2         0.979      0.006    174.008      0.000
+ DHROP
+    Category 1         0.028      0.008      3.463      0.001
+    Category 2         0.972      0.008    118.926      0.000
+ DNBGRP
+    Category 1         0.024      0.008      3.014      0.003
+    Category 2         0.976      0.008    121.745      0.000
+ DRTWEB
+    Category 1         0.190      0.017     10.861      0.000
+    Category 2         0.810      0.017     46.405      0.000
+ DRECFAM
+    Category 1         0.024      0.008      3.141      0.002
+    Category 2         0.976      0.008    126.421      0.000
+ DRELOR
+    Category 1         0.000      0.000      0.000      1.000
+    Category 2         1.000      0.000      0.000      1.000
+
+Latent Class 5
+
+ DCLOA
+    Category 1         0.883      0.087     10.168      0.000
+    Category 2         0.117      0.087      1.347      0.178
+ DCOST
+    Category 1         0.764      0.089      8.548      0.000
+    Category 2         0.236      0.089      2.643      0.008
+ DRELY
+    Category 1         0.738      0.094      7.829      0.000
+    Category 2         0.262      0.094      2.781      0.005
+ DLERN
+    Category 1         0.551      0.104      5.294      0.000
+    Category 2         0.449      0.104      4.312      0.000
+ DCHIL
+    Category 1         0.576      0.099      5.817      0.000
+    Category 2         0.424      0.099      4.287      0.000
+ DHROP
+    Category 1         0.765      0.095      8.063      0.000
+    Category 2         0.235      0.095      2.479      0.013
+ DNBGRP
+    Category 1         0.861      0.068     12.632      0.000
+    Category 2         0.139      0.068      2.046      0.041
+ DRTWEB
+    Category 1         0.942      0.038     24.582      0.000
+    Category 2         0.058      0.038      1.509      0.131
+ DRECFAM
+    Category 1         0.797      0.078     10.158      0.000
+    Category 2         0.203      0.078      2.586      0.010
+ DRELOR
+    Category 1         0.875      0.056     15.740      0.000
+    Category 2         0.125      0.056      2.245      0.025
+
+Latent Class 6
+
+ DCLOA
+    Category 1         0.045      0.011      4.022      0.000
+    Category 2         0.955      0.011     86.137      0.000
+ DCOST
+    Category 1         0.092      0.015      6.248      0.000
+    Category 2         0.908      0.015     61.784      0.000
+ DRELY
+    Category 1         0.003      0.003      0.990      0.322
+    Category 2         0.997      0.003    286.968      0.000
+ DLERN
+    Category 1         0.005      0.003      1.734      0.083
+    Category 2         0.995      0.003    345.352      0.000
+ DCHIL
+    Category 1         0.019      0.007      2.869      0.004
+    Category 2         0.981      0.007    150.410      0.000
+ DHROP
+    Category 1         0.019      0.009      2.103      0.035
+    Category 2         0.981      0.009    107.290      0.000
+ DNBGRP
+    Category 1         0.110      0.015      7.455      0.000
+    Category 2         0.890      0.015     60.185      0.000
+ DRTWEB
+    Category 1         0.236      0.025      9.266      0.000
+    Category 2         0.764      0.025     30.000      0.000
+ DRECFAM
+    Category 1         0.105      0.017      6.046      0.000
+    Category 2         0.895      0.017     51.675      0.000
+ DRELOR
+    Category 1         1.000      0.000      0.000      1.000
+    Category 2         0.000      0.000      0.000      1.000
+
+
+LATENT CLASS ODDS RATIO RESULTS
+
+                                         (Est. - 1) Two-Tailed
+                    Estimate       S.E.     / S.E.    P-Value
+
+Latent Class 1 Compared to Latent Class 2
+
+ DCLOA
+    Category > 1       0.610      0.315     -1.237      0.216
+ DCOST
+    Category > 1       0.511      0.176     -2.778      0.005
+ DRELY
+    Category > 1       1.061      1.000      0.061      0.952
+ DLERN
+    Category > 1      16.121      8.501      1.779      0.075
+ DCHIL
+    Category > 1     160.684    223.531      0.714      0.475
+ DHROP
+    Category > 1       0.343      0.158     -4.170      0.000
+ DNBGRP
+    Category > 1       4.509      1.491      2.354      0.019
+ DRTWEB
+    Category > 1       0.541      0.249     -1.840      0.066
+ DRECFAM
+    Category > 1       0.855      0.244     -0.595      0.552
+ DRELOR
+    Category > 1       0.913      0.232     -0.375      0.708
+
+Latent Class 1 Compared to Latent Class 3
+
+ DCLOA
+    Category > 1       6.188      2.221      2.336      0.020
+ DCOST
+    Category > 1       5.631      1.916      2.417      0.016
+ DRELY
+    Category > 1       8.396      4.327      1.709      0.087
+ DLERN
+    Category > 1       0.908      0.624     -0.148      0.882
+ DCHIL
+    Category > 1       0.491      0.682     -0.745      0.456
+ DHROP
+    Category > 1       1.818      0.521      1.572      0.116
+ DNBGRP
+    Category > 1       0.433      0.121     -4.675      0.000
+ DRTWEB
+    Category > 1       0.126      0.053    -16.474      0.000
+ DRECFAM
+    Category > 1       0.065      0.046    -20.151      0.000
+ DRELOR
+    Category > 1       0.358      0.095     -6.736      0.000
+
+Latent Class 1 Compared to Latent Class 4
+
+ DCLOA
+    Category > 1       0.207      0.080     -9.901      0.000
+ DCOST
+    Category > 1       0.253      0.073    -10.199      0.000
+ DRELY
+    Category > 1       0.205      0.178     -4.464      0.000
+ DLERN
+    Category > 1       0.070      0.089    -10.455      0.000
+ DCHIL
+    Category > 1       0.494      0.469     -1.079      0.281
+ DHROP
+    Category > 1       0.156      0.053    -16.011      0.000
+ DNBGRP
+    Category > 1       0.039      0.013    -71.688      0.000
+ DRTWEB
+    Category > 1       0.042      0.017    -57.500      0.000
+ DRECFAM
+    Category > 1       0.024      0.008   -118.027      0.000
+ DRELOR
+    Category > 1       0.000      0.000    999.000    999.000
+
+Latent Class 1 Compared to Latent Class 5
+
+ DCLOA
+    Category > 1      42.870     35.550      1.178      0.239
+ DCOST
+    Category > 1      11.089      5.525      1.826      0.068
+ DRELY
+    Category > 1     140.041     88.716      1.567      0.117
+ DLERN
+    Category > 1      40.963     23.724      1.684      0.092
+ DCHIL
+    Category > 1      31.443     31.346      0.971      0.331
+ DHROP
+    Category > 1      17.444      9.460      1.738      0.082
+ DNBGRP
+    Category > 1       9.604      5.475      1.571      0.116
+ DRTWEB
+    Category > 1       2.912      2.321      0.824      0.410
+ DRECFAM
+    Category > 1       3.754      1.871      1.472      0.141
+ DRELOR
+    Category > 1       1.600      0.850      0.707      0.480
+
+Latent Class 1 Compared to Latent Class 6
+
+ DCLOA
+    Category > 1       0.265      0.096     -7.627      0.000
+ DCOST
+    Category > 1       0.347      0.089     -7.330      0.000
+ DRELY
+    Category > 1       0.172      0.200     -4.135      0.000
+ DLERN
+    Category > 1       0.168      0.132     -6.302      0.000
+ DCHIL
+    Category > 1       0.442      0.430     -1.299      0.194
+ DHROP
+    Category > 1       0.105      0.055    -16.194      0.000
+ DNBGRP
+    Category > 1       0.193      0.036    -22.314      0.000
+ DRTWEB
+    Category > 1       0.055      0.021    -44.953      0.000
+ DRECFAM
+    Category > 1       0.112      0.027    -32.687      0.000
+ DRELOR
+    Category > 1   *********      0.000    999.000    999.000
+
+Latent Class 2 Compared to Latent Class 3
+
+ DCLOA
+    Category > 1      10.145      4.516      2.025      0.043
+ DCOST
+    Category > 1      11.022      4.485      2.235      0.025
+ DRELY
+    Category > 1       7.914      6.831      1.012      0.311
+ DLERN
+    Category > 1       0.056      0.029    -32.072      0.000
+ DCHIL
+    Category > 1       0.003      0.004   -268.376      0.000
+ DHROP
+    Category > 1       5.303      2.337      1.841      0.066
+ DNBGRP
+    Category > 1       0.096      0.040    -22.483      0.000
+ DRTWEB
+    Category > 1       0.233      0.072    -10.708      0.000
+ DRECFAM
+    Category > 1       0.076      0.058    -16.021      0.000
+ DRELOR
+    Category > 1       0.392      0.109     -5.588      0.000
+
+Latent Class 2 Compared to Latent Class 4
+
+ DCLOA
+    Category > 1       0.339      0.159     -4.167      0.000
+ DCOST
+    Category > 1       0.496      0.166     -3.044      0.002
+ DRELY
+    Category > 1       0.193      0.218     -3.699      0.000
+ DLERN
+    Category > 1       0.004      0.005   -189.436      0.000
+ DCHIL
+    Category > 1       0.003      0.003   -340.491      0.000
+ DHROP
+    Category > 1       0.456      0.226     -2.407      0.016
+ DNBGRP
+    Category > 1       0.009      0.004   -259.076      0.000
+ DRTWEB
+    Category > 1       0.077      0.018    -51.932      0.000
+ DRECFAM
+    Category > 1       0.028      0.010    -93.794      0.000
+ DRELOR
+    Category > 1       0.000      0.000    999.000    999.000
+
+Latent Class 2 Compared to Latent Class 5
+
+ DCLOA
+    Category > 1      70.287     66.329      1.045      0.296
+ DCOST
+    Category > 1      21.704     12.509      1.655      0.098
+ DRELY
+    Category > 1     132.009    127.965      1.024      0.306
+ DLERN
+    Category > 1       2.541      1.277      1.207      0.227
+ DCHIL
+    Category > 1       0.196      0.195     -4.130      0.000
+ DHROP
+    Category > 1      50.875     33.096      1.507      0.132
+ DNBGRP
+    Category > 1       2.130      1.395      0.810      0.418
+ DRTWEB
+    Category > 1       5.380      3.962      1.105      0.269
+ DRECFAM
+    Category > 1       4.392      2.316      1.464      0.143
+ DRELOR
+    Category > 1       1.753      0.958      0.786      0.432
+
+Latent Class 2 Compared to Latent Class 6
+
+ DCLOA
+    Category > 1       0.435      0.195     -2.898      0.004
+ DCOST
+    Category > 1       0.678      0.214     -1.504      0.133
+ DRELY
+    Category > 1       0.162      0.216     -3.874      0.000
+ DLERN
+    Category > 1       0.010      0.006   -152.355      0.000
+ DCHIL
+    Category > 1       0.003      0.003   -369.088      0.000
+ DHROP
+    Category > 1       0.307      0.187     -3.707      0.000
+ DNBGRP
+    Category > 1       0.043      0.014    -66.947      0.000
+ DRTWEB
+    Category > 1       0.102      0.025    -36.241      0.000
+ DRECFAM
+    Category > 1       0.131      0.034    -25.827      0.000
+ DRELOR
+    Category > 1   *********      0.000    999.000    999.000
+
+Latent Class 3 Compared to Latent Class 4
+
+ DCLOA
+    Category > 1       0.033      0.011    -85.274      0.000
+ DCOST
+    Category > 1       0.045      0.016    -60.101      0.000
+ DRELY
+    Category > 1       0.024      0.019    -52.529      0.000
+ DLERN
+    Category > 1       0.077      0.104     -8.918      0.000
+ DCHIL
+    Category > 1       1.005      0.899      0.006      0.995
+ DHROP
+    Category > 1       0.086      0.030    -30.186      0.000
+ DNBGRP
+    Category > 1       0.089      0.037    -24.363      0.000
+ DRTWEB
+    Category > 1       0.331      0.090     -7.405      0.000
+ DRECFAM
+    Category > 1       0.365      0.298     -2.134      0.033
+ DRELOR
+    Category > 1       0.000      0.000    999.000    999.000
+
+Latent Class 3 Compared to Latent Class 5
+
+ DCLOA
+    Category > 1       6.928      6.218      0.953      0.340
+ DCOST
+    Category > 1       1.969      1.144      0.847      0.397
+ DRELY
+    Category > 1      16.680      8.708      1.801      0.072
+ DLERN
+    Category > 1      45.129     27.944      1.579      0.114
+ DCHIL
+    Category > 1      63.992     58.955      1.068      0.285
+ DHROP
+    Category > 1       9.593      5.351      1.606      0.108
+ DNBGRP
+    Category > 1      22.156     13.051      1.621      0.105
+ DRTWEB
+    Category > 1      23.062     16.653      1.325      0.185
+ DRECFAM
+    Category > 1      57.653     44.954      1.260      0.208
+ DRELOR
+    Category > 1       4.475      2.490      1.395      0.163
+
+Latent Class 3 Compared to Latent Class 6
+
+ DCLOA
+    Category > 1       0.043      0.014    -70.884      0.000
+ DCOST
+    Category > 1       0.062      0.021    -45.492      0.000
+ DRELY
+    Category > 1       0.020      0.021    -47.224      0.000
+ DLERN
+    Category > 1       0.185      0.142     -5.723      0.000
+ DCHIL
+    Category > 1       0.900      0.852     -0.118      0.906
+ DHROP
+    Category > 1       0.058      0.030    -31.828      0.000
+ DNBGRP
+    Category > 1       0.444      0.126     -4.417      0.000
+ DRTWEB
+    Category > 1       0.437      0.122     -4.618      0.000
+ DRECFAM
+    Category > 1       1.717      1.254      0.572      0.567
+ DRELOR
+    Category > 1   *********      0.000    999.000    999.000
+
+Latent Class 4 Compared to Latent Class 5
+
+ DCLOA
+    Category > 1     207.585    188.182      1.098      0.272
+ DCOST
+    Category > 1      43.771     24.459      1.749      0.080
+ DRELY
+    Category > 1     682.275    589.463      1.156      0.248
+ DLERN
+    Category > 1     587.474    729.353      0.804      0.421
+ DCHIL
+    Category > 1      63.651     31.434      1.993      0.046
+ DHROP
+    Category > 1     111.688     66.452      1.666      0.096
+ DNBGRP
+    Category > 1     249.446    158.044      1.572      0.116
+ DRTWEB
+    Category > 1      69.599     49.676      1.381      0.167
+ DRECFAM
+    Category > 1     158.078     91.748      1.712      0.087
+ DRELOR
+    Category > 1   *********      0.000    999.000    999.000
+
+Latent Class 4 Compared to Latent Class 6
+
+ DCLOA
+    Category > 1       1.284      0.426      0.667      0.505
+ DCOST
+    Category > 1       1.368      0.310      1.188      0.235
+ DRELY
+    Category > 1       0.837      0.986     -0.166      0.868
+ DLERN
+    Category > 1       2.403      3.098      0.453      0.651
+ DCHIL
+    Category > 1       0.895      0.381     -0.276      0.782
+ DHROP
+    Category > 1       0.673      0.340     -0.960      0.337
+ DNBGRP
+    Category > 1       5.004      1.715      2.335      0.020
+ DRTWEB
+    Category > 1       1.320      0.204      1.564      0.118
+ DRECFAM
+    Category > 1       4.709      1.537      2.414      0.016
+ DRELOR
+    Category > 1   *********      0.000    999.000    999.000
+
+Latent Class 5 Compared to Latent Class 6
+
+ DCLOA
+    Category > 1       0.006      0.005   -181.756      0.000
+ DCOST
+    Category > 1       0.031      0.017    -58.084      0.000
+ DRELY
+    Category > 1       0.001      0.001   -737.516      0.000
+ DLERN
+    Category > 1       0.004      0.003   -345.072      0.000
+ DCHIL
+    Category > 1       0.014      0.008   -129.999      0.000
+ DHROP
+    Category > 1       0.006      0.004   -239.600      0.000
+ DNBGRP
+    Category > 1       0.020      0.012    -84.825      0.000
+ DRTWEB
+    Category > 1       0.019      0.014    -71.694      0.000
+ DRECFAM
+    Category > 1       0.030      0.015    -63.434      0.000
+ DRELOR
+    Category > 1   *********      0.000    999.000    999.000
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.102E-02
+       (ratio of smallest to largest eigenvalue)
+
+
+TECHNICAL 11 OUTPUT
+
+     Random Starts Specifications for the k-1 Class Analysis Model
+        Number of initial stage random starts                2500
+        Number of final stage optimizations                   250
+
+
+
+     VUONG-LO-MENDELL-RUBIN LIKELIHOOD RATIO TEST FOR 5 (H0) VERSUS 6 CLASSES
+
+          H0 Loglikelihood Value                       -14970.458
+          2 Times the Loglikelihood Difference             50.776
+          Difference in the Number of Parameters               11
+          Mean                                              1.832
+          Standard Deviation                               13.793
+          P-Value                                          0.0001
+
+     LO-MENDELL-RUBIN ADJUSTED LRT TEST
+
+          Value                                            50.224
+          P-Value                                          0.0001
+
+
+TECHNICAL 14 OUTPUT
+
+     Random Starts Specifications for the k-1 Class Analysis Model
+        Number of initial stage random starts                2500
+        Number of final stage optimizations                   250
+
+     Random Starts Specification for the k-1 Class Model for Generated Data
+        Number of initial stage random starts                   0
+        Number of final stage optimizations for the
+           initial stage random starts                          0
+     Random Starts Specification for the k Class Model for Generated Data
+        Number of initial stage random starts                  40
+        Number of final stage optimizations                     8
+     Number of bootstrap draws requested                      200
+
+
+     PARAMETRIC BOOTSTRAPPED LIKELIHOOD RATIO TEST FOR 5 (H0) VERSUS 6 CLASSES
+
+          H0 Loglikelihood Value                       -14970.458
+          2 Times the Loglikelihood Difference             50.776
+          Difference in the Number of Parameters               11
+          Approximate P-Value                              0.0000
+          Successful Bootstrap Draws                          200
+
+     WARNING:  OF THE 200 BOOTSTRAP DRAWS, 126 DRAWS HAD BOTH A SMALLER LRT VALUE THAN THE
+     OBSERVED LRT VALUE AND NOT A REPLICATED BEST LOGLIKELIHOOD VALUE FOR THE 6-CLASS MODEL.
+     THIS MEANS THAT THE P-VALUE MAY NOT BE TRUSTWORTHY DUE TO LOCAL MAXIMA.
+     INCREASE THE NUMBER OF RANDOM STARTS USING THE LRTSTARTS OPTION.
+
+
+
+DIAGRAM INFORMATION
+
+  Mplus diagrams are currently not available for Mixture analysis.
+  No diagram output was produced.
+
+
+     Beginning Time:  08:25:00
+        Ending Time:  08:46:16
+       Elapsed Time:  00:21:16
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2019 Muthen & Muthen

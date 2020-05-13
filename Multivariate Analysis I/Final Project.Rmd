@@ -11,7 +11,12 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Introdcution
 
-This project will show the example of using R to carry out some simple multivariate analyses, with a focus on principal component analysis (PCA) and linear discriminate analysis (LDA). Whole project will guide the reader from the exploratory data analysis to more advanced statistical methodologies. For every technique covered in this project, the corresponding research question, method theory (including assumption and limitation), and R code will be provided. 
+This project will show the example of using R to carry out some simple multivariate analyses, with a focus on explortary data analysis (unsupervised learning) and classification analysis (supervised learning).
+
+For the explortary data analysis, we will focus on the principal component analysis (PCA).
+For the cluster analysis, we will compare the results of linear discriminate analysis (LDA) and quadratic discriminatie analysis (QDA).
+
+Whole project will guide the reader from discriptive data analysis to more advanced statistical methodologies. For every technique covered in this project, the corresponding research question, method theory (including assumption and limitation), and R code will be provided. 
 
 ## Data Set
 The data sets in this project come from the UCI Machine Learning Repository (http://archive.ics.uci.edu/ml). In particular, the wine recognition data (http://archive.ics.uci.edu/ml/machine-learning-databases/wine/wine.data)  is updated at Sept 21, 1998 by C.Blake. The original source of the data set comes from Forina, M. et al (1991).
@@ -24,78 +29,52 @@ The observations in the data set are the results of a chemical analysis of wines
 wine <- read.table("http://archive.ics.uci.edu/ml/machine-learning-databases/wine/wine.data",sep=",")
 colnames(wine) <- c("type",	"Alcohol","Malic acid","Ash","Alcalinity","Magnesium","Phenols","Flavanoids","Nonflavanoid phenols","Proanthocyanins","Color intensity","Hue","OD280/OD315","Proline")
 head(wine,5)
+```
+
+```{r}
 dim(wine)
+```
+
+There are 178 observations in the data set and 14 columns.
+
+
+As we can see, the first column `type` indicates which wine type the sample belongs to. 
+There are 13 distinct attributes: `Alcohol`, `Malic acid`, `Ash`, `Alcalinity`, `Magnesium`, `Phenols`, `Flavanoids`,`Nonflavanoid phenols`,`Proanthocyanins`,`Color intensity`, `Hue`, `OD280/OD315`, `Proline`. 
+
+
+## Discriptive Data Analysis
+
+```{r}
+wine$type <- factor(wine$type)
 summary(wine)
 ```
 
-As we can see, the first column `type` indicates which wine type the sample belongs to. There are 178 samples with 13 distinct attributes. All 13 attributes are continuous variables. There is no missing value in the data set.
-
-
-## EDA through Visualization 
-
-#### Matrix Scatter Plot
-
-In multivariate analysis, a common way to understand the structure of the data set through visulization is `matrix scatterplot`. For simplicity, I only use the first 5 attribution in the plot.
-```{r message=FALSE, warning=FALSE}
-library(car)
-scatterplotMatrix(wine[2:6])
+There is no missing value in the data set.
+All of 13 attributes are continuous variable with different scale. For example, the mean of `proline` is 746.9 and mean of `hue` is 0.965. The standard deviation of each attribute are also very different. 
+```{r}
+round(apply(wine[2:14],MARGIN = 2, sd),2)
 ```
 
-In this matrix scatterplot, the diagonal cells show histograms of each of the variables, in this case the concentrations of the first five chemicals. Each of the off-diagonal cells is a scatterplot of two of the five chemicals. As we can see, there is a certain level of correlation between the pair of the attributes. Meanwhile, the distribution of most attributes approximately follow the normal distribution. But the distribution of Alcohol and Malic.acid is more different from the normal distribution.
+
+This indicates that there is a need for normalize the data before the analysis. Meanwhile, scale the data also reshape the distribution of the data so that it is closer to the normal distribution, which is the assumption for many multivariate analysis models.
 
 
-#### Scatter Plot with group label.
-
-Using the scatter plot give us a more detail information about how two attribute are correlated with each other. In particular, I label each simple points with their corresponding wine type. In this way, we can see who the data allocate in different two dimensional space across different wine types. I choose the attribute of `alcohol` and `malic acid` as an example. 
+### mean difference across wine type after normalization
 
 ```{r}
-plot(wine$Alcohol, wine$`Malic acid`)
-text(wine$Alcohol, wine$`Malic acid`, wine$type, cex=0.7, pos=4, col="red")
-```
-
-In general, there is already a pattern in classification. The second type of wine are located at the range with lower value of alcohol. For the first and third type of wine, they are located at the space with high alcohol but low malic acid and high malic acid. However, there are many points from different types of wine overlap with each other. This indicates that there is a limiation in using just two dimension space for classifying the wine type.
-
-
-## Discriptive Analysis
-
-#### mean and standard deviation of each attribute
-In order to have a deeper understanding of the data set. The first thing we need to know is the basic discriptive statistics for each attribution.
-```{r}
-round(sapply(wine[2:14], mean),2)
-round(sapply(wine[2:14], sd),2)
-```
-
-Clearly, we can see there is a big difference in the scale of 13 attribute. This indicates that there is a need for normalize the data before the analysis. Meanwhile, scale the data also reshape the distribution of the data so that it is closer to the normal distribution, which is the assumption for many multivariate analysis models.
-
-
-#### mean and standard deviation difference across wine type
-
-Secondly, we may also interested in explore the difference of mean and standard deviation across different groups. 
-```{r}
-printMeanAndSdByGroup <- function(variables,groupvariable)
-  {
-     # find the names of the variables
-     variablenames <- c(names(groupvariable),names(as.data.frame(variables)))
-     # within each group, find the mean of each variable
-     groupvariable <- groupvariable[,1] # ensures groupvariable is not a list
+printz_scoreByGroup <- function(variables,groupvariable){
      means <- aggregate(as.matrix(variables) ~ groupvariable, FUN = mean)
-     names(means) <- variablenames
-     print(paste("Means:"))
-     print(means)
-     # within each group, find the standard deviation of each variable:
-     sds <- aggregate(as.matrix(variables) ~ groupvariable, FUN = sd)
-     names(sds) <- variablenames
-     print(paste("Standard deviations:"))
-     print(sds)
+     means$groupvariable <- as.numeric(means$groupvariable)
+     print(round(means,2))
 }
 
-printMeanAndSdByGroup(wine[2:14],wine[1])
+printz_scoreByGroup(scale(wine[2:14]),wine$type)
 ```
 
+Accoding to the analysis, I first normalized the data set, which make all 13 attributes have the same standard deviation as 1. 
+Then, we can compare the different of each attribute.
 
-As an example, I will compare the mean difference between the first and second wine type. There is small mean different between the first and second wine type in terms of hue and ash, but big difference in terms of profline and color density.
-This indicates that different attribute has different power in distinguish the wine type. For example, ash and nonflavanoid phenols are simiar across different types of wine. But flavanoids is much lower in the thrid type of wine than the other two type.
-
+For example, three group have clear difference in the average level of `alcohol`. Type 2 wine is the only one has the average negative value of alcohol. Similar pattern can be seem in all attributes. These result indicates that the attributes do have a strength in classifying the wine type.
 
 #### Between-groups Variance and Within-groups Variance for a Variable
 
@@ -125,6 +104,7 @@ WithinGroupsVariance(wine$Alcohol,wine$type)
 As the example, the within group variande for `alcohol` is about 0.26. Simiarly, we can calculate the between group variance using the formula below,
 $$\frac{n_1(\bar{y_1}-\bar{y})^2 + ...+n_g(\bar{y_g}-\bar{y})^2}{g-1}$$
 , where $n_i$ represent the number of sample in group $i$ and $\bar{y_i}$ is the group mean.
+
 ```{r}
 BetweenGroupsVariance <- function(variable,groupvariable){
      n_group <- length(unique(groupvariable))
@@ -140,12 +120,15 @@ BetweenGroupsVariance <- function(variable,groupvariable){
 }
 BetweenGroupsVariance(wine$Alcohol,wine$type)
 ```
+
 As the example, the within group variande for `alcohol` is about 35.39.
 We can calculate the “separation” achieved by a variable as its between-groups variance devided by its within-groups variance.
+
 ```{r}
 35.39742/0.2620525
 ```
-The separation indicate that much more variance in the data set can be explianed by the group difference than the within group uncertainty. A high value of separation means the variboe is useful in classfication since the variance difference across group is significant. Similarly, we can calculate all variables in the data set.
+
+The separation indicate that much more variance in the data set can be explianed by the group difference than the within group uncertainty. A high value of separation means the attribute is useful in classfication since the variance difference across group is significant. Similarly, we can calculate all variables in the data set.
 
 ```{r}
 for (i in 2:14){
@@ -158,6 +141,52 @@ for (i in 2:14){
 ```
  
 As we can see from the analysis, the variable `Flavanoids` and `Proline` have the high separation, while `Magnesium` and `Nonflavanoid phenols` have the low separation.
+
+
+#### Matrix Scatter Plot
+
+In multivariate analysis, a common way to understand the structure of the data set through visulization is `matrix scatterplot`. For simplicity, I only use the first 5 attribution in the plot.
+```{r message=FALSE, warning=FALSE}
+library(car)
+library(ggplot2)
+
+pairs(wine[2:5], 
+      main = "Wine Data for the first 4 attributes -- 3 types",
+      pch = 21, 
+      bg = c("#1b9e77", "#d95f02", "#7570b3")
+    [unclass(wine$type)])
+
+pairs(wine[6:10], 
+      main = "Wine Data for the middle 5 attributes -- 3 types",
+      pch = 21, 
+      bg = c("#1b9e77", "#d95f02", "#7570b3")
+      [unclass(wine$type)])
+
+
+pairs(wine[11:14], 
+      main = "Wine Data for the last 4 attributes -- 3 types",
+      pch = 21, 
+      bg = c("#1b9e77", "#d95f02", "#7570b3")
+      [unclass(wine$type)])
+```
+
+
+Using the scatter plot give us a more detail information about how two attribute are correlated with each other. In general, there are already patterns in classification for most of pairwise scatterplots. These results indicates that these attributes will be useful to classify the wine type.
+
+
+```{r message=FALSE, warning=FALSE}
+library(GGally)
+ggpairs(wine[2:5])
+ggpairs(wine[6:10])
+ggpairs(wine[11:14])
+```
+
+In the matrix scatterplot above, the diagonal cells show histograms of each of the variables, in this case the concentrations of the first five chemicals. Each of the off-diagonal cells is a scatterplot of two of the attributes and the correspoding correlation coefficients.
+
+In terms of normality, most of the atrribute are approximately follow the normal distribution. However, attributs like `alcohol`, `phenols`, `flavanoids`, `OD280/OD315`, and `profile` do have clear difference from the normal distribution. 
+
+In terms of corrleation, most of the correlation are not significant. However, the correlation between `flavanoids` and `phenols` is the only one above 0.8.
+
 
 ## Principal Component Analysis
 
@@ -188,8 +217,10 @@ cumsum((wine.pca$sdev)^2)/sum((wine.pca$sdev)^2)
 
 As we can see the first four principal component keeps about 73.59% variance.
 There are some other rules to we can pick to determine the number of principal component to keep.
+
 For example, if we need to ensure that at least 80% of the total variance should be maintained. Thus, first five principal components should be picked. 
 Another rule is to pick the principal component which has the variance bigger than 1. In this way, we have to keep the first three principal component.
+
 ```{r}
 (wine.pca$sdev)^2
 ```
@@ -204,25 +235,28 @@ The loading of the principal component is helpful in interpretating the possible
 Finllay, scatterplot of the first two principal components, and label the data points with the cultivar that the wine samples come from will be take as an example. 
 
 ```{r}
-plot(wine.pca$x[,1],wine.pca$x[,2]) # make a scatterplot
-text(wine.pca$x[,1],wine.pca$x[,2], wine$type, cex=0.7, pos=4, col="red") 
+plot_data <- data.frame('PC1'=wine.pca$x[,1],'PC2'=wine.pca$x[,2],type=wine$type)
+ggplot(plot_data,aes(x=PC1,y=PC2)) + 
+  geom_point(aes(col=type))
 ```
 
 The scatterplot shows the first principal component on the x-axis, and the second principal component on the y-axis. We can see from the scatterplot that wine samples of cultivar 1 have much lower values of the first principal component than wine samples of cultivar 3. Therefore, the first principal component separates wine samples of cultivars 1 from those of cultivar 3.
 
 We can also see that wine samples of cultivar 2 have much higher values of the second principal component than wine samples of cultivars 1 and 3. Therefore, the second principal component separates samples of cultivar 2 from samples of cultivars 1 and 3.
 
-Therefore, the first two principal components are reasonably useful for distinguishing wine samples of the three different cultivars.
+Therefore, the first two principal components are reasonably useful for distinguishing wine samples of the three different cultivars. If we add more principal components into the analysis, we can expect that the classification will have higher accuracy.
 
 ## Linear Discriminate Analysis
 
-#### Summary of LDA
+#### Summary of LDA and QDA
 
 Linear discriminate analysis (LDA) is a method to find a linear combination of features that characterizes or separates two or more classes of objects or events. The resulting combination may be used as a linear classifier, or, more commonly, for dimensionality reduction before later classification.
 
 LDA assume that the approaches the problem by assuming that the conditional probability density functions from both classes are both normally distributed with differnt mean vector and the same variance-covariance matrix (can also be different). If the varianes are assumed to be the same, it is called homoscedasticity assumption. Besides, LDA also take the multicollinearity and indepdence assumption. Predictive power can decrease with an increased correlation between predictor variables. Meanwhile, simples are assumed to be randomly sampled, and a participant's score on one variable is assumed to be independent of scores on that variable for all other participants. Thus, if the data does not follow the multivariate normal distribution, the variables have high multicollinearlity or the samples are not independent, the result of LDA will be biased. Besides, the LDA also rely on the complete data set and binary class.
 
-#### LDA analysis
+If we do not make the assuption of equal group variance, the analysis will be qudratic discriminate analysis (QDA). Consequently, the decision boundary of QDA is qudratic instead of linear.
+
+#### LDA analysis and QDA analysis
 
 If we want to separate the wines by cultivar, the wines come from three different cultivars, so the number of groups is 3, and the number of variables is four principal component I calculated in the last section. The maximum number of useful discriminant functions that can separate the wines by cultivar is the minimum of 3-1 and 4, and so in this case it is the minimum of 2 and 13, which is 2. 
 The variance is assumed to be the same.
@@ -230,7 +264,10 @@ The variance is assumed to be the same.
 ```{r}
 library(MASS)
 wine.lda <- lda(x = wine.pca$x[,1:4], grouping = wine$type)
-plot(wine.lda)
+lda.plot.data <- as.data.frame(predict(wine.lda)$x)
+lda.plot.data$type <- wine$type
+ggplot(lda.plot.data, aes(LD1, LD2)) +
+  geom_point(aes(color = type))
 ```
 
 As we can see that the two discriminant functions seperate the three wine type well. To see the loading of the discrimiant functions, we can:
@@ -242,7 +279,7 @@ As we can see, the first discrimiant function rely more on the first principal c
 ```{r}
 table(Predicted=predict(wine.lda)$class, Actual=wine$type)
 ```
-As we can see from the table above, most of the data are predicted correctly. Only 2 points belongs to the range 3 are predicted to be in range 2. The overall aggrement rate is $1-2/178=98.88%$.
+As we can see from the table above, most of the data are predicted correctly. Only 2 points belongs to the range 3 are predicted to be in range 2. The overall aggrement rate is $1-5/178=97.19%$.
 
 To futher analysis the separation achieved by each discriminant function. Stacked histogram can be used.
 
@@ -253,6 +290,15 @@ ldahist(data = wine.pred$x[,2], g=wine$type)
 ```
 
 As we can see, the frist discriminant function has the power to distinguish the type 1 and 2 with type 3. However, the difference between 1 and 2 are limiated. The differences between the 3 wine types are more clear seperated in the second discriminant function.
+
+Similarly, we can do the QDA with the same data set and methods.
+
+```{r}
+wine.qda <- qda(x = wine.pca$x[,1:4], grouping = wine$type)
+table(Predicted=predict(wine.qda)$class, Actual=wine$type)
+```
+
+As we can see QDA do imporve the overall model prediction. The overall aggrement rate is $1-2/178=98.87%$. However, the LDA result is already good. I do not recommend to take the result of QDA to avoid the issue of model overfit.
 
 
 ## Reference 
